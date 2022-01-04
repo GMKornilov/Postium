@@ -8,8 +8,14 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Postium"
 include(":app")
+include(":data:post")
 include(":core")
 include(":core:design")
 include(":core:feature-api")
+include(":core:authorization")
 include(":feature:most_popular_posts")
-include(":data:post")
+include(":feature:authorization")
+include(":feature:authorization-api")
+include(":core:secrets")
+include(":core:activity-utils")
+include(":feature:mainpage")

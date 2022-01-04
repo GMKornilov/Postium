@@ -1,10 +1,18 @@
 object Versions {
     const val compose = "1.0.5"
 
-    const val kotlin = "1.5.31"
-
     const val android_gradle = "7.0.3"
-    const val kotlin_gradle = kotlin
+    const val kotlin_gradle = Kotlin.version
+
+    object Kotlin {
+        const val version = "1.5.31"
+
+        object Coroutines {
+            const val version = "1.3.9"
+
+            const val viewModel = "2.4.0"
+        }
+    }
 
     /**
      * AndroidX libraries
@@ -38,5 +46,39 @@ object Versions {
      */
     object MVI {
         const val orbit = "4.3.0"
+    }
+
+    object Compose {
+        object Icons {
+            const val simpleIcons = "1.0.0"
+        }
+    }
+
+    /**
+     * Firebase dependencies
+     */
+    object Firebase {
+        const val bomVersion = "29.0.3"
+    }
+
+    object Google {
+        const val googlePlayServices = "19.2.0"
+
+        const val googlePlayServicesPlugin = "4.3.10"
+
+        const val secrets = "2.0.0"
+    }
+
+    object Facebook {
+        const val login = "12.2.0"
+    }
+
+    /**
+     * Hilt DI dependencies
+     */
+    object Hilt {
+        const val version = "2.38.1"
+
+        const val composeNavigation = "1.0.0-rc01"
     }
 }

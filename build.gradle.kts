@@ -7,7 +7,9 @@ buildscript {
     dependencies {
         classpath(BuildPlugins.AndroidTools)
         classpath(BuildPlugins.KotlinGradlePlugin)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20")
+        classpath(BuildPlugins.GooglePlayServices)
+        classpath(Deps.Hilt.plugin)
+        classpath(Deps.Google.secrets)
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle.kts files

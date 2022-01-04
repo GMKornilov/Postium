@@ -11,6 +11,11 @@ object Deps {
 
     const val materialDesign = "com.google.android.material:material:${Versions.AndroidX.material}"
 
+    object Kotlin {
+        const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.Coroutines.version}"
+        const val coroutinesViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.Kotlin.Coroutines.viewModel}"
+    }
+
     /**
      * Compose libraries
      */
@@ -19,6 +24,11 @@ object Deps {
         const val UiGraphics = "androidx.compose.ui:ui-graphics:${Versions.compose}"
         const val Material = "androidx.compose.material:material:${Versions.compose}"
         const val UiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
+        const val IconsExtended = "androidx.compose.material:material-icons-extended:${Versions.compose}"
+
+        object Icons {
+            const val simple = "br.com.devsrsouza.compose.icons.android:simple-icons:${Versions.Compose.Icons.simpleIcons}"
+        }
     }
 
     /**
@@ -48,5 +58,34 @@ object Deps {
             const val viewModel = "org.orbit-mvi:orbit-viewmodel:${Versions.MVI.orbit}"
             const val testing = "org.orbit-mvi:orbit-viewmodel:${Versions.MVI.orbit}"
         }
+    }
+
+    object Firebase {
+        const val bom = "com.google.firebase:firebase-bom:${Versions.Firebase.bomVersion}"
+
+        const val authorization = "com.google.firebase:firebase-auth-ktx"
+    }
+
+    object Google {
+        const val googlePlayServicesAuth = "com.google.android.gms:play-services-auth:${Versions.Google.googlePlayServices}"
+        const val googlePlayServicesPlugin = "com.google.gms.google-services"
+
+        const val secrets = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:${Versions.Google.secrets}"
+        const val secretsPlugin = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
+    }
+
+    object Facebook {
+        const val login = "com.facebook.android:facebook-login:${Versions.Facebook.login}"
+    }
+
+    /**
+     * Hilt DI
+     */
+    object Hilt {
+        const val plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt.version}"
+        const val android = "com.google.dagger:hilt-android:${Versions.Hilt.version}"
+        const val androidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Hilt.version}"
+
+        const val composeNavigation = "androidx.hilt:hilt-navigation-compose:${Versions.Hilt.composeNavigation}"
     }
 }

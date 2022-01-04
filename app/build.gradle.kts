@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -29,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -44,12 +46,17 @@ android {
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/gradle/incremental.annotation.processors"
         }
     }
 }
 
 dependencies {
     implementation(project(":core:design"))
+    implementation(project(":core:authorization"))
+    implementation(project(":core:feature-api"))
+    implementation(project(":core:activity-utils"))
+    implementation(project(":feature:authorization"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
@@ -62,10 +69,18 @@ dependencies {
     implementation(Deps.Compose.Material)
     implementation(Deps.Compose.UiToolingPreview)
 
+    implementation(Deps.Navigation.composeNavigation)
+
+    implementation(Deps.Hilt.android)
+    kapt(Deps.Hilt.androidCompiler)
 
     testImplementation(Deps.TestingTooling.junit)
     androidTestImplementation(Deps.TestingTooling.androidxJunit)
     androidTestImplementation(Deps.TestingTooling.androidxEspresso)
     androidTestImplementation(Deps.TestingTooling.composeUiTest)
     debugImplementation(Deps.TestingTooling.composeUiTooling)
+}
+
+hilt {
+    enableAggregatingTask = true
 }

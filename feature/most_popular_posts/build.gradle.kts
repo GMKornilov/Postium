@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -25,11 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -61,10 +63,17 @@ dependencies {
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.viewModel)
 
+    implementation(Deps.Hilt.android)
+    kapt(Deps.Hilt.androidCompiler)
+
     testImplementation(Deps.TestingTooling.junit)
     testImplementation(Deps.MVI.Orbit.testing)
     androidTestImplementation(Deps.TestingTooling.androidxJunit)
     androidTestImplementation(Deps.TestingTooling.androidxEspresso)
     androidTestImplementation(Deps.TestingTooling.composeUiTest)
     debugImplementation(Deps.TestingTooling.composeUiTooling)
+}
+
+hilt {
+    enableAggregatingTask = true
 }
