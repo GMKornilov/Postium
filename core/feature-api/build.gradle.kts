@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation(Deps.Navigation.composeNavigation)
+    implementation(Deps.Compose.Material)
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.viewModel)
 }

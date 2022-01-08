@@ -21,8 +21,6 @@ interface HomeEvents {
     @ExperimentalCoroutinesApi
     fun facebookSignIn()
 
-    fun appleSignIn()
-
     companion object {
         @ExperimentalCoroutinesApi
         val MOCK = object : HomeEvents {
@@ -45,9 +43,6 @@ interface HomeEvents {
             }
 
             override fun facebookSignIn() {
-            }
-
-            override fun appleSignIn() {
             }
 
         }

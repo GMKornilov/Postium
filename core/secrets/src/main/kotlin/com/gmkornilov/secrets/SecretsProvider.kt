@@ -5,4 +5,5 @@ interface SecretsProvider {
 
     val facebookAppId: String
     val facebookAppSecret: String
+    val facebookClientToken: String
 }

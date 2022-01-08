@@ -1,7 +1,7 @@
 package com.gmkornilov.authorization.home
 
-sealed class HomeState {
-    object None: HomeState()
-
-    object WrongAuthorization: HomeState()
+data class HomeState(val isLoading: Boolean) {
+    companion object {
+        val DEFAULT = HomeState(isLoading = false)
+    }
 }

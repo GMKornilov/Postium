@@ -3,6 +3,8 @@ plugins {
     id("kotlin-android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id(Deps.Google.secretsPlugin)
+    id(Deps.Google.googlePlayServicesPlugin)
 }
 
 android {
@@ -54,8 +56,11 @@ android {
 dependencies {
     implementation(project(":core:design"))
     implementation(project(":core:authorization"))
+    implementation(project(":core:secrets"))
     implementation(project(":core:feature-api"))
     implementation(project(":core:activity-utils"))
+
+    implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
@@ -69,7 +74,14 @@ dependencies {
     implementation(Deps.Compose.Material)
     implementation(Deps.Compose.UiToolingPreview)
 
+    implementation(Deps.Compose.Accompanist.insets)
+
     implementation(Deps.Navigation.composeNavigation)
+
+    implementation(platform(Deps.Firebase.bom))
+    implementation(Deps.Firebase.authorization)
+
+    implementation(Deps.Facebook.login)
 
     implementation(Deps.Hilt.android)
     kapt(Deps.Hilt.androidCompiler)

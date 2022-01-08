@@ -52,6 +52,10 @@ object Versions {
         object Icons {
             const val simpleIcons = "1.0.0"
         }
+
+        object Accompanist {
+            const val insets = "0.22.0-rc"
+        }
     }
 
     /**

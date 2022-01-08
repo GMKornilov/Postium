@@ -2,31 +2,45 @@ package com.gmkornilov.authorization.home
 
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.viewModelScope
-import com.gmkornilov.authorizarion.data.AuthInteractor
+import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthStatus
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.view_model.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val authInteractor: AuthInteractor,
     private val googleAuthInteractor: GoogleAuthInteractor,
-    private val facebookAuthInteractor: FacebookAuthInteractor
+    private val facebookAuthInteractor: FacebookAuthInteractor,
+    private val emailAuthInteractor: EmailAuthInteractor,
 ) : BaseViewModel<HomeState, HomeSideEffect>(), HomeEvents {
-    override fun getBaseState(): HomeState = HomeState.None
+    override fun getBaseState(): HomeState = HomeState.DEFAULT
 
     @ExperimentalCoroutinesApi
     override fun credentialsSignIn(login: String, password: String) = intent {
+        if (login.isEmpty() || password.isEmpty()) {
+            return@intent
+        }
 
+        viewModelScope.launch {
+            reduce { state.copy(isLoading = true) }
+            emailAuthInteractor.signIn(login, password).collect {
+                reduce { state.copy(isLoading = false) }
+                if (!it) {
+                    postSideEffect(HomeSideEffect.LoginError)
+                }
+            }
+        }
     }
 
     override fun register() = intent {
@@ -44,10 +58,12 @@ class HomeViewModel @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    override fun handleGoogleSignInResult(activityResult: ActivityResult) {
+    override fun handleGoogleSignInResult(activityResult: ActivityResult) = intent {
         viewModelScope.launch {
             googleAuthInteractor.signIn(activityResult).collect {
-
+                if (!it) {
+                    postSideEffect(HomeSideEffect.LoginError)
+                }
             }
         }
     }
@@ -66,12 +82,13 @@ class HomeViewModel @Inject constructor(
                         FacebookAuthStatus.AuthError -> flowOf(false)
                         is FacebookAuthStatus.AuthSuccessful -> facebookAuthInteractor.passToken(it.token)
                     }
-            }
+                }.collect {
+                    if (!it) {
+                        postSideEffect(HomeSideEffect.LoginError)
+                    }
+                }
         }
     }
 
 
-    override fun appleSignIn() = intent {
-
-    }
 }

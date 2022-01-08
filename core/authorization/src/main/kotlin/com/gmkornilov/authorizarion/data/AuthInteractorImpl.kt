@@ -21,12 +21,19 @@ class AuthInteractorImpl @Inject internal constructor(
     override val authState = authStateFlow
 
     @ExperimentalCoroutinesApi
+    override fun isAuthorized(): Boolean {
+        return authStateFlow.value != null
+    }
+
+    @ExperimentalCoroutinesApi
     override fun signInWithCredential(credential: AuthCredential): Flow<Boolean> = callbackFlow {
         firebaseAuth
             .signInWithCredential(credential)
             .addOnCompleteListener {
                 sendBlocking(it.isSuccessful)
             }
+
+        awaitClose {  }
     }
 
     override fun signOut() {

@@ -29,6 +29,10 @@ object Deps {
         object Icons {
             const val simple = "br.com.devsrsouza.compose.icons.android:simple-icons:${Versions.Compose.Icons.simpleIcons}"
         }
+
+        object Accompanist {
+            const val insets = "com.google.accompanist:accompanist-insets:${Versions.Compose.Accompanist.insets}"
+        }
     }
 
     /**

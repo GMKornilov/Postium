@@ -15,14 +15,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
-private const val READ_EMAIL_PERMISSION = "read_email"
+private const val EMAIL_PERMISSION = "email"
+private const val PUBLIC_PROFILE_PERMISSION = "public_profile"
 
 class FacebookAuthInteractorImpl @Inject constructor(
     private val activityHelper: ActivityHelper,
     private val callbackManager: CallbackManager,
     private val loginManager: LoginManager,
     private val authInteractor: AuthInteractor
-): FacebookAuthInteractor {
+) : FacebookAuthInteractor {
     @ExperimentalCoroutinesApi
     override fun signIn() = callbackFlow {
         val callback = object : FacebookCallback<LoginResult> {
@@ -43,7 +44,11 @@ class FacebookAuthInteractorImpl @Inject constructor(
         loginManager.registerCallback(callbackManager, callback)
 
         activityHelper.activityResultRegistryOwner?.let {
-            loginManager.logIn(it, callbackManager, listOf("email", "public_profile"))
+            loginManager.logIn(
+                it,
+                callbackManager,
+                listOf(EMAIL_PERMISSION, PUBLIC_PROFILE_PERMISSION)
+            )
         }
 
         awaitClose { loginManager.unregisterCallback(callbackManager) }

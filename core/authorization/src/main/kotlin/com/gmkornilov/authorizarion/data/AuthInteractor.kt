@@ -11,6 +11,9 @@ interface AuthInteractor {
     val authState: StateFlow<FirebaseUser?>
 
     @ExperimentalCoroutinesApi
+    fun isAuthorized(): Boolean
+
+    @ExperimentalCoroutinesApi
     fun signInWithCredential(credential: AuthCredential): Flow<Boolean>
 
     fun signOut()

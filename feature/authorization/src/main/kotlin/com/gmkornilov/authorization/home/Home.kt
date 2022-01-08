@@ -11,18 +11,20 @@ import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.gmkornilov.authorization.R
-import com.gmkornilov.design.buttons.CircularAppleButton
 import com.gmkornilov.design.buttons.CircularFacebookButton
 import com.gmkornilov.design.buttons.CircularGoogleButton
 import com.gmkornilov.design.buttons.CircularVkButton
 import com.gmkornilov.design.theme.PostiumTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,9 +32,16 @@ import kotlinx.coroutines.launch
 @ExperimentalCoroutinesApi
 @Composable
 fun Home(
-    viewModel: HomeViewModel = hiltViewModel()
+    scaffoldState: ScaffoldState,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
+
+    val scope = rememberCoroutineScope()
+
+    val context = LocalContext.current
 
     val googleSignInlauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
@@ -44,16 +53,32 @@ fun Home(
             viewModel.container.sideEffectFlow.collect {
                 when (it) {
                     is HomeSideEffect.GoogleSignIn -> googleSignInlauncher.launch(it.intent)
+                    HomeSideEffect.LoginError -> showError(
+                        context.getString(R.string.login_failed_label),
+                        scope,
+                        scaffoldState
+                    )
+                    is HomeSideEffect.Navigate -> navController.navigate(it.route)
                 }
             }
         }
     }
 
-    HomeWithState(state = state, homeEvents = viewModel)
+    HomeWithState(state = state, homeEvents = viewModel, modifier)
+}
+
+private fun showError(
+    message: String,
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
+    coroutineScope.launch {
+        scaffoldState.snackbarHostState.showSnackbar(message = message)
+    }
 }
 
 @Composable
-private fun HomeWithState(state: HomeState, homeEvents: HomeEvents) {
+private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Modifier = Modifier) {
     var enteredLogin by remember { mutableStateOf("") }
 
     var enteredPassword by remember { mutableStateOf("") }
@@ -62,7 +87,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(16.dp)
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.app_name),
@@ -114,7 +139,11 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents) {
             onClick = { homeEvents.credentialsSignIn(enteredLogin, enteredPassword) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.login_label))
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Text(text = stringResource(R.string.login_label))
+            }
         }
 
         Text(
@@ -130,8 +159,6 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents) {
             CircularVkButton(onClick = homeEvents::vkSignIn)
 
             CircularGoogleButton(onClick = homeEvents::googleSignIn)
-
-            CircularAppleButton(onClick = homeEvents::appleSignIn)
 
             CircularFacebookButton(onClick = homeEvents::facebookSignIn)
         }
@@ -157,7 +184,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents) {
 fun DefaultPreviewHome() {
     PostiumTheme {
         HomeWithState(
-            state = HomeState.None,
+            state = HomeState.DEFAULT,
             homeEvents = HomeEvents.MOCK
         )
     }
