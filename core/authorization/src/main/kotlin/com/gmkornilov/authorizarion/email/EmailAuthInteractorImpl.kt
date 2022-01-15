@@ -6,7 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class EmailAuthInteractorImpl @Inject constructor(
+internal class EmailAuthInteractorImpl @Inject constructor(
     private val authInteractor: AuthInteractor,
 ): EmailAuthInteractor {
     @ExperimentalCoroutinesApi

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
-class AuthInteractorImpl @Inject internal constructor(
+internal class AuthInteractorImpl @Inject internal constructor(
     private val firebaseAuth: FirebaseAuth,
 ) : AuthInteractor {
     @ExperimentalCoroutinesApi

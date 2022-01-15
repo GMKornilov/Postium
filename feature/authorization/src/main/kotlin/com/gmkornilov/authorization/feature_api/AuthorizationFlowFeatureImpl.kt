@@ -15,7 +15,7 @@ private const val ROUTE = "authorization"
 private const val HOME_ROUTE = "authorization/home"
 private const val REGISTRATION_ROUTE = "authorization/registration"
 
-class AuthorizationFlowFeatureImpl @Inject constructor() : AuthorizationFlowFeature {
+internal class AuthorizationFlowFeatureImpl @Inject constructor() : AuthorizationFlowFeature {
     override val route = ROUTE
 
     override fun registerGraph(

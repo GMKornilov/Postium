@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface FeatureModule {
+internal interface FeatureModule {
     @Binds
     fun mainpageFlowFeature(mainpageFeature: MainpageFeatureImpl): MainpageFeature
 }

@@ -1,7 +1,5 @@
 package com.gmkornilov.authorizarion.data
 
-import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorizarion.data.AuthInteractorImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Binds
 import dagger.Module
@@ -13,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface AuthModule {
+internal interface AuthModule {
     @Binds
     @Singleton
     fun authInteractor(authInteractorImpl: AuthInteractorImpl): AuthInteractor

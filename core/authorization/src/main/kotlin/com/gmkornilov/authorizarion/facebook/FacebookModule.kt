@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface FacebookModule {
+internal interface FacebookModule {
     @Binds
     @Singleton
     fun facebookAuthInteractor(facebookAuthInteractorImpl: FacebookAuthInteractorImpl): FacebookAuthInteractor

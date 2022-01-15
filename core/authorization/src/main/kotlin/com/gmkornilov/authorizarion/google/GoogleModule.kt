@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface GoogleModule {
+internal interface GoogleModule {
     @Binds
     @Singleton
     fun googleAuthInteractor(googleAuthInteractor: GoogleAuthInteractorImpl): GoogleAuthInteractor

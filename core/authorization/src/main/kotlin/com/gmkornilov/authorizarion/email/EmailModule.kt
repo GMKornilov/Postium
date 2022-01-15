@@ -7,7 +7,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface EmailModule {
+internal interface EmailModule {
     @Binds
     fun emailAuthInteractor(emailAuthInteractorImpl: EmailAuthInteractorImpl): EmailAuthInteractor
 }

@@ -18,7 +18,7 @@ import javax.inject.Inject
 private const val EMAIL_PERMISSION = "email"
 private const val PUBLIC_PROFILE_PERMISSION = "public_profile"
 
-class FacebookAuthInteractorImpl @Inject constructor(
+internal class FacebookAuthInteractorImpl @Inject constructor(
     private val activityHelper: ActivityHelper,
     private val callbackManager: CallbackManager,
     private val loginManager: LoginManager,

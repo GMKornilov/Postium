@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface AuthorizationModule {
+internal interface AuthorizationModule {
     @Binds
     fun authorizationFlowFeature(authorizationFlowFeature: AuthorizationFlowFeatureImpl): AuthorizationFlowFeature
 }

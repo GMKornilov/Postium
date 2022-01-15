@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-class GoogleAuthInteractorImpl @Inject constructor(
+internal class GoogleAuthInteractorImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val authInteractor: AuthInteractor,
     secretsProvider: SecretsProvider,

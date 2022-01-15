@@ -7,7 +7,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface SecretsModule {
+internal interface SecretsModule {
     @Binds
     fun secretsProvider(secretsProviderImpl: SecretsProviderImpl): SecretsProvider
 }

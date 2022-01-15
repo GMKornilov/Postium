@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 private const val ROUTE = "mainpage"
 
-class MainpageFeatureImpl @Inject constructor(): MainpageFeature {
+internal class MainpageFeatureImpl @Inject constructor(): MainpageFeature {
     override val route = ROUTE
 
     override fun registerGraph(
