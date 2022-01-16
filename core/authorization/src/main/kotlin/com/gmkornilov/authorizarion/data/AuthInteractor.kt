@@ -1,5 +1,6 @@
 package com.gmkornilov.authorizarion.data
 
+import com.gmkornilov.authorizarion.model.PostiumUser
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AuthInteractor {
     @ExperimentalCoroutinesApi
-    val authState: StateFlow<FirebaseUser?>
+    val authState: StateFlow<PostiumUser?>
 
     @ExperimentalCoroutinesApi
     fun isAuthorized(): Boolean

@@ -1,8 +1,9 @@
 package com.gmkornilov.authorizarion.data
 
+import com.gmkornilov.authorizarion.model.PostiumUser
+import com.gmkornilov.authorizarion.model.PostiumUserImpl
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
@@ -15,7 +16,7 @@ internal class AuthInteractorImpl @Inject internal constructor(
     private val firebaseAuth: FirebaseAuth,
 ) : AuthInteractor {
     @ExperimentalCoroutinesApi
-    private val authStateFlow: MutableStateFlow<FirebaseUser?> = MutableStateFlow(null)
+    private val authStateFlow: MutableStateFlow<PostiumUser?> = MutableStateFlow(null)
 
     @ExperimentalCoroutinesApi
     override val authState = authStateFlow
@@ -33,7 +34,7 @@ internal class AuthInteractorImpl @Inject internal constructor(
                 sendBlocking(it.isSuccessful)
             }
 
-        awaitClose {  }
+        awaitClose { }
     }
 
     override fun signOut() {
@@ -43,7 +44,8 @@ internal class AuthInteractorImpl @Inject internal constructor(
     @ExperimentalCoroutinesApi
     private fun initialize() {
         firebaseAuth.addAuthStateListener {
-            authStateFlow.value = it.currentUser
+            authStateFlow.value =
+                it.currentUser?.let { firebaseUser -> PostiumUserImpl(firebaseUser) }
         }
     }
 
