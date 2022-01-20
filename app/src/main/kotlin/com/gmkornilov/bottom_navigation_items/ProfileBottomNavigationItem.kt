@@ -1,4 +1,4 @@
-package com.gmkornilov.navigation.bottom_navigation_items
+package com.gmkornilov.bottom_navigation_items
 
 import android.content.Context
 import androidx.compose.material.Icon
@@ -8,17 +8,20 @@ import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.feature_api.AuthorizationFlowFeature
-import com.gmkornilov.navigation.BottomNavigationItem
+import com.gmkornilov.authorization.brick_navigation.AuthorizationFlowScreen
+import com.gmkornilov.navigation.BottomNavigationScreen
 import com.gmkornilov.postium.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class ProfileBottomNavigationItem @Inject constructor(
     private val authInteractor: AuthInteractor,
-    private val authorizationFlowFeature: AuthorizationFlowFeature,
     @ApplicationContext context: Context,
+    parentRouter: TreeRouter,
+    bottomNavigationScreen: BottomNavigationScreen,
+    private val authorizationFlowScreen: AuthorizationFlowScreen,
 ): BottomNavigationItem {
     @Composable
     override fun IconComposable() {
@@ -33,11 +36,20 @@ class ProfileBottomNavigationItem @Inject constructor(
         Icon(imageVector = icon, contentDescription = "home")
     }
 
-    override fun isInTab(route: String): Boolean {
-        return authorizationFlowFeature.containsRoute(route)
-    }
-
     override val title = context.getString(R.string.profile_tab)
 
-    override val route: String = authorizationFlowFeature.route
+    override fun onSelected() {
+        super.onSelected()
+
+        if (router.isEmpty() && authInteractor.authState.value == null) {
+            // TODO: add authorization deps
+            router.addScreen(authorizationFlowScreen.screen)
+        }
+    }
+
+    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreen.screen.key)
+
+    private fun TreeRouter.isEmpty(): Boolean {
+        return this.screen.value == null
+    }
 }

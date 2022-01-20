@@ -1,15 +1,16 @@
-package com.gmkornilov.navigation
+package com.gmkornilov.bottom_navigation_items
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.alphicc.brick.TreeRouter
 
 interface BottomNavigationItem {
     @Composable
     fun IconComposable()
 
-    fun isInTab(route: String): Boolean
-
     val title: String
 
-    val route: String
+    val router: TreeRouter
+
+    fun onSelected() {}
 }

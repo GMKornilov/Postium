@@ -76,7 +76,11 @@ dependencies {
 
     implementation(Deps.Compose.Accompanist.insets)
 
+    implementation(Deps.MVI.Orbit.core)
+    implementation(Deps.MVI.Orbit.testing)
+
     implementation(Deps.Navigation.composeNavigation)
+    implementation(Deps.Navigation.brickNavigation)
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.authorization)

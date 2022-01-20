@@ -39,6 +39,8 @@ object Versions {
      */
     object Navigation {
         const val compose = "2.4.0-rc01"
+
+        const val brick = "1.0.0-beta02"
     }
 
     /**

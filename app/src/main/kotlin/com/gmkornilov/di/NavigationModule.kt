@@ -1,22 +1,18 @@
 package com.gmkornilov.di
 
-import com.gmkornilov.authorization.feature_api.AuthorizationFlowFeature
-import com.gmkornilov.feature_api.FeatureApi
-import com.gmkornilov.mainpage.feature_api.MainpageFeature
-import dagger.Binds
+import com.alphicc.brick.TreeRouter
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface NavigationModule {
-    @Binds
-    @IntoSet
-    fun authorizationFlowFeature(homeFeatureApi: AuthorizationFlowFeature): FeatureApi
-
-    @Binds
-    @IntoSet
-    fun mainPageFeature(homeFeatureApi: MainpageFeature): FeatureApi
+    companion object {
+        @Provides
+        fun router(): TreeRouter {
+            return TreeRouter.new()
+        }
+    }
 }

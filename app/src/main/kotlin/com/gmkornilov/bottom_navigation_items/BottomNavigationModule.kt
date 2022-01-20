@@ -1,6 +1,5 @@
-package com.gmkornilov.navigation.bottom_navigation_items
+package com.gmkornilov.bottom_navigation_items
 
-import com.gmkornilov.navigation.BottomNavigationItem
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

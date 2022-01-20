@@ -34,8 +34,8 @@ import kotlinx.coroutines.launch
 fun Home(
     scaffoldState: ScaffoldState,
     navController: NavController,
+    viewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
 
@@ -53,7 +53,7 @@ fun Home(
             viewModel.container.sideEffectFlow.collect {
                 when (it) {
                     is HomeSideEffect.GoogleSignIn -> googleSignInlauncher.launch(it.intent)
-                    HomeSideEffect.LoginError -> showError(
+                    is HomeSideEffect.LoginError -> showError(
                         context.getString(R.string.login_failed_label),
                         scope,
                         scaffoldState

@@ -62,6 +62,7 @@ dependencies {
     implementation(Deps.Compose.Icons.simple)
 
     implementation(Deps.Navigation.composeNavigation)
+    implementation(Deps.Navigation.brickNavigation)
 
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.viewModel)

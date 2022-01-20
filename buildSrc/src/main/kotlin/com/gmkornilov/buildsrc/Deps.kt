@@ -51,6 +51,8 @@ object Deps {
      */
     object Navigation {
         const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.Navigation.compose}"
+
+        const val brickNavigation = "io.github.alphicc:brick:${Versions.Navigation.brick}"
     }
 
     /**
