@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:feature-api"))
+    implementation(project(":core:common"))
     implementation(project(":core:design"))
 
     implementation(project(":data:post"))

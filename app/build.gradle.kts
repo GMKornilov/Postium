@@ -57,7 +57,7 @@ dependencies {
     implementation(project(":core:design"))
     implementation(project(":core:authorization"))
     implementation(project(":core:secrets"))
-    implementation(project(":core:feature-api"))
+    implementation(project(":core:common"))
     implementation(project(":core:activity-utils"))
 
     implementation(project(":feature:mainpage"))
