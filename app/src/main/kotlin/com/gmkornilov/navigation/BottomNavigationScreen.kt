@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,10 +18,17 @@ import com.alphicc.brick.navigationContainers.AnimatedScreensContainer
 import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.insets.statusBarsPadding
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-
+@EntryPoint
+@InstallIn(SingletonComponent::class)
 interface BottomNavigationScreenDeps {
     val router: TreeRouter
 
@@ -68,6 +76,7 @@ private fun BottomMenuScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
+                .statusBarsPadding()
                 .padding(bottom = 48.dp)
                 .background(MaterialTheme.colors.background)
                 .fillMaxSize()
@@ -81,7 +90,6 @@ private fun BottomMenuScreen(
             bottomNavigationItems,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .height(48.dp)
                 .fillMaxWidth()
         )
     }
@@ -94,11 +102,15 @@ private fun BottomBar(
     bottomNavigationItems: List<BottomNavigationItem>,
     modifier: Modifier = Modifier
 ) {
-    BottomNavigation(modifier) {
+    BottomNavigation(modifier.navigationBarsHeight(additional = 56.dp)) {
         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+            val isSelected = index == selectedIndex
             BottomNavigationItem(
                 icon = { bottomNavigationItem.IconComposable() },
-                selected = index == selectedIndex,
+                label = if (isSelected) {
+                    { Text(bottomNavigationItem.title) }
+                } else null,
+                selected = isSelected,
                 onClick = { onIndexSelected(index) },
                 modifier = Modifier.navigationBarsPadding()
             )

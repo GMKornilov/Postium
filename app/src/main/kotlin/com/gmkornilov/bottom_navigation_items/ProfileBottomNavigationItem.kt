@@ -11,18 +11,29 @@ import androidx.compose.runtime.getValue
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorization.brick_navigation.AuthorizationFlowScreen
+import com.gmkornilov.authorization.di.AuthorizationDeps
 import com.gmkornilov.navigation.BottomNavigationScreen
 import com.gmkornilov.postium.R
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface ProfileBottomNavigationsDeps : AuthorizationDeps
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileBottomNavigationItem @Inject constructor(
     private val authInteractor: AuthInteractor,
     @ApplicationContext context: Context,
     parentRouter: TreeRouter,
     bottomNavigationScreen: BottomNavigationScreen,
     private val authorizationFlowScreen: AuthorizationFlowScreen,
-): BottomNavigationItem {
+    private val profileBottomNavigationItem: ProfileBottomNavigationsDeps
+) : BottomNavigationItem {
     @Composable
     override fun IconComposable() {
         val user by authInteractor.authState.collectAsState()
@@ -41,9 +52,8 @@ class ProfileBottomNavigationItem @Inject constructor(
     override fun onSelected() {
         super.onSelected()
 
-        if (router.isEmpty() && authInteractor.authState.value == null) {
-            // TODO: add authorization deps
-            router.addScreen(authorizationFlowScreen.screen)
+        if (authInteractor.authState.value == null) {
+            router.addScreen(authorizationFlowScreen.screen, profileBottomNavigationItem)
         }
     }
 

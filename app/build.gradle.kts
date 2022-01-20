@@ -75,6 +75,7 @@ dependencies {
     implementation(Deps.Compose.UiToolingPreview)
 
     implementation(Deps.Compose.Accompanist.insets)
+    implementation(Deps.Compose.Accompanist.systemUi)
 
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.testing)

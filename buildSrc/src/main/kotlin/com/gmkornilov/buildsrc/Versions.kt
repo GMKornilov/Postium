@@ -57,6 +57,8 @@ object Versions {
 
         object Accompanist {
             const val insets = "0.22.0-rc"
+
+            const val systemUi = "0.22.0-rc"
         }
     }
 

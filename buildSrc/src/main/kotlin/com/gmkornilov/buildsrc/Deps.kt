@@ -32,6 +32,7 @@ object Deps {
 
         object Accompanist {
             const val insets = "com.google.accompanist:accompanist-insets:${Versions.Compose.Accompanist.insets}"
+            const val systemUi = "com.google.accompanist:accompanist-systemuicontroller:${Versions.Compose.Accompanist.systemUi}"
         }
     }
 
