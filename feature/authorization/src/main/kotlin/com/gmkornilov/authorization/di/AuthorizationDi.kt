@@ -3,6 +3,7 @@ package com.gmkornilov.authorization.di
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
+import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeViewModel
 import dagger.Component
 
@@ -12,7 +13,7 @@ interface AuthorizationDeps {
     val emailAuthInteractor: EmailAuthInteractor
 }
 
-@Component(dependencies = [AuthorizationDeps::class])
+@Component(dependencies = [AuthorizationDeps::class, UserResultHandler::class])
 interface AuthorizationComponent {
     val homeViewModel: HomeViewModel
 }

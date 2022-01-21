@@ -8,7 +8,8 @@ interface BottomNavigationItem {
     @Composable
     fun IconComposable()
 
-    val title: String
+    @Composable
+    fun TitleComposable()
 
     val router: TreeRouter
 

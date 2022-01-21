@@ -20,7 +20,6 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -108,7 +107,7 @@ private fun BottomBar(
             BottomNavigationItem(
                 icon = { bottomNavigationItem.IconComposable() },
                 label = if (isSelected) {
-                    { Text(bottomNavigationItem.title) }
+                    { bottomNavigationItem.IconComposable() }
                 } else null,
                 selected = isSelected,
                 onClick = { onIndexSelected(index) },

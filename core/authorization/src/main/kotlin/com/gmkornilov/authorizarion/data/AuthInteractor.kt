@@ -11,6 +11,8 @@ interface AuthInteractor {
     @ExperimentalCoroutinesApi
     val authState: StateFlow<PostiumUser?>
 
+    fun getPostiumUser(): PostiumUser?
+
     @ExperimentalCoroutinesApi
     fun isAuthorized(): Boolean
 

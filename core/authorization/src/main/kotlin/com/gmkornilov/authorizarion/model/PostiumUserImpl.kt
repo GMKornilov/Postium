@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseUser
 internal class PostiumUserImpl(
     private val firebaseUser: FirebaseUser
 ): PostiumUser {
+    override fun getUid() = firebaseUser.uid
+
     override fun getDisplayName() = firebaseUser.displayName
 
     override fun getEmail() = firebaseUser.email
