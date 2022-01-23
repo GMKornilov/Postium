@@ -67,6 +67,8 @@ object Versions {
      */
     object Firebase {
         const val bomVersion = "29.0.3"
+
+        const val coroutinesPlayServices = "1.6.0"
     }
 
     object Google {

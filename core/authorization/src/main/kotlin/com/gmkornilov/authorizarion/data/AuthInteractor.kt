@@ -2,9 +2,7 @@ package com.gmkornilov.authorizarion.data
 
 import com.gmkornilov.authorizarion.model.PostiumUser
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface AuthInteractor {
@@ -17,7 +15,13 @@ interface AuthInteractor {
     fun isAuthorized(): Boolean
 
     @ExperimentalCoroutinesApi
-    fun signInWithCredential(credential: AuthCredential): Flow<Boolean>
+    suspend fun signInWithCredential(credential: AuthCredential): SignInResult
 
     fun signOut()
+}
+
+sealed class SignInResult {
+    data class NewUser(val user: PostiumUser): SignInResult()
+
+    data class ExistingUser(val user: PostiumUser): SignInResult()
 }

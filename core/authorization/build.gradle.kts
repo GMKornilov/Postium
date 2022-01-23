@@ -47,6 +47,7 @@ dependencies {
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.authorization)
+    implementation(Deps.Firebase.coroutinesPlayServices)
     implementation(Deps.Google.googlePlayServicesAuth)
 
     implementation(Deps.Facebook.login)

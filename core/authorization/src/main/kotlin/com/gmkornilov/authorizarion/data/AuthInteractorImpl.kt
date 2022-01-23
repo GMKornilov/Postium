@@ -2,18 +2,13 @@ package com.gmkornilov.authorizarion.data
 
 import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorizarion.model.PostiumUserImpl
+import com.gmkornilov.authorizarion.model.toPostiumUser
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import kotlin.contracts.contract
 
 internal class AuthInteractorImpl @Inject internal constructor(
     private val firebaseAuth: FirebaseAuth,
@@ -34,14 +29,16 @@ internal class AuthInteractorImpl @Inject internal constructor(
     }
 
     @ExperimentalCoroutinesApi
-    override fun signInWithCredential(credential: AuthCredential): Flow<Boolean> = callbackFlow {
-        firebaseAuth
-            .signInWithCredential(credential)
-            .addOnCompleteListener {
-                sendBlocking(it.isSuccessful)
-            }
+    override suspend fun signInWithCredential(credential: AuthCredential): SignInResult {
+        val result = firebaseAuth.signInWithCredential(credential).await()
 
-        awaitClose { }
+        val isNewUser = result.additionalUserInfo?.isNewUser ?: false
+
+        return if (isNewUser) {
+            SignInResult.NewUser(result.user!!.toPostiumUser())
+        } else {
+            SignInResult.ExistingUser(result.user!!.toPostiumUser())
+        }
     }
 
     override fun signOut() {

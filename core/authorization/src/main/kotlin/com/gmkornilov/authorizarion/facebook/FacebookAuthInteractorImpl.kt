@@ -7,12 +7,10 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.gmkornilov.activity_utils.ActivityHelper
 import com.gmkornilov.authorizarion.data.AuthInteractor
+import com.gmkornilov.authorizarion.data.SignInResult
 import com.google.firebase.auth.FacebookAuthProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 
 private const val EMAIL_PERMISSION = "email"
@@ -25,37 +23,44 @@ internal class FacebookAuthInteractorImpl @Inject constructor(
     private val authInteractor: AuthInteractor
 ) : FacebookAuthInteractor {
     @ExperimentalCoroutinesApi
-    override fun signIn() = callbackFlow {
+    override suspend fun signIn() = suspendCancellableCoroutine<FacebookAuthStatus> {
+        val cancellationCallback = { _: Throwable? ->
+            loginManager.unregisterCallback(callbackManager)
+        }
+
         val callback = object : FacebookCallback<LoginResult> {
             override fun onCancel() {
-                sendBlocking(FacebookAuthStatus.AuthCancelled)
+                it.resume(FacebookAuthStatus.AuthCancelled, cancellationCallback)
             }
 
             override fun onError(error: FacebookException) {
-                sendBlocking(FacebookAuthStatus.AuthError)
+                it.resume(FacebookAuthStatus.AuthError, cancellationCallback)
             }
 
             override fun onSuccess(result: LoginResult) {
-                sendBlocking(FacebookAuthStatus.AuthSuccessful(result.accessToken.token))
+                it.resume(
+                    FacebookAuthStatus.AuthSuccessful(result.accessToken.token),
+                    cancellationCallback
+                )
             }
 
         }
 
         loginManager.registerCallback(callbackManager, callback)
 
-        activityHelper.activityResultRegistryOwner?.let {
+        activityHelper.activityResultRegistryOwner?.let { activity ->
             loginManager.logIn(
-                it,
+                activity,
                 callbackManager,
                 listOf(EMAIL_PERMISSION, PUBLIC_PROFILE_PERMISSION)
             )
         }
 
-        awaitClose { loginManager.unregisterCallback(callbackManager) }
+        it.invokeOnCancellation { cause -> cancellationCallback(cause) }
     }
 
     @ExperimentalCoroutinesApi
-    override fun passToken(token: String): Flow<Boolean> {
+    override suspend fun passToken(token: String): SignInResult {
         val credential = FacebookAuthProvider.getCredential(token)
 
         return authInteractor.signInWithCredential(credential)

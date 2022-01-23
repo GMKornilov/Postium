@@ -1,12 +1,12 @@
 package com.gmkornilov.authorizarion.facebook
 
+import com.gmkornilov.authorizarion.data.SignInResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 
 interface FacebookAuthInteractor {
     @ExperimentalCoroutinesApi
-    fun signIn(): Flow<FacebookAuthStatus>
+    suspend fun signIn(): FacebookAuthStatus
 
     @ExperimentalCoroutinesApi
-    fun passToken(token: String): Flow<Boolean>
+    suspend fun passToken(token: String): SignInResult
 }

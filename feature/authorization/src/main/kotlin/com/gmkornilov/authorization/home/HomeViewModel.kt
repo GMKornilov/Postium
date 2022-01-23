@@ -1,17 +1,12 @@
 package com.gmkornilov.authorization.home
 
 import androidx.activity.result.ActivityResult
-import androidx.lifecycle.viewModelScope
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthStatus
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.view_model.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -33,12 +28,9 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             reduce { state.copy(isLoading = true) }
-            emailAuthInteractor.signIn(login, password).collect {
-                reduce { state.copy(isLoading = false) }
-                if (!it) {
-                    postSideEffect(HomeSideEffect.LoginError)
-                }
-            }
+            val result = emailAuthInteractor.signIn(login, password)
+            reduce { state.copy(isLoading = false) }
+            // TODO: show something with result
         }
     }
 
@@ -59,11 +51,7 @@ class HomeViewModel @Inject constructor(
     @ExperimentalCoroutinesApi
     override fun handleGoogleSignInResult(activityResult: ActivityResult) = intent {
         viewModelScope.launch {
-            googleAuthInteractor.signIn(activityResult).collect {
-                if (!it) {
-                    postSideEffect(HomeSideEffect.LoginError)
-                }
-            }
+            googleAuthInteractor.signIn(activityResult)
         }
     }
 
@@ -74,18 +62,17 @@ class HomeViewModel @Inject constructor(
     @ExperimentalCoroutinesApi
     override fun facebookSignIn() = intent {
         viewModelScope.launch {
-            facebookAuthInteractor.signIn()
-                .flatMapConcat {
-                    when (it) {
-                        FacebookAuthStatus.AuthCancelled -> flowOf(false)
-                        FacebookAuthStatus.AuthError -> flowOf(false)
-                        is FacebookAuthStatus.AuthSuccessful -> facebookAuthInteractor.passToken(it.token)
-                    }
-                }.collect {
-                    if (!it) {
-                        postSideEffect(HomeSideEffect.LoginError)
-                    }
+            when (val facebookAuthStatus = facebookAuthInteractor.signIn()) {
+                FacebookAuthStatus.AuthCancelled -> {
                 }
+                FacebookAuthStatus.AuthError -> {
+                    postSideEffect(HomeSideEffect.LoginError)
+                }
+                is FacebookAuthStatus.AuthSuccessful -> {
+                    val result = facebookAuthInteractor.passToken(facebookAuthStatus.token)
+                    // TODO: do something with result
+                }
+            }
         }
     }
 

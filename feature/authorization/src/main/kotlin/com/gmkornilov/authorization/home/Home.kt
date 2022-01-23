@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gmkornilov.authorization.R
 import com.gmkornilov.design.buttons.CircularFacebookButton
@@ -26,7 +25,6 @@ import com.gmkornilov.design.buttons.CircularVkButton
 import com.gmkornilov.design.theme.PostiumTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
