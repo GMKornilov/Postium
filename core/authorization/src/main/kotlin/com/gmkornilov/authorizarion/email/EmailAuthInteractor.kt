@@ -10,9 +10,7 @@ interface EmailAuthInteractor {
 }
 
 sealed class EmailAuthResult {
-    data class ExistingUser(val postiumUser: PostiumUser): EmailAuthResult()
-
-    data class NewUser(val postiumUser: PostiumUser): EmailAuthResult()
+    data class Success(val postiumUser: PostiumUser): EmailAuthResult()
 
     object UserDoesntExist: EmailAuthResult()
 
@@ -20,6 +18,6 @@ sealed class EmailAuthResult {
 }
 
 internal fun SignInResult.toEmailAuthResult() = when (this) {
-    is SignInResult.ExistingUser -> EmailAuthResult.ExistingUser(this.user)
-    is SignInResult.NewUser -> EmailAuthResult.NewUser(this.user)
+    is SignInResult.ExistingUser -> EmailAuthResult.Success(this.user)
+    is SignInResult.NewUser -> EmailAuthResult.Success(this.user)
 }

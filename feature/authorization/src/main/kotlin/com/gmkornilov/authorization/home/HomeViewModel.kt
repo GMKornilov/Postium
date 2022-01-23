@@ -1,10 +1,14 @@
 package com.gmkornilov.authorization.home
 
 import androidx.activity.result.ActivityResult
+import com.gmkornilov.authorizarion.data.SignInResult
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
+import com.gmkornilov.authorizarion.email.EmailAuthResult
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthStatus
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
+import com.gmkornilov.authorizarion.model.PostiumUser
+import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -17,6 +21,7 @@ class HomeViewModel @Inject constructor(
     private val googleAuthInteractor: GoogleAuthInteractor,
     private val facebookAuthInteractor: FacebookAuthInteractor,
     private val emailAuthInteractor: EmailAuthInteractor,
+    private val userResultHandler: UserResultHandler,
 ) : BaseViewModel<HomeState, HomeSideEffect>(), HomeEvents {
     override fun getBaseState(): HomeState = HomeState.DEFAULT
 
@@ -27,10 +32,18 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            reduce { state.copy(isLoading = true) }
+            reduce { HomeState.Loading }
             val result = emailAuthInteractor.signIn(login, password)
-            reduce { state.copy(isLoading = false) }
-            // TODO: show something with result
+            reduce {
+                when (result) {
+                    is EmailAuthResult.Success -> {
+                        handleSuccessfulResult(result.postiumUser)
+                        HomeState.None
+                    }
+                    EmailAuthResult.UserDoesntExist -> HomeState.UserDoesntExist
+                    EmailAuthResult.WrongPassword -> HomeState.WrongPassword
+                }
+            }
         }
     }
 
@@ -69,12 +82,16 @@ class HomeViewModel @Inject constructor(
                     postSideEffect(HomeSideEffect.LoginError)
                 }
                 is FacebookAuthStatus.AuthSuccessful -> {
-                    val result = facebookAuthInteractor.passToken(facebookAuthStatus.token)
-                    // TODO: do something with result
+                    when (val result = facebookAuthInteractor.passToken(facebookAuthStatus.token)) {
+                        is SignInResult.ExistingUser -> handleSuccessfulResult(result.user)
+                        is SignInResult.NewUser -> handleSuccessfulResult(result.user)
+                    }
                 }
             }
         }
     }
 
-
+    private fun handleSuccessfulResult(postiumUser: PostiumUser?) {
+        userResultHandler.handleResult(postiumUser)
+    }
 }

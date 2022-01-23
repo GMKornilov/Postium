@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.gmkornilov.authorization.R
 import com.gmkornilov.design.buttons.CircularFacebookButton
 import com.gmkornilov.design.buttons.CircularGoogleButton
@@ -30,11 +29,11 @@ import kotlinx.coroutines.launch
 @ExperimentalCoroutinesApi
 @Composable
 fun Home(
-    scaffoldState: ScaffoldState,
-    navController: NavController,
     viewModel: HomeViewModel,
     modifier: Modifier = Modifier,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val state by viewModel.container.stateFlow.collectAsState()
 
     val scope = rememberCoroutineScope()
@@ -54,9 +53,8 @@ fun Home(
                     is HomeSideEffect.LoginError -> showError(
                         context.getString(R.string.login_failed_label),
                         scope,
-                        scaffoldState
+                        snackbarHostState
                     )
-                    is HomeSideEffect.Navigate -> navController.navigate(it.route)
                 }
             }
         }
@@ -68,10 +66,10 @@ fun Home(
 private fun showError(
     message: String,
     coroutineScope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    snackbarHostState: SnackbarHostState
 ) {
     coroutineScope.launch {
-        scaffoldState.snackbarHostState.showSnackbar(message = message)
+        snackbarHostState.showSnackbar(message = message)
     }
 }
 
@@ -126,6 +124,21 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             }
         )
 
+        val text = when (state) {
+            HomeState.UserDoesntExist -> stringResource(R.string.unexisting_user_label)
+            HomeState.WrongPassword -> stringResource(R.string.wrong_password_label)
+            else -> null
+        }
+
+        if (text != null) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.subtitle2,
+                color = MaterialTheme.colors.error,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
         TextButton(
             onClick = homeEvents::passwordRestoration,
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -135,10 +148,10 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
 
         Button(
             onClick = { homeEvents.credentialsSignIn(enteredLogin, enteredPassword) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(48.dp)
         ) {
-            if (state.isLoading) {
-                CircularProgressIndicator()
+            if (state is HomeState.Loading) {
+                CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
             } else {
                 Text(text = stringResource(R.string.login_label))
             }
@@ -183,6 +196,39 @@ fun DefaultPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.DEFAULT,
+            homeEvents = HomeEvents.MOCK
+        )
+    }
+}
+
+@Preview
+@Composable
+fun LoadingPreviewHome() {
+    PostiumTheme {
+        HomeWithState(
+            state = HomeState.Loading,
+            homeEvents = HomeEvents.MOCK
+        )
+    }
+}
+
+@Preview
+@Composable
+fun WrongPasswordPreviewHome() {
+    PostiumTheme {
+        HomeWithState(
+            state = HomeState.WrongPassword,
+            homeEvents = HomeEvents.MOCK
+        )
+    }
+}
+
+@Preview
+@Composable
+fun UserDoesntExistPreviewHome() {
+    PostiumTheme {
+        HomeWithState(
+            state = HomeState.UserDoesntExist,
             homeEvents = HomeEvents.MOCK
         )
     }

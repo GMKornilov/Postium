@@ -1,9 +1,7 @@
 package com.gmkornilov.authorization.brick_navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
 import com.gmkornilov.authorization.di.AuthorizationDeps
 import com.gmkornilov.authorization.di.DaggerAuthorizationComponent
 import com.gmkornilov.authorization.domain.UserResultHandler
@@ -36,8 +34,6 @@ private val authorizationHomeScreen = BaseScreen(
         val viewModel = it.get<HomeViewModel>()
 
         Home(
-            scaffoldState = rememberScaffoldState(),
-            navController = rememberNavController(),
             viewModel = viewModel,
             modifier = Modifier.fillMaxSize()
         )
