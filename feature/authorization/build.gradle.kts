@@ -47,6 +47,8 @@ dependencies {
 
     implementation(project(":core:authorization"))
 
+    implementation(Deps.Kotlin.coroutinesAndroid)
+
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
     implementation(Deps.AndroidX.activityCompose)

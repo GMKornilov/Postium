@@ -72,7 +72,7 @@ class ProfileBottomNavigationItem @Inject constructor(
         if (authInteractor.getPostiumUser() == null) {
             router.addScreen(
                 authorizationFlowScreen.screen,
-                AuthorizationArgument(profileBottomNavigationItem, userResultHandler)
+                AuthorizationArgument(profileBottomNavigationItem, userResultHandler, router)
             )
         }
     }

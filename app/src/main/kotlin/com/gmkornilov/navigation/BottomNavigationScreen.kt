@@ -107,7 +107,7 @@ private fun BottomBar(
             BottomNavigationItem(
                 icon = { bottomNavigationItem.IconComposable() },
                 label = if (isSelected) {
-                    { bottomNavigationItem.IconComposable() }
+                    { bottomNavigationItem.TitleComposable() }
                 } else null,
                 selected = isSelected,
                 onClick = { onIndexSelected(index) },

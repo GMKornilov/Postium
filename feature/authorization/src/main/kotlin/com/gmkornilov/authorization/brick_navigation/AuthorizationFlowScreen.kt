@@ -2,6 +2,7 @@ package com.gmkornilov.authorization.brick_navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorization.di.AuthorizationDeps
 import com.gmkornilov.authorization.di.DaggerAuthorizationComponent
 import com.gmkornilov.authorization.domain.UserResultHandler
@@ -15,6 +16,7 @@ import javax.inject.Inject
 data class AuthorizationArgument(
     val authorizationDeps: AuthorizationDeps,
     val userResultHandler: UserResultHandler,
+    val router: TreeRouter,
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
