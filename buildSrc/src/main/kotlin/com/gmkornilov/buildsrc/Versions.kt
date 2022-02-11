@@ -1,11 +1,11 @@
 object Versions {
-    const val compose = "1.0.5"
+    const val compose = "1.1.0"
 
     const val android_gradle = "7.0.3"
     const val kotlin_gradle = Kotlin.version
 
     object Kotlin {
-        const val version = "1.5.31"
+        const val version = "1.6.10"
 
         object Coroutines {
             const val version = "1.3.9"

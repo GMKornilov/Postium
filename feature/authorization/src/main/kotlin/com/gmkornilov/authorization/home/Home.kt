@@ -24,6 +24,7 @@ import com.gmkornilov.design.buttons.CircularVkButton
 import com.gmkornilov.design.theme.PostiumTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -73,6 +74,7 @@ private fun showError(
     }
 }
 
+@ExperimentalCoroutinesApi
 @Composable
 private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Modifier = Modifier) {
     var enteredLogin by remember { mutableStateOf("") }
@@ -190,6 +192,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
     }
 }
 
+@ExperimentalCoroutinesApi
 @Preview
 @Composable
 fun DefaultPreviewHome() {
@@ -201,6 +204,7 @@ fun DefaultPreviewHome() {
     }
 }
 
+@ExperimentalCoroutinesApi
 @Preview
 @Composable
 fun LoadingPreviewHome() {
@@ -212,6 +216,7 @@ fun LoadingPreviewHome() {
     }
 }
 
+@ExperimentalCoroutinesApi
 @Preview
 @Composable
 fun WrongPasswordPreviewHome() {
@@ -223,6 +228,7 @@ fun WrongPasswordPreviewHome() {
     }
 }
 
+@ExperimentalCoroutinesApi
 @Preview
 @Composable
 fun UserDoesntExistPreviewHome() {
