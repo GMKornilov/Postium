@@ -11,6 +11,7 @@ import com.gmkornilov.authorization.home.HomeViewModel
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
 data class AuthorizationArgument(
@@ -19,7 +20,7 @@ data class AuthorizationArgument(
     val router: TreeRouter,
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
 private val authorizationHomeScreen = BaseScreen(
     key = "Authorization Home",
     onCreate = { _, argument ->

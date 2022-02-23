@@ -7,6 +7,6 @@ class RegistrationViewModel @Inject constructor(
 
 ) : BaseViewModel<RegistrationState, RegistrationSideEffect>(), RegistrationEvents {
     override fun getBaseState(): RegistrationState {
-        return RegistrationState()
+        return RegistrationState.None
     }
 }

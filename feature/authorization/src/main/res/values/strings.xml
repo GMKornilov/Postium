@@ -3,6 +3,7 @@
     <string name="app_name">Postium</string>
     <string name="login_hint">Login</string>
     <string name="password_hint">Password</string>
+    <string name="password_confirmation_hint">Confirm password</string>
     <string name="not_registered_label">Not registered yet? Press here.</string>
     <string name="forgot_password_label">Forgot password?</string>
     <string name="login_label">Log in</string>
@@ -14,4 +15,6 @@
 
     <string name="unexisting_user_label">User doesn\'t exist</string>
     <string name="wrong_password_label">Incorrect password for given user</string>
+
+    <string name="register">Register</string>
 </resources>

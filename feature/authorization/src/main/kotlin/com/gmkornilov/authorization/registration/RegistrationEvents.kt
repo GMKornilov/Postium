@@ -1,4 +1,9 @@
 package com.gmkornilov.authorization.registration
 
-interface RegistrationEvents {
+internal interface RegistrationEvents {
+    companion object {
+        val MOCK = object : RegistrationEvents {
+
+        }
+    }
 }

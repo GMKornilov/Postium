@@ -5,28 +5,27 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.authorization.R
 import com.gmkornilov.design.buttons.CircularFacebookButton
 import com.gmkornilov.design.buttons.CircularGoogleButton
 import com.gmkornilov.design.buttons.CircularVkButton
+import com.gmkornilov.design.components.PasswordTextField
 import com.gmkornilov.design.theme.PostiumTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Composable
 fun Home(
@@ -48,7 +47,7 @@ fun Home(
 
     LaunchedEffect(viewModel) {
         launch {
-            viewModel.container.sideEffectFlow.collect {
+            viewModel.container.sideEffectFlow.collect(FlowCollector {
                 when (it) {
                     is HomeSideEffect.GoogleSignIn -> googleSignInlauncher.launch(it.intent)
                     is HomeSideEffect.LoginError -> showError(
@@ -57,7 +56,7 @@ fun Home(
                         snackbarHostState
                     )
                 }
-            }
+            })
         }
     }
 
@@ -101,29 +100,13 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
                 .fillMaxWidth()
         )
 
-        OutlinedTextField(
+        PasswordTextField(
             value = enteredPassword,
+            isPasswordVisible = passwordVisible,
+            onPasswordVisibleChange = { passwordVisible = it },
             onValueChange = { enteredPassword = it },
             label = { Text(stringResource(id = R.string.password_hint)) },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = if (passwordVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
-            trailingIcon = {
-                val icon = if (passwordVisible) {
-                    Icons.Filled.VisibilityOff
-                } else {
-                    Icons.Filled.Visibility
-                }
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = stringResource(R.string.toggle_visibility_content_description)
-                    )
-                }
-            }
         )
 
         val text = when (state) {
@@ -150,7 +133,9 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
 
         Button(
             onClick = { homeEvents.credentialsSignIn(enteredLogin, enteredPassword) },
-            modifier = Modifier.fillMaxWidth().height(48.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
         ) {
             if (state is HomeState.Loading) {
                 CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)

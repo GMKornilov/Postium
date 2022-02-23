@@ -1,4 +1,7 @@
 package com.gmkornilov.authorization.registration
 
-class RegistrationState {
+sealed class RegistrationState {
+    object None: RegistrationState()
+
+    object PasswordDontMathc: RegistrationState()
 }
