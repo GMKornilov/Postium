@@ -5,16 +5,16 @@ import android.content.Intent
 import androidx.activity.result.ActivityResult
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.data.SignInResult
+import com.gmkornilov.di.ApplicationContext
 import com.gmkornilov.secrets.SecretsProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.GoogleAuthProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-internal class GoogleAuthInteractorImpl @Inject constructor(
+class GoogleAuthInteractorImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val authInteractor: AuthInteractor,
     secretsProvider: SecretsProvider,

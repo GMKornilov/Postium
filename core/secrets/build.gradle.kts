@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
     id(Deps.Google.secretsPlugin)
 }
 
@@ -37,10 +36,6 @@ android {
 }
 
 dependencies {
-    implementation(Deps.Hilt.android)
-    kapt(Deps.Hilt.androidCompiler)
-}
-
-hilt {
-    enableAggregatingTask = true
+    implementation(Deps.Dagger.core)
+    kapt(Deps.Dagger.kapt)
 }

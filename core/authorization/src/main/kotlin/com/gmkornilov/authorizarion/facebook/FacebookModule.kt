@@ -5,14 +5,10 @@ import com.facebook.login.LoginManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
-internal interface FacebookModule {
+interface FacebookModule {
     @Binds
     @Singleton
     fun facebookAuthInteractor(facebookAuthInteractorImpl: FacebookAuthInteractorImpl): FacebookAuthInteractor

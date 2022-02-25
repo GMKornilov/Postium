@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -36,10 +35,9 @@ android {
 }
 
 dependencies {
-    implementation(Deps.Hilt.android)
-    kapt(Deps.Hilt.androidCompiler)
-}
+    implementation(Deps.AndroidX.androidXCoreKtx)
+    implementation(Deps.AndroidX.appCompat)
 
-hilt {
-    enableAggregatingTask = true
+    implementation(Deps.Dagger.core)
+    kapt(Deps.Dagger.kapt)
 }

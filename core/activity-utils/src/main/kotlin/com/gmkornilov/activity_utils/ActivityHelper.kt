@@ -2,9 +2,7 @@ package com.gmkornilov.activity_utils
 
 import androidx.activity.ComponentActivity
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class ActivityHelper @Inject constructor() {
     private var activity: ComponentActivity? = null
 

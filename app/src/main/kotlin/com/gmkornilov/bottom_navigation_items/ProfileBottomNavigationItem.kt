@@ -12,29 +12,20 @@ import androidx.compose.ui.res.stringResource
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
-import com.gmkornilov.authorization.brick_navigation.AuthorizationArgument
-import com.gmkornilov.authorization.brick_navigation.AuthorizationFlowScreen
-import com.gmkornilov.authorization.di.AuthorizationDeps
+import com.gmkornilov.authorization.brick_navigation.AuthorizationFlowScreenFactory
 import com.gmkornilov.authorization.domain.UserResultHandler
-import com.gmkornilov.navigation.BottomNavigationScreen
 import com.gmkornilov.postium.R
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.gmkornilov.root_screen.RootScreenFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface ProfileBottomNavigationsDeps : AuthorizationDeps
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProfileBottomNavigationItem @Inject constructor(
     private val authInteractor: AuthInteractor,
     parentRouter: TreeRouter,
-    bottomNavigationScreen: BottomNavigationScreen,
-    private val authorizationFlowScreen: AuthorizationFlowScreen,
-    private val profileBottomNavigationItem: ProfileBottomNavigationsDeps
+    bottomNavigationScreenFactory: RootScreenFactory,
+    private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
 ) : BottomNavigationItem {
     @Composable
     override fun IconComposable() {
@@ -71,13 +62,13 @@ class ProfileBottomNavigationItem @Inject constructor(
 
         if (authInteractor.getPostiumUser() == null) {
             router.addScreen(
-                authorizationFlowScreen.screen,
-                AuthorizationArgument(profileBottomNavigationItem, userResultHandler, router)
+                authorizationFlowScreenFactory.build(),
+                userResultHandler
             )
         }
     }
 
-    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreen.screen.key)
+    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreenFactory.screenKey)
 
     private fun TreeRouter.isEmpty(): Boolean {
         return this.screen.value == null

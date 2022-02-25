@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -64,8 +63,8 @@ dependencies {
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.viewModel)
 
-    implementation(Deps.Hilt.android)
-    kapt(Deps.Hilt.androidCompiler)
+    implementation(Deps.Dagger.core)
+    kapt(Deps.Dagger.kapt)
 
     testImplementation(Deps.TestingTooling.junit)
     testImplementation(Deps.MVI.Orbit.testing)
@@ -73,8 +72,4 @@ dependencies {
     androidTestImplementation(Deps.TestingTooling.androidxEspresso)
     androidTestImplementation(Deps.TestingTooling.composeUiTest)
     debugImplementation(Deps.TestingTooling.composeUiTooling)
-}
-
-hilt {
-    enableAggregatingTask = true
 }

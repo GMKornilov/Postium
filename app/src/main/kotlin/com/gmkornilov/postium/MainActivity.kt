@@ -12,15 +12,12 @@ import com.alphicc.brick.TreeRouter
 import com.alphicc.brick.navigationContainers.ScreensContainer
 import com.gmkornilov.activity_utils.ActivityHelper
 import com.gmkornilov.design.theme.PostiumTheme
-import com.gmkornilov.navigation.BottomNavigationScreen
-import com.gmkornilov.navigation.BottomNavigationScreenDeps
+import com.gmkornilov.root_screen.RootScreenFactory
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var activityHelper: ActivityHelper
@@ -29,12 +26,11 @@ class MainActivity : ComponentActivity() {
     lateinit var router: TreeRouter
 
     @Inject
-    lateinit var bottomNavigationScreenDeps: BottomNavigationScreenDeps
-
-    @Inject
-    lateinit var bottomNavigationScreen: BottomNavigationScreen
+    lateinit var bottomNavigationScreenFactory: RootScreenFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as MainApplication).component.inject(this)
+
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -53,7 +49,7 @@ class MainActivity : ComponentActivity() {
         }
 
         if (savedInstanceState == null) {
-            router.addScreen(bottomNavigationScreen.screen, bottomNavigationScreenDeps)
+            router.addScreen(bottomNavigationScreenFactory.build())
         }
     }
 

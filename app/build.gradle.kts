@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
     id(Deps.Google.secretsPlugin)
     id(Deps.Google.googlePlayServicesPlugin)
 }
@@ -88,16 +87,12 @@ dependencies {
 
     implementation(Deps.Facebook.login)
 
-    implementation(Deps.Hilt.android)
-    kapt(Deps.Hilt.androidCompiler)
+    implementation(Deps.Dagger.core)
+    kapt(Deps.Dagger.kapt)
 
     testImplementation(Deps.TestingTooling.junit)
     androidTestImplementation(Deps.TestingTooling.androidxJunit)
     androidTestImplementation(Deps.TestingTooling.androidxEspresso)
     androidTestImplementation(Deps.TestingTooling.composeUiTest)
     debugImplementation(Deps.TestingTooling.composeUiTooling)
-}
-
-hilt {
-    enableAggregatingTask = true
 }

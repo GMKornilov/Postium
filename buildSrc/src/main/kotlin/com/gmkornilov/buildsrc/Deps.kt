@@ -100,16 +100,9 @@ object Deps {
         const val login = "com.facebook.android:facebook-login:${Versions.Facebook.login}"
     }
 
-    /**
-     * Hilt DI
-     */
-    object Hilt {
-        const val plugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt.version}"
-        const val android = "com.google.dagger:hilt-android:${Versions.Hilt.version}"
-        const val androidCompiler =
-            "com.google.dagger:hilt-android-compiler:${Versions.Hilt.version}"
+    object Dagger {
+        const val core = "com.google.dagger:dagger:${Versions.Dagger.version}"
 
-        const val composeNavigation =
-            "androidx.hilt:hilt-navigation-compose:${Versions.Hilt.composeNavigation}"
+        const val kapt = "com.google.dagger:dagger-compiler:${Versions.Dagger.version}"
     }
 }

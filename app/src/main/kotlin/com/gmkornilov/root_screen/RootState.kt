@@ -1,8 +1,8 @@
-package com.gmkornilov.navigation
+package com.gmkornilov.root_screen
 
 import com.alphicc.brick.TreeRouter
 
-data class BottomNavigationState(
+data class RootState(
     val selectedIndex: Int,
     val selectedRouter: TreeRouter
 )

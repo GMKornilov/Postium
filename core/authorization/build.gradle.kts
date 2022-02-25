@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
     id(Deps.Google.googlePlayServicesPlugin)
 }
 
@@ -37,13 +36,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
     implementation(project(":core:secrets"))
     implementation(project(":core:activity-utils"))
 
     implementation(Deps.Kotlin.coroutinesAndroid)
 
-    implementation(Deps.Hilt.android)
-    kapt(Deps.Hilt.androidCompiler)
+    implementation(Deps.Dagger.core)
+    kapt(Deps.Dagger.kapt)
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.authorization)
@@ -51,8 +51,4 @@ dependencies {
     implementation(Deps.Google.googlePlayServicesAuth)
 
     implementation(Deps.Facebook.login)
-}
-
-hilt {
-    enableAggregatingTask = true
 }

@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
-internal class EmailAuthInteractorImpl @Inject constructor(
+class EmailAuthInteractorImpl @Inject constructor(
     private val authInteractor: AuthInteractor,
 ): EmailAuthInteractor {
     @ExperimentalCoroutinesApi

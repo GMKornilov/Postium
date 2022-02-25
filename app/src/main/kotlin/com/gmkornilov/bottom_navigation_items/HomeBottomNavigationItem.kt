@@ -7,15 +7,15 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.alphicc.brick.TreeRouter
-import com.gmkornilov.mainpage.brick_navigation.MainpageScreen
-import com.gmkornilov.navigation.BottomNavigationScreen
+import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.postium.R
+import com.gmkornilov.root_screen.RootScreenFactory
 import javax.inject.Inject
 
 class HomeBottomNavigationItem @Inject constructor(
     parentRouter: TreeRouter,
-    bottomNavigationScreen: BottomNavigationScreen,
-    mainpageScreen: MainpageScreen,
+    bottomNavigationScreenFactory: RootScreenFactory,
+    mainpageScreenFactory: MainpageScreenFactory,
 ): BottomNavigationItem {
     @Composable
     override fun IconComposable() {
@@ -27,7 +27,7 @@ class HomeBottomNavigationItem @Inject constructor(
         Text(stringResource(R.string.home_tab))
     }
 
-    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreen.screen.key).apply {
-        newRootScreen(mainpageScreen.screen)
+    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreenFactory.screenKey).apply {
+        newRootScreen(mainpageScreenFactory.build())
     }
 }

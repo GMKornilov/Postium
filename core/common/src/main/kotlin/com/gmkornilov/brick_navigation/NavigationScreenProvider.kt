@@ -1,8 +1,7 @@
 package com.gmkornilov.brick_navigation
 
-import com.alphicc.brick.Screen
-import com.gmkornilov.view_model.BaseViewModel
+interface Dependency
 
-interface NavigationScreenProvider<D : BaseViewModel<*, *>> {
-    val screen: Screen<D>
+interface NavigationScreenProvider<D: Dependency> {
+    val dependency: D
 }

@@ -83,12 +83,7 @@ object Versions {
         const val login = "12.2.0"
     }
 
-    /**
-     * Hilt DI dependencies
-     */
-    object Hilt {
-        const val version = "2.38.1"
-
-        const val composeNavigation = "1.0.0-rc01"
+    object Dagger {
+        const val version = "2.41"
     }
 }
