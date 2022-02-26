@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.home
+package com.gmkornilov.authorization.home.view
 
 import androidx.activity.result.ActivityResult
 import com.gmkornilov.authorizarion.data.SignInResult
@@ -9,6 +9,7 @@ import com.gmkornilov.authorizarion.facebook.FacebookAuthStatus
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.domain.UserResultHandler
+import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class HomeViewModel @Inject constructor(
     private val googleAuthInteractor: GoogleAuthInteractor,
     private val facebookAuthInteractor: FacebookAuthInteractor,
     private val emailAuthInteractor: EmailAuthInteractor,
-    private val userResultHandler: UserResultHandler,
+    private val homeFlowEvents: HomeFlowEvents,
 ) : BaseViewModel<HomeState, HomeSideEffect>(), HomeEvents {
     override fun getBaseState(): HomeState = HomeState.DEFAULT
 
@@ -47,13 +48,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun register() = intent {
+    override fun register() = homeFlowEvents.registerClicked()
 
-    }
-
-    override fun passwordRestoration() = intent {
-
-    }
+    override fun passwordRestoration() = homeFlowEvents.passwordRestorationClicked()
 
     override fun googleSignIn() = intent {
         val signInIntent = googleAuthInteractor.getSignInIntent()
@@ -92,6 +89,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun handleSuccessfulResult(postiumUser: PostiumUser?) {
-        userResultHandler.handleResult(postiumUser)
+        homeFlowEvents.successfulAuthorization(postiumUser)
     }
 }

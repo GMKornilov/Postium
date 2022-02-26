@@ -14,5 +14,5 @@ interface DepsModule {
 
     @Singleton
     @Binds
-    fun bindRootDeps(singletonDeps: SingletonDeps): RootScreenFactory.RootScreenDeps
+    fun bindRootDeps(singletonDeps: SingletonDeps): RootScreenFactory.Deps
 }

@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.home
+package com.gmkornilov.authorization.home.view
 
 import android.content.Intent
 

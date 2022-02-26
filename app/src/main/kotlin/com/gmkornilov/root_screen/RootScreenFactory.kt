@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.brick_navigation.AuthorizationFlowScreenFactory
+import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
@@ -24,8 +24,8 @@ private const val key = "Root screen"
 
 @OptIn(ExperimentalAnimationApi::class)
 class RootScreenFactory @Inject constructor(
-    override val dependency: RootScreenDeps,
-) : NavigationScreenProvider<RootScreenFactory.RootScreenDeps> {
+    override val dependency: Deps,
+) : NavigationScreenProvider<RootScreenFactory.Deps> {
 
     val screenKey = key
 
@@ -34,7 +34,7 @@ class RootScreenFactory @Inject constructor(
             key = key,
             onCreate = { _, _ ->
                 val component = DaggerRootScreenFactory_Component.builder()
-                    .rootScreenDeps(dependency)
+                    .deps(dependency)
                     .build()
                 return@BaseScreen component.rootViewModel
             },
@@ -56,21 +56,21 @@ class RootScreenFactory @Inject constructor(
         )
     }
 
-    interface RootScreenDeps :
-        AuthorizationFlowScreenFactory.AuthorizationDeps,
-        MainpageScreenFactory.MainPageDependency,
+    interface Deps :
+        AuthorizationFlowScreenFactory.Deps,
+        MainpageScreenFactory.Deps,
         Dependency {
-        override val router: TreeRouter
-
         val authInteractor: AuthInteractor
+
+        val router: TreeRouter
     }
 
     @RootScope
     @dagger.Component(
-        dependencies = [RootScreenDeps::class],
+        dependencies = [Deps::class],
         modules = [RootModule::class],
     )
-    interface Component : AuthorizationFlowScreenFactory.AuthorizationDeps {
+    interface Component : AuthorizationFlowScreenFactory.Deps, MainpageScreenFactory.Deps {
         val rootViewModel: RootViewModel
     }
 
@@ -82,7 +82,11 @@ class RootScreenFactory @Inject constructor(
 
         @Binds
         @RootScope
-        fun bindAuthorizationDeps(component: Component): AuthorizationFlowScreenFactory.AuthorizationDeps
+        fun bindAuthorizationDeps(component: Component): AuthorizationFlowScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindMainpageDeps(component: Component): MainpageScreenFactory.Deps
 
         companion object {
             @Provides

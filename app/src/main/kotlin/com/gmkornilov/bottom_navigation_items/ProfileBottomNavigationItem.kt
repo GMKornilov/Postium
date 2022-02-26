@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
-import com.gmkornilov.authorization.brick_navigation.AuthorizationFlowScreenFactory
+import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.postium.R
 import com.gmkornilov.root_screen.RootScreenFactory
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProfileBottomNavigationItem @Inject constructor(
     private val authInteractor: AuthInteractor,
-    parentRouter: TreeRouter,
+    rootRouter: TreeRouter,
     bottomNavigationScreenFactory: RootScreenFactory,
     private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
 ) : BottomNavigationItem {
@@ -61,16 +61,9 @@ class ProfileBottomNavigationItem @Inject constructor(
         super.onSelected()
 
         if (authInteractor.getPostiumUser() == null) {
-            router.addScreen(
-                authorizationFlowScreenFactory.build(),
-                userResultHandler
-            )
+            authorizationFlowScreenFactory.start(userResultHandler, router)
         }
     }
 
-    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreenFactory.screenKey)
-
-    private fun TreeRouter.isEmpty(): Boolean {
-        return this.screen.value == null
-    }
+    override val router: TreeRouter = rootRouter.branch(bottomNavigationScreenFactory.screenKey)
 }

@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.home
+package com.gmkornilov.authorization.home.view
 
 sealed class HomeState {
     object None: HomeState()
@@ -10,6 +10,6 @@ sealed class HomeState {
     object WrongPassword: HomeState()
 
     companion object {
-        val DEFAULT = HomeState.None
+        val DEFAULT = None
     }
 }

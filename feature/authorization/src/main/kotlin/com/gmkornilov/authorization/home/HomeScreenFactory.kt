@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.brick_navigation
+package com.gmkornilov.authorization.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -8,8 +8,10 @@ import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.authorization.domain.UserResultHandler
-import com.gmkornilov.authorization.home.Home
-import com.gmkornilov.authorization.home.HomeViewModel
+import com.gmkornilov.authorization.feature_flow.AuthorizationFlow
+import com.gmkornilov.authorization.home.domain.HomeFlowEvents
+import com.gmkornilov.authorization.home.view.Home
+import com.gmkornilov.authorization.home.view.HomeViewModel
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
@@ -18,17 +20,16 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
-class AuthorizationFlowScreenFactory @Inject constructor(
-    override val dependency: AuthorizationDeps,
-): NavigationScreenProvider<AuthorizationFlowScreenFactory.AuthorizationDeps> {
-
+class HomeScreenFactory @Inject constructor(
+    override val dependency: Deps,
+): NavigationScreenProvider<HomeScreenFactory.Deps> {
     private val authorizationHomeScreen = BaseScreen(
         key = "Authorization Home",
         onCreate = { _, argument ->
             val arg = argument.get<UserResultHandler>()
 
-            val component = DaggerAuthorizationFlowScreenFactory_Component.builder()
-                .authorizationDeps(dependency)
+            val component = DaggerHomeScreenFactory_Component.builder()
+                .deps(dependency)
                 .userResultHandler(arg)
                 .build()
 
@@ -48,15 +49,15 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         return authorizationHomeScreen
     }
 
-    interface AuthorizationDeps: Dependency {
+    interface Deps: Dependency {
         val googleAuthInteractor: GoogleAuthInteractor
         val facebookAuthInteractor: FacebookAuthInteractor
         val emailAuthInteractor: EmailAuthInteractor
 
-        val router: TreeRouter
+        val homeFlowEvents: HomeFlowEvents
     }
 
-    @dagger.Component(dependencies = [AuthorizationDeps::class, UserResultHandler::class])
+    @dagger.Component(dependencies = [Deps::class, UserResultHandler::class])
     interface Component {
         val homeViewModel: HomeViewModel
     }

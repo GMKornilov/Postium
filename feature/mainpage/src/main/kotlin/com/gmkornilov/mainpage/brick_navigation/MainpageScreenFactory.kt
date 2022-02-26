@@ -9,8 +9,8 @@ import com.gmkornilov.mainpage.mainpage.Mainpage
 import javax.inject.Inject
 
 class MainpageScreenFactory @Inject constructor(
-    override val dependency: MainPageDependency,
-): NavigationScreenProvider<MainpageScreenFactory.MainPageDependency> {
+    override val dependency: Deps,
+): NavigationScreenProvider<MainpageScreenFactory.Deps> {
     private val mainpageScreen = BaseScreen<MainPageViewModel>(
         key = "Home",
         content = {
@@ -18,7 +18,7 @@ class MainpageScreenFactory @Inject constructor(
         }
     )
 
-    interface MainPageDependency : Dependency {
+    interface Deps : Dependency {
 
     }
 

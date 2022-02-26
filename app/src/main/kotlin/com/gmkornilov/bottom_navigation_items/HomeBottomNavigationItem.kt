@@ -13,7 +13,7 @@ import com.gmkornilov.root_screen.RootScreenFactory
 import javax.inject.Inject
 
 class HomeBottomNavigationItem @Inject constructor(
-    parentRouter: TreeRouter,
+    rootRouter: TreeRouter,
     bottomNavigationScreenFactory: RootScreenFactory,
     mainpageScreenFactory: MainpageScreenFactory,
 ): BottomNavigationItem {
@@ -27,7 +27,7 @@ class HomeBottomNavigationItem @Inject constructor(
         Text(stringResource(R.string.home_tab))
     }
 
-    override val router: TreeRouter = parentRouter.branch(bottomNavigationScreenFactory.screenKey).apply {
+    override val router: TreeRouter = rootRouter.branch(bottomNavigationScreenFactory.screenKey).apply {
         newRootScreen(mainpageScreenFactory.build())
     }
 }
