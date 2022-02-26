@@ -7,6 +7,7 @@ import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
+import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import dagger.Binds
@@ -47,7 +48,7 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         dependencies = [Deps::class],
         modules = [Module::class],
     )
-    interface Component : HomeScreenFactory.Deps {
+    interface Component : HomeScreenFactory.Deps, RegistrationScreenFactory.Deps {
         val flowInteractor: AuthorizationFlowInteractor
 
         val treeRouter: TreeRouter
@@ -71,6 +72,10 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         @AuthorizationScope
         @Binds
         fun bindHomeDeps(component: Component): HomeScreenFactory.Deps
+
+        @AuthorizationScope
+        @Binds
+        fun bindRegistrationDeps(component: Component): RegistrationScreenFactory.Deps
 
         @AuthorizationScope
         @Binds

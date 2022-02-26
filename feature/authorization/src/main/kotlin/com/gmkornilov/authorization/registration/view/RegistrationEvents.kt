@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.registration
+package com.gmkornilov.authorization.registration.view
 
 internal interface RegistrationEvents {
     companion object {

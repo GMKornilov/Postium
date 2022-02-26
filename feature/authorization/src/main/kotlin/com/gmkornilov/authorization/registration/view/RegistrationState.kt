@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.registration
+package com.gmkornilov.authorization.registration.view
 
 sealed class RegistrationState {
     object None: RegistrationState()

@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.registration
+package com.gmkornilov.authorization.registration.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,17 +17,6 @@ import com.gmkornilov.authorization.R
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.design.components.PasswordTextField
 import com.gmkornilov.design.theme.PostiumTheme
-
-private const val REGISTRATION_KEY = "registration"
-
-val registrationScreen = BaseScreen(
-    REGISTRATION_KEY,
-    onCreate = { _, _ -> RegistrationViewModel() }
-) {
-    val viewModel = it.get<RegistrationViewModel>()
-
-    Registration(viewModel)
-}
 
 @Composable
 internal fun Registration(
