@@ -16,14 +16,10 @@ class RootViewModel @Inject constructor(
 ) : BaseViewModel<RootState, Nothing>() {
     private val routerIndexFlow = MutableStateFlow(0)
 
-    private val routerFlow = routerIndexFlow.map {
-        bottomNavigationItems[it].router
-    }.stateIn(viewModelScope, SharingStarted.Lazily, bottomNavigationItems.first().router)
-
     init {
         viewModelScope.launch {
             routerIndexFlow.collect {
-                forceUpdateState(RootState(it, routerFlow.value))
+                forceUpdateState(RootState(it, getRouter(it)))
             }
         }
     }
@@ -36,6 +32,8 @@ class RootViewModel @Inject constructor(
             RootState(index, item.router)
         }
     }
+
+    private fun getRouter(index: Int) = bottomNavigationItems[index].router
 
     override fun getBaseState(): RootState {
         return RootState(0, bottomNavigationItems.first().router)

@@ -18,7 +18,7 @@ class AuthorizationFlowInteractor @Inject constructor(
     private var authorizationStep = AuthorizationStep.NONE
 
     fun startAuthorizationFlow() {
-        if (authorizationStep == AuthorizationStep.NONE) {
+        if (authorizationStep != AuthorizationStep.NONE) {
             return
         }
 

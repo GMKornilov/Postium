@@ -8,12 +8,11 @@ import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.registration.RegistrationScreenFactory
+import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import dagger.Binds
 import dagger.BindsInstance
-import dagger.Component
-import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
@@ -80,5 +79,9 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         @AuthorizationScope
         @Binds
         fun bindHomeFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): HomeFlowEvents
+
+        @AuthorizationScope
+        @Binds
+        fun bindRegistrationFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): RegistrationFlowEvents
     }
 }

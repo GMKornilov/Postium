@@ -1,6 +1,7 @@
 package com.gmkornilov.authorization.registration
 
 import com.alphicc.brick.Screen
+import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.registration.view.Registration
 import com.gmkornilov.authorization.registration.view.RegistrationViewModel
 import com.gmkornilov.brick_navigation.BaseScreen
@@ -34,7 +35,7 @@ class RegistrationScreenFactory @Inject constructor(
     }
 
     interface Deps: Dependency {
-
+        val registrationFlowEvents: RegistrationFlowEvents
     }
 
     @Scope
