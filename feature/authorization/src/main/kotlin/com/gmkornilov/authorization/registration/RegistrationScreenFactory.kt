@@ -1,5 +1,7 @@
 package com.gmkornilov.authorization.registration
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.registration.view.Registration
@@ -27,7 +29,7 @@ class RegistrationScreenFactory @Inject constructor(
     ) {
         val viewModel = it.get<RegistrationViewModel>()
 
-        Registration(viewModel)
+        Registration(viewModel, Modifier.fillMaxSize())
     }
 
     fun build(): Screen<RegistrationViewModel> {

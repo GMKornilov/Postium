@@ -17,12 +17,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
+private const val HOME_KEY = "Authorization Home"
+
 @OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
 class HomeScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<HomeScreenFactory.Deps> {
+    private val screenKey = HOME_KEY
+
     private val authorizationHomeScreen = BaseScreen(
-        key = "Authorization Home",
+        key = HOME_KEY,
         onCreate = { _, argument ->
             val arg = argument.get<UserResultHandler>()
 

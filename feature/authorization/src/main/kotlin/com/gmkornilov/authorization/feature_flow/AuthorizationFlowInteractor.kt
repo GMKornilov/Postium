@@ -35,7 +35,7 @@ class AuthorizationFlowInteractor @Inject constructor(
 
     override fun registerClicked() {
         authorizationStep = AuthorizationStep.REGISTRATION
-        router.addChild(registrationScreenFactory.build())
+        router.addScreen(registrationScreenFactory.build())
     }
 
     override fun passwordRestorationClicked() {

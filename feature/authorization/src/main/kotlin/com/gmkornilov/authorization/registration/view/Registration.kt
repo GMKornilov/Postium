@@ -26,7 +26,8 @@ internal fun Registration(
 
     RegistrationWithState(
         state = state,
-        registrationEvents = registrationViewModel
+        registrationEvents = registrationViewModel,
+        modifier = modifier,
     )
 }
 
