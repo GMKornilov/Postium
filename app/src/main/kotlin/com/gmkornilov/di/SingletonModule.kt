@@ -11,6 +11,7 @@ import com.gmkornilov.context.ApplicationContext
 import com.gmkornilov.secrets.SecretsModule
 import com.gmkornilov.strings.StringsProvider
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 @Module(
@@ -28,9 +29,11 @@ import javax.inject.Singleton
 interface SingletonModule {
     companion object {
         @Singleton
+        @Provides
         fun activityHelper() = ActivityHelper()
 
         @Singleton
+        @Provides
         fun stringsProvider(@ApplicationContext context: Context) = StringsProvider(context)
     }
 }

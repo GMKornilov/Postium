@@ -3,7 +3,7 @@ package com.gmkornilov.activity_utils
 import androidx.activity.ComponentActivity
 import javax.inject.Inject
 
-class ActivityHelper @Inject constructor() {
+class ActivityHelper {
     private var activity: ComponentActivity? = null
 
     val activityResultRegistry get() =  activity?.activityResultRegistry

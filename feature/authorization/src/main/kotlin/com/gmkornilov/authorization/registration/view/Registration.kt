@@ -98,12 +98,15 @@ private fun RegistrationWithState(
 
         Button(
             onClick = {
-                registrationEvents.registerUser(
-                    enteredLogin,
-                    enteredPassword,
-                    enteredPasswordConfirmation
-                )
+                if (!state.loading) {
+                    registrationEvents.registerUser(
+                        enteredLogin,
+                        enteredPassword,
+                        enteredPasswordConfirmation
+                    )
+                }
             },
+            enabled = !state.loading,
             modifier = Modifier
                 .padding(top = 32.dp)
                 .height(48.dp)
