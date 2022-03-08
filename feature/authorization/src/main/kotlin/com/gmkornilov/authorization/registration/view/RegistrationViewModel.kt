@@ -6,7 +6,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
-class RegistrationViewModel @Inject constructor(
+internal class RegistrationViewModel @Inject constructor(
     private val registrationFlowEvents: RegistrationFlowEvents,
 ) : BaseViewModel<RegistrationState, RegistrationSideEffect>(), RegistrationEvents {
     override fun getBaseState(): RegistrationState {

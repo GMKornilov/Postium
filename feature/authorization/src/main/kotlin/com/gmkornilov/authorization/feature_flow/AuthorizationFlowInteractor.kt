@@ -9,7 +9,7 @@ import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import javax.inject.Inject
 
-class AuthorizationFlowInteractor @Inject constructor(
+internal class AuthorizationFlowInteractor @Inject constructor(
     private val router: TreeRouter,
     private val homeScreenFactory: HomeScreenFactory,
     private val registrationScreenFactory: RegistrationScreenFactory,

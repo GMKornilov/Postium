@@ -14,7 +14,7 @@ import javax.inject.Scope
 
 private const val REGISTRATION_KEY = "registration"
 
-class RegistrationScreenFactory @Inject constructor(
+internal class RegistrationScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<RegistrationScreenFactory.Deps> {
     private val registrationScreen = BaseScreen(

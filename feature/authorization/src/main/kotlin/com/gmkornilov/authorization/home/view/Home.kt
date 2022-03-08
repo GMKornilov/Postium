@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Composable
-fun Home(
+internal fun Home(
     viewModel: HomeViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -224,7 +224,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
 @ExperimentalCoroutinesApi
 @Preview
 @Composable
-fun DefaultPreviewHome() {
+internal fun DefaultPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.DEFAULT,
@@ -237,7 +237,7 @@ fun DefaultPreviewHome() {
 @ExperimentalCoroutinesApi
 @Preview
 @Composable
-fun LoadingPreviewHome() {
+internal fun LoadingPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.Loading,
@@ -250,7 +250,7 @@ fun LoadingPreviewHome() {
 @ExperimentalCoroutinesApi
 @Preview
 @Composable
-fun WrongPasswordPreviewHome() {
+internal fun WrongPasswordPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.WrongPassword,
@@ -263,7 +263,7 @@ fun WrongPasswordPreviewHome() {
 @ExperimentalCoroutinesApi
 @Preview
 @Composable
-fun UserDoesntExistPreviewHome() {
+internal fun UserDoesntExistPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.UserDoesntExist,

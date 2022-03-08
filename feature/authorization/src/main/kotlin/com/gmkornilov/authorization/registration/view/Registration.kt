@@ -32,7 +32,7 @@ internal fun Registration(
 }
 
 @Composable
-internal fun RegistrationWithState(
+private fun RegistrationWithState(
     state: RegistrationState,
     registrationEvents: RegistrationEvents,
     modifier: Modifier = Modifier,

@@ -18,7 +18,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+internal class HomeViewModel @Inject constructor(
     private val googleAuthInteractor: GoogleAuthInteractor,
     private val facebookAuthInteractor: FacebookAuthInteractor,
     private val emailAuthInteractor: EmailAuthInteractor,

@@ -1,4 +1,4 @@
 package com.gmkornilov.authorization.registration.view
 
-class RegistrationSideEffect {
+internal class RegistrationSideEffect {
 }

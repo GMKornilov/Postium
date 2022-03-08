@@ -1,6 +1,6 @@
 package com.gmkornilov.authorization.home.view
 
-sealed class HomeState {
+internal sealed class HomeState {
     object None: HomeState()
 
     object Loading: HomeState()

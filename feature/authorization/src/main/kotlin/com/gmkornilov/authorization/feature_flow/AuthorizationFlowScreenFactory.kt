@@ -47,7 +47,7 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         dependencies = [Deps::class],
         modules = [Module::class],
     )
-    interface Component : HomeScreenFactory.Deps, RegistrationScreenFactory.Deps {
+    internal interface Component : HomeScreenFactory.Deps, RegistrationScreenFactory.Deps {
         val flowInteractor: AuthorizationFlowInteractor
 
         val treeRouter: TreeRouter
@@ -67,7 +67,7 @@ class AuthorizationFlowScreenFactory @Inject constructor(
     }
 
     @dagger.Module
-    interface Module {
+    internal interface Module {
         @AuthorizationScope
         @Binds
         fun bindHomeDeps(component: Component): HomeScreenFactory.Deps

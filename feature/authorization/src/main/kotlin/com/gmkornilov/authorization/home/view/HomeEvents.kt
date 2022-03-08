@@ -3,7 +3,7 @@ package com.gmkornilov.authorization.home.view
 import androidx.activity.result.ActivityResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-interface HomeEvents {
+internal interface HomeEvents {
     @ExperimentalCoroutinesApi
     fun credentialsSignIn(login: String, password: String)
 

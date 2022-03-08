@@ -20,7 +20,7 @@ import javax.inject.Inject
 private const val HOME_KEY = "Authorization Home"
 
 @OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
-class HomeScreenFactory @Inject constructor(
+internal class HomeScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<HomeScreenFactory.Deps> {
     private val screenKey = HOME_KEY

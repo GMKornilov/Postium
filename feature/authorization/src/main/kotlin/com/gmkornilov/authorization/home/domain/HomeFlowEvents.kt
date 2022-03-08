@@ -2,7 +2,7 @@ package com.gmkornilov.authorization.home.domain
 
 import com.gmkornilov.authorizarion.model.PostiumUser
 
-interface HomeFlowEvents {
+internal interface HomeFlowEvents {
     fun registerClicked()
 
     fun passwordRestorationClicked()
