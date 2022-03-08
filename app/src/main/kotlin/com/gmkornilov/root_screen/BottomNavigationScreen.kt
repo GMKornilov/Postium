@@ -32,7 +32,8 @@ internal fun BottomMenuScreen(
         Box(
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(bottom = 48.dp)
+                .navigationBarsPadding()
+                .padding(bottom = 56.dp)
                 .background(MaterialTheme.colors.background)
                 .fillMaxSize()
         ) {

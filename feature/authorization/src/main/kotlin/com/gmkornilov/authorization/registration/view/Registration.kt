@@ -1,9 +1,6 @@
 package com.gmkornilov.authorization.registration.view
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -96,7 +93,8 @@ internal fun PreviewRegistration() {
     PostiumTheme {
         RegistrationWithState(
             state = RegistrationState.None,
-            registrationEvents = RegistrationEvents.MOCK
+            registrationEvents = RegistrationEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
