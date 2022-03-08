@@ -30,6 +30,7 @@ object Deps {
         const val UiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
         const val IconsExtended =
             "androidx.compose.material:material-icons-extended:${Versions.compose}"
+        const val ConstraintLayout = "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.Libraries.constraintLayout}"
 
         object Icons {
             const val simple =

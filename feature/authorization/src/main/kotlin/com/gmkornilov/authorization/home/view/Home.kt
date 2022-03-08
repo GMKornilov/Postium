@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.gmkornilov.authorization.R
 import com.gmkornilov.design.buttons.CircularFacebookButton
 import com.gmkornilov.design.buttons.CircularGoogleButton
@@ -81,14 +82,21 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
     var enteredPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    ConstraintLayout(
         modifier = modifier.padding(horizontal = 16.dp)
     ) {
+        val (title, login, password, errorLabel,
+            forgotPassword, loginButton, outterLoginLabel,
+            outterLoginRow, notRegistered) = createRefs()
+
         Text(
             text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.h1
+            style = MaterialTheme.typography.h1,
+            modifier = Modifier.constrainAs(title) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
 
         OutlinedTextField(
@@ -98,6 +106,9 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             modifier = Modifier
                 .padding(top = 32.dp)
                 .fillMaxWidth()
+                .constrainAs(login) {
+                    top.linkTo(title.bottom)
+                }
         )
 
         PasswordTextField(
@@ -106,7 +117,11 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             onPasswordVisibleChange = { passwordVisible = it },
             onValueChange = { enteredPassword = it },
             label = { Text(stringResource(id = R.string.password_hint)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(password) {
+                    top.linkTo(login.bottom)
+                },
         )
 
         val text = when (state) {
@@ -120,13 +135,27 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
                 text = text,
                 style = MaterialTheme.typography.subtitle2,
                 color = MaterialTheme.colors.error,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .constrainAs(errorLabel) {
+                        top.linkTo(password.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
             )
         }
 
+        val bottomBarrier = createBottomBarrier(errorLabel, password)
+
         TextButton(
             onClick = homeEvents::passwordRestoration,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 8.dp)
+                .constrainAs(forgotPassword) {
+                    top.linkTo(bottomBarrier, goneMargin = 4.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         ) {
             Text(text = stringResource(R.string.forgot_password_label))
         }
@@ -136,6 +165,9 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
+                .constrainAs(loginButton) {
+                    top.linkTo(forgotPassword.bottom)
+                }
         ) {
             if (state is HomeState.Loading) {
                 CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
@@ -147,12 +179,20 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
         Text(
             text = stringResource(R.string.auth_extended_label),
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp)
+            modifier = Modifier.padding(top = 32.dp).constrainAs(outterLoginLabel) {
+                top.linkTo(loginButton.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp).constrainAs(outterLoginRow) {
+                top.linkTo(outterLoginLabel.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         ) {
             CircularVkButton(onClick = homeEvents::vkSignIn)
 
@@ -163,7 +203,11 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
 
         TextButton(
             onClick = homeEvents::register,
-            modifier = Modifier.padding(top = 64.dp)
+            modifier = Modifier.constrainAs(notRegistered) {
+                bottom.linkTo(parent.bottom, margin = 8.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         ) {
             Icon(
                 imageVector = Icons.Outlined.PermIdentity,
@@ -184,7 +228,8 @@ fun DefaultPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.DEFAULT,
-            homeEvents = HomeEvents.MOCK
+            homeEvents = HomeEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -196,7 +241,8 @@ fun LoadingPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.Loading,
-            homeEvents = HomeEvents.MOCK
+            homeEvents = HomeEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -208,7 +254,8 @@ fun WrongPasswordPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.WrongPassword,
-            homeEvents = HomeEvents.MOCK
+            homeEvents = HomeEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -220,7 +267,8 @@ fun UserDoesntExistPreviewHome() {
     PostiumTheme {
         HomeWithState(
             state = HomeState.UserDoesntExist,
-            homeEvents = HomeEvents.MOCK
+            homeEvents = HomeEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

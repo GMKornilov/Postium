@@ -59,6 +59,7 @@ dependencies {
     implementation(Deps.Compose.Material)
     implementation(Deps.Compose.UiToolingPreview)
     implementation(Deps.Compose.IconsExtended)
+    implementation(Deps.Compose.ConstraintLayout)
 
     implementation(Deps.Compose.Icons.simple)
 
