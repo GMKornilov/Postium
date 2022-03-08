@@ -11,6 +11,7 @@ import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.strings.StringsProvider
 import dagger.Binds
 import dagger.BindsInstance
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,6 +38,8 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         val googleAuthInteractor: GoogleAuthInteractor
         val facebookAuthInteractor: FacebookAuthInteractor
         val emailAuthInteractor: EmailAuthInteractor
+
+        val stringsProvider: StringsProvider
     }
 
     @Scope

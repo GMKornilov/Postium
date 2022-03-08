@@ -2,9 +2,9 @@ package com.gmkornilov.postium
 
 import android.app.Application
 import android.content.Context
+import com.gmkornilov.context.ApplicationContext
 import com.gmkornilov.di.SingletonDeps
 import com.gmkornilov.di.SingletonModule
-import com.gmkornilov.root_screen.DaggerRootScreenFactory_Component
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -18,7 +18,7 @@ class MainApplication : Application() {
         @Component.Builder
         interface Builder {
             @BindsInstance
-            fun applicationContext(context: Context): Builder
+            fun applicationContext(@ApplicationContext context: Context): Builder
 
             fun build(): MainComponent
         }

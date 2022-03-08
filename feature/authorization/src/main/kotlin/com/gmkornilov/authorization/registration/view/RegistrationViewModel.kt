@@ -1,6 +1,9 @@
 package com.gmkornilov.authorization.registration.view
 
+import com.gmkornilov.authorizarion.email.EmailAuthInteractor
+import com.gmkornilov.authorizarion.email.EmailRegisterResult
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
+import com.gmkornilov.authorization.registration.domain.RegistrationStringsProvider
 import com.gmkornilov.view_model.BaseViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -8,17 +11,46 @@ import javax.inject.Inject
 
 internal class RegistrationViewModel @Inject constructor(
     private val registrationFlowEvents: RegistrationFlowEvents,
+    private val emailAuthInteractorImpl: EmailAuthInteractor,
+    private val registrationStringsProvider: RegistrationStringsProvider,
 ) : BaseViewModel<RegistrationState, RegistrationSideEffect>(), RegistrationEvents {
     override fun getBaseState(): RegistrationState {
-        return RegistrationState.None
+        return RegistrationState.DEFAULT
     }
 
-    override fun registerUser(username: String, password: String, passwordConfirmation: String) = intent {
-        if (password != passwordConfirmation) {
-            reduce {
-                RegistrationState.PasswordDontMathc
+    override fun registerUser(email: String, password: String, passwordConfirmation: String) =
+        intent {
+            if (password != passwordConfirmation) {
+                reduce {
+                    RegistrationState(
+                        passwordError = true,
+                        passwordConfirmationError = true,
+                        errorLabel = registrationStringsProvider.getPasswordDontMatch()
+                    )
+                }
+                return@intent
             }
-            return@intent
+            val result = emailAuthInteractorImpl.createUser(email, password)
+            reduce {
+                when (result) {
+                    is EmailRegisterResult.Success -> {
+                        RegistrationState.DEFAULT
+                    }
+                    EmailRegisterResult.WeakPassword -> RegistrationState(
+                        passwordError = true,
+                        passwordConfirmationError = true,
+                        errorLabel = registrationStringsProvider.getWeakPassword(),
+                    )
+                    EmailRegisterResult.MalformedEmail -> RegistrationState(
+                        emailError = true,
+                        errorLabel = registrationStringsProvider.getMalformedEmail(),
+                    )
+                    EmailRegisterResult.UserAlreadyExists -> RegistrationState(
+                        emailError = true,
+                        passwordError = true,
+                        errorLabel = registrationStringsProvider.getUserAlreadyExists(),
+                    )
+                }
+            }
         }
-    }
 }

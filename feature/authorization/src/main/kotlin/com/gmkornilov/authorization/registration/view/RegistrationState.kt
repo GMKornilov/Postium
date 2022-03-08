@@ -1,7 +1,13 @@
 package com.gmkornilov.authorization.registration.view
 
-internal sealed class RegistrationState {
-    object None: RegistrationState()
-
-    object PasswordDontMathc: RegistrationState()
+internal data class RegistrationState(
+    val loading: Boolean = false,
+    val emailError: Boolean = false,
+    val passwordError: Boolean = false,
+    val passwordConfirmationError: Boolean = false,
+    val errorLabel: String? = null,
+) {
+    companion object {
+        val DEFAULT = RegistrationState()
+    }
 }

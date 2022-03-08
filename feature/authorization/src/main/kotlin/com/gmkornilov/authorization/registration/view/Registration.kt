@@ -1,9 +1,7 @@
 package com.gmkornilov.authorization.registration.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +40,12 @@ private fun RegistrationWithState(
     var enteredPasswordConfirmation by remember { mutableStateOf("") }
     var enteredPasswordConfirmationVisible by remember { mutableStateOf(false) }
 
+    val errorColors = TextFieldDefaults.outlinedTextFieldColors(
+        focusedBorderColor = MaterialTheme.colors.error,
+        unfocusedBorderColor = MaterialTheme.colors.error,
+        focusedLabelColor = MaterialTheme.colors.error,
+    )
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +55,10 @@ private fun RegistrationWithState(
             value = enteredLogin,
             onValueChange = { enteredLogin = it },
             label = { Text(stringResource(R.string.login_hint)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = if (state.emailError) {
+                errorColors
+            } else TextFieldDefaults.outlinedTextFieldColors(),
         )
 
         PasswordTextField(
@@ -61,6 +68,9 @@ private fun RegistrationWithState(
             onValueChange = { enteredPassword = it },
             label = { Text(stringResource(id = R.string.password_hint)) },
             modifier = Modifier.fillMaxWidth(),
+            colors = if (state.passwordError) {
+                errorColors
+            } else null,
         )
 
         PasswordTextField(
@@ -70,7 +80,21 @@ private fun RegistrationWithState(
             onValueChange = { enteredPasswordConfirmation = it },
             label = { Text(stringResource(id = R.string.password_confirmation_hint)) },
             modifier = Modifier.fillMaxWidth(),
+            colors = if (state.passwordConfirmationError) {
+                errorColors
+            } else null,
         )
+
+        if (state.errorLabel != null) {
+            Text(
+                text = state.errorLabel,
+                style = MaterialTheme.typography.subtitle2,
+                color = MaterialTheme.colors.error,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
 
         Button(
             onClick = {
@@ -80,9 +104,16 @@ private fun RegistrationWithState(
                     enteredPasswordConfirmation
                 )
             },
-            modifier = Modifier.padding(top = 32.dp)
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .height(48.dp)
+                .fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.register))
+            if (state.loading) {
+                CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+            } else {
+                Text(text = stringResource(id = R.string.register))
+            }
         }
     }
 }
@@ -92,7 +123,38 @@ private fun RegistrationWithState(
 internal fun PreviewRegistration() {
     PostiumTheme {
         RegistrationWithState(
-            state = RegistrationState.None,
+            state = RegistrationState.DEFAULT,
+            registrationEvents = RegistrationEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Preview
+@Composable
+internal fun PreviewRegistrationPasswordDontMatch() {
+    PostiumTheme {
+        RegistrationWithState(
+            state = RegistrationState(
+                emailError = true,
+                passwordError = true,
+                passwordConfirmationError = true,
+                errorLabel = stringResource(id = R.string.password_dont_match)
+            ),
+            registrationEvents = RegistrationEvents.MOCK,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Preview
+@Composable
+internal fun PreviewRegistrationLoading() {
+    PostiumTheme {
+        RegistrationWithState(
+            state = RegistrationState(
+                loading = true,
+            ),
             registrationEvents = RegistrationEvents.MOCK,
             modifier = Modifier.fillMaxSize(),
         )

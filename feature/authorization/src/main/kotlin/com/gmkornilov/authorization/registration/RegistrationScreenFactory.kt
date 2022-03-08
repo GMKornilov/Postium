@@ -3,12 +3,14 @@ package com.gmkornilov.authorization.registration
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
+import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.registration.view.Registration
 import com.gmkornilov.authorization.registration.view.RegistrationViewModel
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.strings.StringsProvider
 import javax.inject.Inject
 import javax.inject.Scope
 
@@ -38,6 +40,10 @@ internal class RegistrationScreenFactory @Inject constructor(
 
     interface Deps: Dependency {
         val registrationFlowEvents: RegistrationFlowEvents
+
+        val emailAuthInteractor: EmailAuthInteractor
+
+        val stringsProvider: StringsProvider
     }
 
     @Scope

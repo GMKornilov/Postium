@@ -16,5 +16,12 @@
     <string name="unexisting_user_label">User doesn\'t exist</string>
     <string name="wrong_password_label">Incorrect password for given user</string>
 
+    <!-- Registration screen -->
     <string name="register">Register</string>
+
+    <string name="password_dont_match">Пароли не совпадают</string>
+    <string name="weak_password">Введенный пароль слишком слабый</string>
+    <string name="malformed_email">Некорректный email</string>
+    <string name="user_already_exists">Данный пользователь уже зарегистрирован</string>
+    <!-- endofsection -->
 </resources>

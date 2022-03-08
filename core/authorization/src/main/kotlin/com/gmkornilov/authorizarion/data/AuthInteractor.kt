@@ -17,6 +17,8 @@ interface AuthInteractor {
     @ExperimentalCoroutinesApi
     suspend fun signInWithCredential(credential: AuthCredential): SignInResult
 
+    suspend fun createUser(email: String, password: String): SignInResult
+
     fun signOut()
 }
 

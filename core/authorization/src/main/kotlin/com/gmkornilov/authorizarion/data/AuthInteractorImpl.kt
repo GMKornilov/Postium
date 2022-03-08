@@ -41,6 +41,11 @@ class AuthInteractorImpl @Inject internal constructor(
         }
     }
 
+    override suspend fun createUser(email: String, password: String): SignInResult {
+        val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+        return SignInResult.NewUser(result.user!!.toPostiumUser())
+    }
+
     override fun signOut() {
         firebaseAuth.signOut()
     }
