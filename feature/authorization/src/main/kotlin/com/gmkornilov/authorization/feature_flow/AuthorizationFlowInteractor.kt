@@ -43,11 +43,24 @@ internal class AuthorizationFlowInteractor @Inject constructor(
         // TODO: router navigate to password registration screen
     }
 
-    override fun successfulAuthorization(user: PostiumUser?) {
-        userResultHandler.handleResult(user)
+    override fun successfulAuthorization(user: PostiumUser, isNew: Boolean) {
+        if (isNew) {
+            handleNewUser(user)
+        } else {
+            userResultHandler.handleResult(user)
+        }
     }
 
     override fun rootBackClicked() {
         router.backScreen()
+    }
+
+    override fun successfulRegistration(postiumUser: PostiumUser) {
+        handleNewUser(postiumUser)
+    }
+
+    private fun handleNewUser(user: PostiumUser) {
+        router.backToScreen(homeScreenFactory.screenKey)
+        // TODO: navigate to new screen
     }
 }

@@ -38,7 +38,7 @@ internal class HomeViewModel @Inject constructor(
             reduce {
                 when (result) {
                     is EmailAuthResult.Success -> {
-                        handleSuccessfulResult(result.postiumUser)
+                        handleSuccessfulResult(result.postiumUser, false)
                         HomeState.None
                     }
                     EmailAuthResult.UserDoesntExist -> HomeState.UserDoesntExist
@@ -80,15 +80,15 @@ internal class HomeViewModel @Inject constructor(
                 }
                 is FacebookAuthStatus.AuthSuccessful -> {
                     when (val result = facebookAuthInteractor.passToken(facebookAuthStatus.token)) {
-                        is SignInResult.ExistingUser -> handleSuccessfulResult(result.user)
-                        is SignInResult.NewUser -> handleSuccessfulResult(result.user)
+                        is SignInResult.ExistingUser -> handleSuccessfulResult(result.user, false)
+                        is SignInResult.NewUser -> handleSuccessfulResult(result.user, true)
                     }
                 }
             }
         }
     }
 
-    private fun handleSuccessfulResult(postiumUser: PostiumUser?) {
-        homeFlowEvents.successfulAuthorization(postiumUser)
+    private fun handleSuccessfulResult(postiumUser: PostiumUser, isNew: Boolean) {
+        homeFlowEvents.successfulAuthorization(postiumUser, isNew)
     }
 }

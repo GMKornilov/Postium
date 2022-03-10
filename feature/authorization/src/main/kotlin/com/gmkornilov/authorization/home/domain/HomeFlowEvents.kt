@@ -7,7 +7,7 @@ internal interface HomeFlowEvents {
 
     fun passwordRestorationClicked()
 
-    fun successfulAuthorization(user: PostiumUser?)
+    fun successfulAuthorization(user: PostiumUser, isNew: Boolean)
 
     fun rootBackClicked()
 }

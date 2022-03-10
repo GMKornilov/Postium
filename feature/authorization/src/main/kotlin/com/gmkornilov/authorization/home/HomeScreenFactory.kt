@@ -23,7 +23,7 @@ private const val HOME_KEY = "Authorization Home"
 internal class HomeScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<HomeScreenFactory.Deps> {
-    private val screenKey = HOME_KEY
+    val screenKey = HOME_KEY
 
     private val authorizationHomeScreen = BaseScreen(
         key = HOME_KEY,

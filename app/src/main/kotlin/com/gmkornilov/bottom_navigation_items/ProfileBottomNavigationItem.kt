@@ -41,7 +41,7 @@ class ProfileBottomNavigationItem @Inject constructor(
     }
 
     private val userResultHandler = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser?) {
+        override fun handleResult(user: PostiumUser) {
             // TODO: navigate to some screen if authorization was unsuccessful
             user?.let {
                 // TODO: add root profile screen
