@@ -63,6 +63,9 @@ object Versions {
             const val insets = "0.22.0-rc"
 
             const val systemUi = "0.22.0-rc"
+
+            const val pager = "0.22.0-rc"
+            const val pagerIndicators = "0.22.0-rc"
         }
     }
 

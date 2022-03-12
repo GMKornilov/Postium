@@ -7,14 +7,17 @@ import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
+import com.gmkornilov.authorization.user_form.UserFormScreenFactory
+import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import javax.inject.Inject
 
 internal class AuthorizationFlowInteractor @Inject constructor(
     private val router: TreeRouter,
     private val homeScreenFactory: HomeScreenFactory,
     private val registrationScreenFactory: RegistrationScreenFactory,
+    private val userFormScreenFactory: UserFormScreenFactory,
     private val userResultHandler: UserResultHandler,
-): HomeFlowEvents, RegistrationFlowEvents {
+): HomeFlowEvents, RegistrationFlowEvents, UserFormFlowEvents {
     private var authorizationStep = AuthorizationStep.NONE
 
     fun startAuthorizationFlow() {
@@ -30,7 +33,8 @@ internal class AuthorizationFlowInteractor @Inject constructor(
         NONE,
         LOGIN,
         REGISTRATION,
-        FORGOT_PASSWORD
+        FORGOT_PASSWORD,
+        USER_FORM
     }
 
     override fun registerClicked() {
@@ -61,6 +65,13 @@ internal class AuthorizationFlowInteractor @Inject constructor(
 
     private fun handleNewUser(user: PostiumUser) {
         router.backToScreen(homeScreenFactory.screenKey)
-        // TODO: navigate to new screen
+        authorizationStep = AuthorizationStep.USER_FORM
+        router.replaceScreen(userFormScreenFactory.build(), user)
+    }
+
+    override fun userFormBack(user: PostiumUser) {
+        authorizationStep = AuthorizationStep.NONE
+        router.backScreen()
+        userResultHandler.handleResult(user)
     }
 }

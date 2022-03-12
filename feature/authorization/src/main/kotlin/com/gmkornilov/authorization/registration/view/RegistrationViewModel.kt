@@ -31,10 +31,10 @@ internal class RegistrationViewModel @Inject constructor(
                 }
                 return@intent
             }
-            registerUnsage(email.trim(), password)
+            registerUnsafe(email.trim(), password)
         }
 
-    private fun registerUnsage(email: String, password: String) = intent {
+    private fun registerUnsafe(email: String, password: String) = intent {
         viewModelScope.launch {
             reduce {
                 this.state.copy(loading = true)
@@ -43,6 +43,7 @@ internal class RegistrationViewModel @Inject constructor(
             reduce {
                 when (result) {
                     is EmailRegisterResult.Success -> {
+                        registrationFlowEvents.successfulRegistration(result.postiumUser)
                         RegistrationState.DEFAULT
                     }
                     EmailRegisterResult.WeakPassword -> RegistrationState(

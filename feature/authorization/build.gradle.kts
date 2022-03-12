@@ -63,6 +63,9 @@ dependencies {
 
     implementation(Deps.Compose.Icons.simple)
 
+    implementation(Deps.Compose.Accompanist.pager)
+    implementation(Deps.Compose.Accompanist.pagerIndicators)
+
     implementation(Deps.Navigation.composeNavigation)
     implementation(Deps.Navigation.brickNavigation)
 

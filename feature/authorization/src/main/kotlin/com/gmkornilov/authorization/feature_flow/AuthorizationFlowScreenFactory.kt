@@ -9,6 +9,8 @@ import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
+import com.gmkornilov.authorization.user_form.UserFormScreenFactory
+import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.strings.StringsProvider
@@ -50,7 +52,7 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         dependencies = [Deps::class],
         modules = [Module::class],
     )
-    internal interface Component : HomeScreenFactory.Deps, RegistrationScreenFactory.Deps {
+    internal interface Component : HomeScreenFactory.Deps, RegistrationScreenFactory.Deps, UserFormScreenFactory.Deps {
         val flowInteractor: AuthorizationFlowInteractor
 
         val treeRouter: TreeRouter
@@ -81,10 +83,18 @@ class AuthorizationFlowScreenFactory @Inject constructor(
 
         @AuthorizationScope
         @Binds
+        fun bindUserFormDeps(component: Component): UserFormScreenFactory.Deps
+
+        @AuthorizationScope
+        @Binds
         fun bindHomeFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): HomeFlowEvents
 
         @AuthorizationScope
         @Binds
         fun bindRegistrationFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): RegistrationFlowEvents
+
+        @AuthorizationScope
+        @Binds
+        fun bindUserFormFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): UserFormFlowEvents
     }
 }

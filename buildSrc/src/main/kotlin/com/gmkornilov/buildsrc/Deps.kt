@@ -30,7 +30,8 @@ object Deps {
         const val UiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
         const val IconsExtended =
             "androidx.compose.material:material-icons-extended:${Versions.compose}"
-        const val ConstraintLayout = "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.Libraries.constraintLayout}"
+        const val ConstraintLayout =
+            "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.Libraries.constraintLayout}"
 
         object Icons {
             const val simple =
@@ -40,8 +41,14 @@ object Deps {
         object Accompanist {
             const val insets =
                 "com.google.accompanist:accompanist-insets:${Versions.Compose.Accompanist.insets}"
+
             const val systemUi =
                 "com.google.accompanist:accompanist-systemuicontroller:${Versions.Compose.Accompanist.systemUi}"
+
+            const val pager =
+                "com.google.accompanist:accompanist-pager:${Versions.Compose.Accompanist.pager}"
+            const val pagerIndicators =
+                "com.google.accompanist:accompanist-pager-indicators:${Versions.Compose.Accompanist.pagerIndicators}"
         }
     }
 
