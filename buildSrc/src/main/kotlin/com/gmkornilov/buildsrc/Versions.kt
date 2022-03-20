@@ -53,6 +53,7 @@ object Versions {
     object Compose {
         object Icons {
             const val simpleIcons = "1.0.0"
+            const val tablerIcons = "1.0.0"
         }
 
         object Libraries {
@@ -66,6 +67,12 @@ object Versions {
 
             const val pager = "0.22.0-rc"
             const val pagerIndicators = "0.22.0-rc"
+
+            const val placeholder = "0.22.0-rc"
+        }
+
+        object Images {
+            const val coil = "2.0.0-rc01"
         }
     }
 

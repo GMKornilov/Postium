@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -15,9 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.gmkornilov.authorization.R
-import com.gmkornilov.design.buttons.CircularFacebookButton
-import com.gmkornilov.design.buttons.CircularGoogleButton
-import com.gmkornilov.design.buttons.CircularVkButton
+import com.gmkornilov.design.commons.buttons.CircularFacebookButton
+import com.gmkornilov.design.commons.buttons.CircularGoogleButton
+import com.gmkornilov.design.commons.buttons.CircularVkButton
 import com.gmkornilov.design.components.PasswordTextField
 import com.gmkornilov.design.theme.PostiumTheme
 import kotlinx.coroutines.CoroutineScope

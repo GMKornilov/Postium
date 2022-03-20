@@ -45,17 +45,32 @@ android {
 }
 
 dependencies {
+    implementation(Deps.Kotlin.coroutinesAndroid)
+
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
 
     implementation(Deps.materialDesign)
 
+    implementation(Deps.AndroidX.activityCompose)
+    implementation(Deps.AndroidX.lifecycleRuntime)
+
+    implementation(Deps.Compose.Ui)
     implementation(Deps.Compose.UiGraphics)
     implementation(Deps.Compose.Material)
     implementation(Deps.Compose.IconsExtended)
     implementation(Deps.Compose.UiToolingPreview)
+    implementation(Deps.Compose.ConstraintLayout)
+    implementation(Deps.Compose.Icons.simple)
+    implementation(Deps.Compose.Icons.tabler)
+
+    implementation(Deps.Compose.Accompanist.placeholderMaterial)
+
+    implementation(Deps.Compose.Images.coil)
 
     testImplementation(Deps.TestingTooling.junit)
     androidTestImplementation(Deps.TestingTooling.androidxJunit)
     androidTestImplementation(Deps.TestingTooling.androidxEspresso)
+    androidTestImplementation(Deps.TestingTooling.composeUiTest)
+    debugImplementation(Deps.TestingTooling.composeUiTooling)
 }

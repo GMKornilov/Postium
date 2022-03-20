@@ -1,4 +1,4 @@
-package com.gmkornilov.design.buttons
+package com.gmkornilov.design.commons.buttons
 
 
 import androidx.compose.foundation.layout.height

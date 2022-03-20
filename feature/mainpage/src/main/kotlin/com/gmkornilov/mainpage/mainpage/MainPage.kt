@@ -9,7 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun Mainpage() {
+internal fun Mainpage(
+    mainPageViewModel: MainPageViewModel,
+    modifier: Modifier,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text("this is main page", modifier = Modifier.align(Alignment.Center))
     }
