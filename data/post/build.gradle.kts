@@ -34,6 +34,9 @@ android {
 }
 
 dependencies {
+    implementation(platform(Deps.Firebase.bom))
+    implementation(Deps.Firebase.firestore)
+    implementation(Deps.Firebase.coroutinesPlayServices)
     implementation(Deps.TestingTooling.androidxEspresso)
     implementation(Deps.TestingTooling.androidxJunit)
 }

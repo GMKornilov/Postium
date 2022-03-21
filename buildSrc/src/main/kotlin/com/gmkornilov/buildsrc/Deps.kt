@@ -95,6 +95,8 @@ object Deps {
     object Firebase {
         const val bom = "com.google.firebase:firebase-bom:${Versions.Firebase.bomVersion}"
 
+        const val firestore = "com.google.firebase:firebase-firestore-ktx"
+
         const val authorization = "com.google.firebase:firebase-auth-ktx"
 
         const val coroutinesPlayServices =

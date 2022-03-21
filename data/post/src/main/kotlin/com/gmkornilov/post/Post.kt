@@ -1,3 +1,7 @@
 package com.gmkornilov.post
 
-data class Post(val text: String)
+data class Post(
+    val title: String,
+    val likes: Int,
+    val dislikes: Int,
+)
