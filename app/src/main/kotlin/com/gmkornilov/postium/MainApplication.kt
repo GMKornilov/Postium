@@ -8,6 +8,7 @@ import com.gmkornilov.di.SingletonModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
+import timber.log.Timber
 
 class MainApplication : Application() {
     @Singleton
@@ -21,6 +22,14 @@ class MainApplication : Application() {
             fun applicationContext(@ApplicationContext context: Context): Builder
 
             fun build(): MainComponent
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
         }
     }
 

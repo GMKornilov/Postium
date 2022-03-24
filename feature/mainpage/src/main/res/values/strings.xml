@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_page_title">Главная</string>
+    <string name="last_week_title">За последнюю неделю</string>
+    <string name="last_day_title">За последний день</string>
+    <string name="all_time_title">За все время</string>
+</resources>

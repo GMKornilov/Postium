@@ -1,19 +1,228 @@
 package com.gmkornilov.mainpage.mainpage
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.gmkornilov.design.commons.posts.PostPreview
+import com.gmkornilov.design.data.CornerType
+import com.gmkornilov.design.theme.PostiumTheme
+import com.gmkornilov.mainpage.R
+import com.gmkornilov.post.Post
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun Mainpage(
     mainPageViewModel: MainPageViewModel,
     modifier: Modifier,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text("this is main page", modifier = Modifier.align(Alignment.Center))
+    val state by mainPageViewModel.container.stateFlow.collectAsState()
+
+    LaunchedEffect(mainPageViewModel, state.currentRange) {
+        if (state.currentPageState() == PostsState.None) {
+            mainPageViewModel.loadAllPosts()
+        }
+    }
+
+    MainpageWithState(mainPageEvents = mainPageViewModel, state = state, modifier = modifier)
+}
+
+@ExperimentalFoundationApi
+@ExperimentalMaterialApi
+@Composable
+private fun MainpageWithState(
+    mainPageEvents: MainPageEvents,
+    state: MainPageState,
+    modifier: Modifier = Modifier,
+) {
+    val currentRange = state.currentRange
+
+    val postsState = state.currentPageState()
+
+    var menuExpanded by remember { mutableStateOf(false) }
+
+    Column(modifier = modifier) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.surface)
+        ) {
+            Text(
+                text = stringResource(id = R.string.main_page_title),
+                style = MaterialTheme.typography.h6,
+                color = MaterialTheme.colors.onSurface,
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
+                    .align(CenterVertically),
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
+                Row(modifier = Modifier.clickable { menuExpanded = !menuExpanded }) {
+                    Text(
+                        stringResource(id = currentRange.titleRes),
+                        modifier = Modifier.align(CenterVertically)
+                    )
+
+                    IconButton(onClick = {}) {
+                        Icon(
+                            Icons.Filled.ArrowDropDown,
+                            null,
+                            modifier = Modifier.rotate(if (menuExpanded) 180f else 360f),
+                            tint = MaterialTheme.colors.onSurface,
+                        )
+                    }
+                }
+                DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
+                    PostTimeRange.values().forEach { postTimeRange ->
+                        DropdownMenuItem(
+                            onClick = {
+                                mainPageEvents.selectTimeRange(postTimeRange)
+                                menuExpanded = false
+                            }
+                        ) {
+                            Text(text = stringResource(id = postTimeRange.titleRes))
+                        }
+                    }
+                }
+            }
+        }
+
+        Divider(modifier = Modifier.fillMaxWidth())
+
+        when (postsState) {
+            is PostsState.Loading -> LoadingState()
+            is PostsState.Error -> ErrorState()
+            is PostsState.Success -> SuccessState(posts = postsState.items)
+        }
+    }
+}
+
+@Composable
+private fun LoadingState(modifier: Modifier = Modifier) {
+
+}
+
+@Composable
+private fun ErrorState(modifier: Modifier = Modifier) {
+
+}
+
+@ExperimentalFoundationApi
+@Composable
+private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
+    val state = rememberLazyListState()
+
+    LazyColumn(state = state, modifier = modifier.background(MaterialTheme.colors.background)) {
+        itemsIndexed(posts) { index, item ->
+            val isFirst = index == 0
+            val isLast = index == posts.lastIndex
+
+            val cornerType: CornerType
+            val bottomPadding: Dp
+
+            when {
+                isFirst -> {
+                    cornerType = CornerType.BOTTOM
+                    bottomPadding = 4.dp
+                }
+                isLast -> {
+                    cornerType = CornerType.ALL
+                    bottomPadding = 0.dp
+                }
+                else -> {
+                    cornerType = CornerType.ALL
+                    bottomPadding = 4.dp
+                }
+            }
+
+            PostPreview(
+                title = item.title,
+                userName = "",
+                avatarUrl = null,
+                isUpChecked = false,
+                isDownChecked = false,
+                isBookmarkChecked = false,
+                cornerType = cornerType,
+                modifier = Modifier.padding(bottom = bottomPadding)
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_MASK,
+)
+@Composable
+fun SuccessPreview() {
+    PostiumTheme {
+        val posts = listOf(
+            Post("First title", 1, 0),
+            Post("Second title", 2, 2),
+            Post("Third title", 0, 100),
+        )
+
+        val state = MainPageState(
+            allTimeState = PostsState.Success(posts),
+            currentRange = PostTimeRange.ALL_TIME
+        )
+
+        MainpageWithState(
+            mainPageEvents = MainPageEvents.MOCK,
+            state = state,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_MASK,
+)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@Composable
+private fun SuccessPreviewLong() {
+    PostiumTheme {
+        val posts = listOf(
+            Post("First title", 1, 0),
+            Post("Second title", 2, 2),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+            Post("Third title", 0, 100),
+        )
+
+
+        val state = MainPageState(
+            allTimeState = PostsState.Success(posts),
+            currentRange = PostTimeRange.ALL_TIME
+        )
+
+        MainpageWithState(
+            mainPageEvents = MainPageEvents.MOCK,
+            state = state,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

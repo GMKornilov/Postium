@@ -59,6 +59,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:activity-utils"))
 
+    implementation(project(":data:post"))
+
     implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))
 
@@ -84,8 +86,11 @@ dependencies {
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.authorization)
+    implementation(Deps.Firebase.firestore)
 
     implementation(Deps.Facebook.login)
+
+    implementation(Deps.Logging.timber)
 
     implementation(Deps.Dagger.core)
     kapt(Deps.Dagger.kapt)

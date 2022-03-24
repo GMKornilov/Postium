@@ -11,6 +11,10 @@ object Deps {
             "androidx.activity:activity-compose:${Versions.AndroidX.activity_compose}"
     }
 
+    object Logging {
+        const val timber = "com.jakewharton.timber:timber:${Versions.Logging.timber}"
+    }
+
     const val materialDesign = "com.google.android.material:material:${Versions.AndroidX.material}"
 
     object Kotlin {

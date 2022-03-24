@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    kotlin("kapt")
 }
 
 android {
@@ -37,6 +38,10 @@ dependencies {
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)
     implementation(Deps.Firebase.coroutinesPlayServices)
+
+    implementation(Deps.Dagger.core)
+    kapt(Deps.Dagger.kapt)
+
     implementation(Deps.TestingTooling.androidxEspresso)
     implementation(Deps.TestingTooling.androidxJunit)
 }

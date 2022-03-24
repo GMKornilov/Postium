@@ -1,6 +1,5 @@
 package com.gmkornilov.design.commons.posts
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,21 +16,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.SubcomposeAsyncImage
+import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.DarkBurgundy
 import com.gmkornilov.design.theme.Green
 import com.gmkornilov.design.theme.PostiumTheme
-import com.gmkornilov.design.R
-import com.gmkornilov.design.data.CornerType
 import com.google.accompanist.placeholder.material.placeholder
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun PostPreview(
+fun PostPreview(
     title: String,
     userName: String,
     avatarUrl: String?,
@@ -45,9 +42,7 @@ private fun PostPreview(
     downClicked: (Boolean) -> Unit = {},
     boolmarkClicked: (Boolean) -> Unit = {},
 ) {
-
     val cornerRadius = 32.dp
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -164,13 +159,13 @@ private fun PostPreview(
 
 @Preview
 @Composable
-fun PostsColumnLight() {
+private fun PostsColumnLight() {
     PostsColumn(isLight = true)
 }
 
 @Preview
 @Composable
-fun PostsColumnDark() {
+private fun PostsColumnDark() {
     PostsColumn(isLight = false)
 }
 

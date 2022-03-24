@@ -8,6 +8,7 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.mainpage.MainPageViewModel
 import com.gmkornilov.mainpage.mainpage.Mainpage
+import com.gmkornilov.source.FirebasePostSource
 import javax.inject.Inject
 
 class MainpageScreenFactory @Inject constructor(
@@ -28,7 +29,7 @@ class MainpageScreenFactory @Inject constructor(
     )
 
     interface Deps : Dependency {
-
+        val firebasePostSource: FirebasePostSource
     }
 
     @dagger.Component(

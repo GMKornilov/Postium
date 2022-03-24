@@ -14,6 +14,10 @@ object Versions {
         }
     }
 
+    object Logging {
+        const val timber = "5.0.1"
+    }
+
     /**
      * AndroidX libraries
      */

@@ -24,6 +24,7 @@ import javax.inject.Singleton
         GoogleModule::class,
         SecretsModule::class,
         NavigationModule::class,
+        PostsModule::class,
     ]
 )
 interface SingletonModule {

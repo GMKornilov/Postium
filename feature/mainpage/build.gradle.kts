@@ -44,6 +44,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:design"))
 
+    implementation(project(":data:post"))
+
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
     implementation(Deps.AndroidX.activityCompose)
@@ -66,6 +68,8 @@ dependencies {
 
     implementation(Deps.Dagger.core)
     kapt(Deps.Dagger.kapt)
+
+    implementation(Deps.Logging.timber)
 
     implementation(Deps.Kotlin.coroutinesAndroid)
     implementation(Deps.Kotlin.coroutinesViewModel)
