@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -56,7 +57,7 @@ private fun MainpageWithState(
 
     var menuExpanded by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.background(MaterialTheme.colors.background)) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -104,19 +105,24 @@ private fun MainpageWithState(
             }
         }
 
-        Divider(modifier = Modifier.fillMaxWidth())
-
         when (postsState) {
             is PostsState.Loading -> LoadingState()
             is PostsState.Error -> ErrorState()
             is PostsState.Success -> SuccessState(posts = postsState.items)
+            else -> {}
         }
     }
 }
 
 @Composable
 private fun LoadingState(modifier: Modifier = Modifier) {
-
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
+    ) {
+        CircularProgressIndicator(modifier = Modifier.align(Center))
+    }
 }
 
 @Composable
@@ -129,13 +135,17 @@ private fun ErrorState(modifier: Modifier = Modifier) {
 private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
     val state = rememberLazyListState()
 
-    LazyColumn(state = state, modifier = modifier.background(MaterialTheme.colors.background)) {
-        itemsIndexed(posts) { index, item ->
+    LazyColumn(state = state, modifier = modifier) {
+        itemsIndexed(posts, key = { _, post -> post.id }) { index, item ->
             val isFirst = index == 0
             val isLast = index == posts.lastIndex
 
             val cornerType: CornerType
             val bottomPadding: Dp
+
+            var isLiked by remember { mutableStateOf(false) }
+            var isDisliked by remember { mutableStateOf(false) }
+            var isBookmarked by remember { mutableStateOf(false) }
 
             when {
                 isFirst -> {
@@ -156,11 +166,25 @@ private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
                 title = item.title,
                 userName = "",
                 avatarUrl = null,
-                isUpChecked = false,
-                isDownChecked = false,
-                isBookmarkChecked = false,
+                isUpChecked = isLiked,
+                isDownChecked = isDisliked,
+                isBookmarkChecked = isBookmarked,
                 cornerType = cornerType,
-                modifier = Modifier.padding(bottom = bottomPadding)
+                modifier = Modifier.padding(bottom = bottomPadding),
+                onCardClick = {},
+                upClicked = {
+                    isLiked = !isLiked
+                    if (isLiked && isDisliked) {
+                        isDisliked = false
+                    }
+                },
+                downClicked = {
+                    isDisliked = !isDisliked
+                    if (isDisliked && isLiked) {
+                        isLiked = false
+                    }
+                },
+                boolmarkClicked = { isBookmarked = !isBookmarked }
             )
         }
     }
@@ -174,9 +198,9 @@ private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
 fun SuccessPreview() {
     PostiumTheme {
         val posts = listOf(
-            Post("First title", 1, 0),
-            Post("Second title", 2, 2),
-            Post("Third title", 0, 100),
+            Post("1", "First title", 1, 0),
+            Post("2", "Second title", 2, 2),
+            Post("3", "Third title", 0, 100),
         )
 
         val state = MainPageState(
@@ -200,17 +224,17 @@ fun SuccessPreview() {
 private fun SuccessPreviewLong() {
     PostiumTheme {
         val posts = listOf(
-            Post("First title", 1, 0),
-            Post("Second title", 2, 2),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
-            Post("Third title", 0, 100),
+            Post("1", "First title", 1, 0),
+            Post("2", "Second title", 2, 2),
+            Post("3", "Third title", 0, 100),
+            Post("4", "Third title", 0, 100),
+            Post("5", "Third title", 0, 100),
+            Post("6", "Third title", 0, 100),
+            Post("7", "Third title", 0, 100),
+            Post("8", "Third title", 0, 100),
+            Post("9", "Third title", 0, 100),
+            Post("10", "Third title", 0, 100),
+            Post("11", "Third title", 0, 100),
         )
 
 
