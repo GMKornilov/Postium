@@ -2,6 +2,7 @@ package com.gmkornilov.authorization.home.view
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -82,7 +83,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
     var passwordVisible by remember { mutableStateOf(false) }
 
     ConstraintLayout(
-        modifier = modifier.padding(horizontal = 16.dp)
+        modifier = modifier.background(MaterialTheme.colors.surface).padding(horizontal = 16.dp)
     ) {
         val (title, login, password, errorLabel,
             forgotPassword, loginButton, outterLoginLabel,

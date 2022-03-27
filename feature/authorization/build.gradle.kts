@@ -66,7 +66,6 @@ dependencies {
     implementation(Deps.Compose.Accompanist.pager)
     implementation(Deps.Compose.Accompanist.pagerIndicators)
 
-    implementation(Deps.Navigation.composeNavigation)
     implementation(Deps.Navigation.brickNavigation)
 
     implementation(Deps.MVI.Orbit.core)

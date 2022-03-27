@@ -51,6 +51,8 @@ internal class AuthorizationFlowInteractor @Inject constructor(
         if (isNew) {
             handleNewUser(user)
         } else {
+            router.backToScreen(homeScreenFactory.screenKey)
+            router.backScreen()
             userResultHandler.handleResult(user)
         }
     }

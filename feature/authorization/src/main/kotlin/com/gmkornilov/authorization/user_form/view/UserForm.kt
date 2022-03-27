@@ -1,8 +1,10 @@
 package com.gmkornilov.authorization.user_form.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,7 +43,14 @@ private fun UserFormWithState(
     modifier: Modifier,
 ) {
     Box(modifier = modifier) {
-        HorizontalPager(count = PAGE_COUNT, state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+        HorizontalPager(
+            count = PAGE_COUNT, state = pagerState,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    MaterialTheme.colors.surface
+                )
+        ) { page ->
             when (page) {
                 0 -> FirstPage()
                 1 -> SecondPage()

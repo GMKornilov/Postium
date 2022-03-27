@@ -1,5 +1,6 @@
 package com.gmkornilov.authorization.registration.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -49,7 +50,9 @@ private fun RegistrationWithState(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(horizontal = 16.dp)
+        modifier = modifier
+            .background(MaterialTheme.colors.surface)
+            .padding(horizontal = 16.dp)
     ) {
         OutlinedTextField(
             value = enteredLogin,

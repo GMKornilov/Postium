@@ -12,8 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
@@ -64,34 +63,37 @@ private fun MainpageWithState(
             Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.surface)
+                .padding(top = 8.dp, bottom = 8.dp)
+                .height(48.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.main_page_title),
                 style = MaterialTheme.typography.h6,
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
-                    .align(CenterVertically),
+                    .padding(start = 16.dp, end = 8.dp)
+                    .align(Alignment.CenterVertically),
             )
 
             Spacer(Modifier.weight(1f))
 
-            Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 8.dp)
+            ) {
                 Row(modifier = Modifier.clickable { menuExpanded = !menuExpanded }) {
                     Text(
                         stringResource(id = currentRange.titleRes),
                         color = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.align(CenterVertically),
                     )
 
-                    IconButton(onClick = { menuExpanded = !menuExpanded }) {
-                        Icon(
-                            Icons.Filled.ArrowDropDown,
-                            null,
-                            modifier = Modifier.rotate(if (menuExpanded) 180f else 360f),
-                            tint = MaterialTheme.colors.onSurface,
-                        )
-                    }
+                    Icon(
+                        Icons.Filled.ArrowDropDown,
+                        null,
+                        modifier = Modifier.rotate(if (menuExpanded) 180f else 360f),
+                        tint = MaterialTheme.colors.onSurface,
+                    )
                 }
                 DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
                     PostTimeRange.values().forEach { postTimeRange ->
@@ -127,7 +129,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
     ) {
-        CircularProgressIndicator(modifier = Modifier.align(Center))
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
 
@@ -180,7 +182,7 @@ private fun SuccessState(
                 onCardClick = {},
                 upClicked = { mainPageEvents.likePost(item) },
                 downClicked = { mainPageEvents.dislikePost(item) },
-                boolmarkClicked = { mainPageEvents.bookmarkPost(item)}
+                boolmarkClicked = { mainPageEvents.bookmarkPost(item) }
             )
         }
     }
@@ -212,17 +214,72 @@ private fun SuccessPreviewDark() {
 private fun SuccessPreview() {
     PostiumTheme {
         val posts = listOf(
-            PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.BOOKMARKED),
-            PostPreviewData("2", "Second title", PostPreviewLikeStatus.LIKED, PostPreviewBookmarkStatus.BOOKMARKED),
-            PostPreviewData("3", "Third title", PostPreviewLikeStatus.DISLIKED, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("4", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("5", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("6", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("7", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("8", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("9", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("10", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
-            PostPreviewData("11", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData(
+                "1",
+                "First title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.BOOKMARKED
+            ),
+            PostPreviewData(
+                "2",
+                "Second title",
+                PostPreviewLikeStatus.LIKED,
+                PostPreviewBookmarkStatus.BOOKMARKED
+            ),
+            PostPreviewData(
+                "3",
+                "Third title",
+                PostPreviewLikeStatus.DISLIKED,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "4",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "5",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "6",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "7",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "8",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "9",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "10",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
+            PostPreviewData(
+                "11",
+                "Third title",
+                PostPreviewLikeStatus.NONE,
+                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+            ),
         )
 
 
