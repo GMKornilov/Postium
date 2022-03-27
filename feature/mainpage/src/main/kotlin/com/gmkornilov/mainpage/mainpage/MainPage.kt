@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.commons.posts.PostPreview
 import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
+import com.gmkornilov.letIf
 import com.gmkornilov.mainpage.R
 import com.gmkornilov.mainpage.model.PostPreviewBookmarkStatus
 import com.gmkornilov.mainpage.model.PostPreviewData
@@ -172,8 +173,8 @@ private fun SuccessState(
 
             PostPreview(
                 title = item.title,
-                userName = "",
-                avatarUrl = null,
+                userName = item.username.orEmpty(),
+                avatarUrl = item.avatarUrl.letIf(!item.avatarUrl.isNullOrEmpty()) { it },
                 isUpChecked = item.likeStatus.isLiked,
                 isDownChecked = item.likeStatus.isDisliked,
                 isBookmarkChecked = item.bookmarkStatus.isBookmarked,
@@ -217,66 +218,72 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "1",
                 "First title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.BOOKMARKED
             ),
             PostPreviewData(
                 "2",
                 "Second title",
+                "test",
+                null,
                 PostPreviewLikeStatus.LIKED,
                 PostPreviewBookmarkStatus.BOOKMARKED
             ),
             PostPreviewData(
                 "3",
                 "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.DISLIKED,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "4",
                 "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "5",
                 "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "6",
                 "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "7",
                 "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "8",
                 "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "9",
                 "Third title",
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
-            ),
-            PostPreviewData(
-                "10",
-                "Third title",
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
-            ),
-            PostPreviewData(
-                "11",
-                "Third title",
+                "test",
+                null,
                 PostPreviewLikeStatus.NONE,
                 PostPreviewBookmarkStatus.NOT_BOOKMARKED
             ),

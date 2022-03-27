@@ -50,6 +50,11 @@ dependencies {
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))
     implementation(project(":data:post_bookmarks"))
+    implementation(project(":data:user"))
+
+    implementation(platform(Deps.Firebase.bom))
+    implementation(Deps.Firebase.firestore)
+    implementation(Deps.Firebase.coroutinesPlayServices)
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)

@@ -8,6 +8,8 @@ import com.gmkornilov.mainpage.model.toPostPreviewLikeStatus
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.source.FirebasePostSource
+import com.gmkornilov.user.model.User
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class MainpageInteractor @Inject constructor(
@@ -21,6 +23,11 @@ class MainpageInteractor @Inject constructor(
 
         val posts = firebasePostSource.getAllPosts()
 
+        val users = posts.map {
+            it.
+            userReference!!.get().await().toObject(User::class.java)
+        }
+
         val postLikeStatuses = currentUser?.let {
             postLikeRepository.getLikesStatuses(it.getUid(), posts.map { post -> post.id })
         } ?: emptyMap()
@@ -29,12 +36,16 @@ class MainpageInteractor @Inject constructor(
             postBookmarkRepository.getBookmarkStatuses(it.getUid(), posts.map { post -> post.id })
         } ?: emptyMap()
 
-        return posts.map {
+        return posts.mapIndexed { index, post ->
+            val user = users[index]
+
             PostPreviewData(
-                id = it.id,
-                title = it.title,
-                likeStatus = postLikeStatuses[it.id].toPostPreviewLikeStatus(),
-                bookmarkStatus = postBookmarkStatuses[it.id].toPostPreviewBookmarkStatus(),
+                id = post.id,
+                title = post.title,
+                username = user?.name,
+                avatarUrl = user?.avatarUrl,
+                likeStatus = postLikeStatuses[post.id].toPostPreviewLikeStatus(),
+                bookmarkStatus = postBookmarkStatuses[post.id].toPostPreviewBookmarkStatus(),
             )
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -91,7 +92,8 @@ fun PostPreview(
                             top.linkTo(dividerRef.bottom, margin = 8.dp)
                             start.linkTo(parent.start, margin = 8.dp)
                             bottom.linkTo(parent.bottom, margin = 8.dp)
-                        }
+                        },
+                    contentScale = ContentScale.Crop
                 )
             }
 
@@ -104,8 +106,8 @@ fun PostPreview(
                     .padding(start = userNamePadding)
                     .constrainAs(userNameRef) {
                         start.linkTo(avatarRef.end, margin = 8.dp)
-                        top.linkTo(dividerRef.bottom, margin = 8.dp)
-                        bottom.linkTo(upRef.bottom)
+                        top.linkTo(dividerRef.bottom)
+                        bottom.linkTo(parent.bottom)
                     }
             )
 
