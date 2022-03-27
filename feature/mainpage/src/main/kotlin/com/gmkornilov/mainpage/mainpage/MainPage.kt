@@ -195,8 +195,8 @@ fun SuccessPreview() {
     PostiumTheme {
         val posts = listOf(
             PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("2", "Second title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("3", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("2", "Second title", PostPreviewLikeStatus.LIKED),
+            PostPreviewData("3", "Third title", PostPreviewLikeStatus.DISLIKED),
         )
 
         val state = MainPageState(

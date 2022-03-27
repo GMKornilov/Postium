@@ -27,30 +27,22 @@ internal class MainPageViewModel @Inject constructor(
     private fun getLikeUserHandler(post: PostPreviewData) = object : UserResultHandler {
         override fun handleResult(user: PostiumUser) {
             intent {
-                val newPost = post.copy(likeStatus = PostPreviewLikeStatus.LIKED)
-
-                reduce {
-                    val currentState = this.state.currentPageState()
-                    val newState = currentState.letIf(
-                        currentState is PostsState.Success,
-                        { state ->
-                            val success = state as PostsState.Success
-                            val newItems = success.items.toMutableList().apply {
-                                val index = this.indexOf(post)
-                                if (index != -1) {
-                                    this[index] = newPost
-                                }
-                            }
-                            PostsState.Success(newItems)
-                        },
-                        { it }
-                    )
-                    changeCurrentSelectionState(this.state, newState)
+                val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.LIKED) {
+                    PostPreviewLikeStatus.NONE
+                } else {
+                    PostPreviewLikeStatus.LIKED
                 }
+
+                val newPost = post.copy(likeStatus = newLikeStatus)
+                replacePost(post, newPost)
 
                 viewModelScope.launch {
                     try {
-                        mainpageInteractor.likePost(post)
+                        if (newLikeStatus == PostPreviewLikeStatus.LIKED) {
+                            mainpageInteractor.likePost(post)
+                        } else {
+                            mainpageInteractor.removeStatus(post)
+                        }
                     } catch (e: Exception) {
                         Timber.e(e)
                     }
@@ -62,30 +54,22 @@ internal class MainPageViewModel @Inject constructor(
     private fun getDislikeUserHandler(post: PostPreviewData) = object: UserResultHandler {
         override fun handleResult(user: PostiumUser) {
             intent {
-                val newPost = post.copy(likeStatus = PostPreviewLikeStatus.DISLIKED)
-
-                reduce {
-                    val currentState = this.state.currentPageState()
-                    val newState = currentState.letIf(
-                        currentState is PostsState.Success,
-                        { state ->
-                            val success = state as PostsState.Success
-                            val newItems = success.items.toMutableList().apply {
-                                val index = this.indexOf(post)
-                                if (index != -1) {
-                                    this[index] = newPost
-                                }
-                            }
-                            PostsState.Success(newItems)
-                        },
-                        { it }
-                    )
-                    changeCurrentSelectionState(this.state, newState)
+                val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.DISLIKED) {
+                    PostPreviewLikeStatus.NONE
+                } else {
+                    PostPreviewLikeStatus.DISLIKED
                 }
+
+                val newPost = post.copy(likeStatus = newLikeStatus)
+                replacePost(post, newPost)
 
                 viewModelScope.launch {
                     try {
-                        mainpageInteractor.dislikePost(post)
+                        if (newLikeStatus == PostPreviewLikeStatus.DISLIKED) {
+                            mainpageInteractor.dislikePost(post)
+                        } else {
+                            mainpageInteractor.removeStatus(post)
+                        }
                     } catch (e: Exception) {
                         Timber.e(e)
                     }
@@ -143,6 +127,27 @@ internal class MainPageViewModel @Inject constructor(
         user?.let {
             bookmarkUserHandler.handleResult(user)
         } ?: authoriztionFlowFactory.start(bookmarkUserHandler, router)
+    }
+
+    private fun replacePost(oldPost: PostPreviewData, newPost: PostPreviewData) = intent {
+        reduce {
+            val currentState = this.state.currentPageState()
+            val newState = currentState.letIf(
+                currentState is PostsState.Success,
+                { state ->
+                    val success = state as PostsState.Success
+                    val newItems = success.items.toMutableList().apply {
+                        val index = this.indexOf(oldPost)
+                        if (index != -1) {
+                            this[index] = newPost
+                        }
+                    }
+                    PostsState.Success(newItems)
+                },
+                { it }
+            )
+            changeCurrentSelectionState(this.state, newState)
+        }
     }
 
     private fun changeCurrentSelectionState(

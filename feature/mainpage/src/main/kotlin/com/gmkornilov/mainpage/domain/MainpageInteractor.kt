@@ -52,4 +52,15 @@ class MainpageInteractor @Inject constructor(
             postLikeRepository.dislikePost(it.getUid(), postPreviewData.id)
         }
     }
+
+    suspend fun removeStatus(postPreviewData: PostPreviewData) {
+        if (postPreviewData.id.isEmpty()) {
+            return
+        }
+        val currentUser = authInteractor.getPostiumUser()
+
+        currentUser?.let {
+            postLikeRepository.removeStatus(it.getUid(), postPreviewData.id)
+        }
+    }
 }
