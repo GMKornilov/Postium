@@ -1,4 +1,4 @@
-package com.gmkornilov.post
+package com.gmkornilov.model
 
 import org.junit.Test
 

@@ -102,7 +102,7 @@ internal class MainPageViewModel @Inject constructor(
         viewModelScope.launch {
             reduce { changeCurrentSelectionState(this.state, PostsState.Loading) }
             try {
-                val posts = mainpageInteractor.loadData()
+                val posts = mainpageInteractor.loadDataWithTimeRange(this@intent.state.currentRange)
                 reduce { changeCurrentSelectionState(this.state, PostsState.Success(posts)) }
             } catch (e: Exception) {
                 Timber.e(e)

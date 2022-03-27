@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)
     implementation(Deps.Firebase.coroutinesPlayServices)

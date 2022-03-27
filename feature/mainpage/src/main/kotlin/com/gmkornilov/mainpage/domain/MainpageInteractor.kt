@@ -1,6 +1,8 @@
 package com.gmkornilov.mainpage.domain
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
+import com.gmkornilov.mainpage.mainpage.PostTimeRange
+import com.gmkornilov.mainpage.mainpage.toTimeRange
 import com.gmkornilov.mainpage.model.PostPreviewData
 import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
 import com.gmkornilov.mainpage.model.toPostPreviewBookmarkStatus
@@ -12,16 +14,18 @@ import com.gmkornilov.user.model.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class MainpageInteractor @Inject constructor(
+internal class MainpageInteractor @Inject constructor(
     private val firebasePostSource: FirebasePostSource,
     private val postLikeRepository: PostLikeRepository,
     private val authInteractor: AuthInteractor,
     private val postBookmarkRepository: PostBookmarkRepository,
 ) {
-    suspend fun loadData(): List<PostPreviewData> {
+    suspend fun loadDataWithTimeRange(postTimeRange: PostTimeRange): List<PostPreviewData> {
+        val timeRange = postTimeRange.toTimeRange()
+
         val currentUser = authInteractor.getPostiumUser()
 
-        val posts = firebasePostSource.getAllPosts()
+        val posts = firebasePostSource.getPostsFromTimeRange(timeRange)
 
         val users = posts.map {
             it.

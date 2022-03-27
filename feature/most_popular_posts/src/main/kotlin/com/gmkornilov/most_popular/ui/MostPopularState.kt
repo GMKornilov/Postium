@@ -1,6 +1,6 @@
 package com.gmkornilov.most_popular.ui
 
-import com.gmkornilov.post.Post
+import com.gmkornilov.model.Post
 
 data class MostPopularState(
     val posts: List<Post> = emptyList()
