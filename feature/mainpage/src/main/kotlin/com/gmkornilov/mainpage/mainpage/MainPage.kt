@@ -24,6 +24,7 @@ import com.gmkornilov.design.commons.posts.PostPreview
 import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.mainpage.R
+import com.gmkornilov.mainpage.model.PostPreviewBookmarkStatus
 import com.gmkornilov.mainpage.model.PostPreviewData
 import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
 
@@ -79,10 +80,11 @@ private fun MainpageWithState(
                 Row(modifier = Modifier.clickable { menuExpanded = !menuExpanded }) {
                     Text(
                         stringResource(id = currentRange.titleRes),
-                        modifier = Modifier.align(CenterVertically)
+                        color = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.align(CenterVertically),
                     )
 
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = { menuExpanded = !menuExpanded }) {
                         Icon(
                             Icons.Filled.ArrowDropDown,
                             null,
@@ -151,8 +153,6 @@ private fun SuccessState(
             val cornerType: CornerType
             val bottomPadding: Dp
 
-            var isBookmarked by remember { mutableStateOf(false) }
-
             when {
                 isFirst -> {
                     cornerType = CornerType.BOTTOM
@@ -174,63 +174,55 @@ private fun SuccessState(
                 avatarUrl = null,
                 isUpChecked = item.likeStatus.isLiked,
                 isDownChecked = item.likeStatus.isDisliked,
-                isBookmarkChecked = false,
+                isBookmarkChecked = item.bookmarkStatus.isBookmarked,
                 cornerType = cornerType,
                 modifier = Modifier.padding(bottom = bottomPadding),
                 onCardClick = {},
                 upClicked = { mainPageEvents.likePost(item) },
                 downClicked = { mainPageEvents.dislikePost(item) },
-                boolmarkClicked = { isBookmarked = !isBookmarked }
+                boolmarkClicked = { mainPageEvents.bookmarkPost(item)}
             )
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_MASK,
+    name = "Preview light",
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
 )
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun SuccessPreview() {
-    PostiumTheme {
-        val posts = listOf(
-            PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("2", "Second title", PostPreviewLikeStatus.LIKED),
-            PostPreviewData("3", "Third title", PostPreviewLikeStatus.DISLIKED),
-        )
-
-        val state = MainPageState(
-            allTimeState = PostsState.Success(posts),
-            currentRange = PostTimeRange.ALL_TIME
-        )
-
-        MainpageWithState(
-            mainPageEvents = MainPageEvents.MOCK,
-            state = state,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
+private fun SuccessPreviewLight() {
+    SuccessPreview()
 }
 
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_MASK,
+    name = "Preview dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-private fun SuccessPreviewLong() {
+private fun SuccessPreviewDark() {
+    SuccessPreview()
+}
+
+@ExperimentalMaterialApi
+@ExperimentalFoundationApi
+@Composable
+private fun SuccessPreview() {
     PostiumTheme {
         val posts = listOf(
-            PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("2", "Second title", PostPreviewLikeStatus.LIKED),
-            PostPreviewData("3", "Third title", PostPreviewLikeStatus.DISLIKED),
-            PostPreviewData("4", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("5", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("6", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("7", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("8", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("9", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("10", "Third title", PostPreviewLikeStatus.NONE),
-            PostPreviewData("11", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.BOOKMARKED),
+            PostPreviewData("2", "Second title", PostPreviewLikeStatus.LIKED, PostPreviewBookmarkStatus.BOOKMARKED),
+            PostPreviewData("3", "Third title", PostPreviewLikeStatus.DISLIKED, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("4", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("5", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("6", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("7", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("8", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("9", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("10", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
+            PostPreviewData("11", "Third title", PostPreviewLikeStatus.NONE, PostPreviewBookmarkStatus.NOT_BOOKMARKED),
         )
 
 

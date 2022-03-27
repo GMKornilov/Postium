@@ -8,8 +8,9 @@ enum class PostPreviewLikeStatus(val isLiked: Boolean = false, val isDisliked: B
     NONE,
 }
 
-fun PostLikeStatus.toPostPreviewLikeStatus() = when (this) {
+fun PostLikeStatus?.toPostPreviewLikeStatus() = when (this) {
     PostLikeStatus.LIKED -> PostPreviewLikeStatus.LIKED
     PostLikeStatus.DISLIKED -> PostPreviewLikeStatus.DISLIKED
     PostLikeStatus.NONE -> PostPreviewLikeStatus.NONE
+    null -> PostPreviewLikeStatus.NONE
 }

@@ -49,6 +49,7 @@ dependencies {
 
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))
+    implementation(project(":data:post_bookmarks"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)

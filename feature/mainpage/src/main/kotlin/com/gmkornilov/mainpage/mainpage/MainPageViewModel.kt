@@ -7,6 +7,7 @@ import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.letIf
 import com.gmkornilov.mainpage.domain.MainpageInteractor
+import com.gmkornilov.mainpage.model.PostPreviewBookmarkStatus
 import com.gmkornilov.mainpage.model.PostPreviewData
 import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
 import com.gmkornilov.view_model.BaseViewModel
@@ -41,7 +42,7 @@ internal class MainPageViewModel @Inject constructor(
                         if (newLikeStatus == PostPreviewLikeStatus.LIKED) {
                             mainpageInteractor.likePost(post)
                         } else {
-                            mainpageInteractor.removeStatus(post)
+                            mainpageInteractor.removeLikeStatus(post)
                         }
                     } catch (e: Exception) {
                         Timber.e(e)
@@ -68,7 +69,7 @@ internal class MainPageViewModel @Inject constructor(
                         if (newLikeStatus == PostPreviewLikeStatus.DISLIKED) {
                             mainpageInteractor.dislikePost(post)
                         } else {
-                            mainpageInteractor.removeStatus(post)
+                            mainpageInteractor.removeLikeStatus(post)
                         }
                     } catch (e: Exception) {
                         Timber.e(e)
@@ -80,7 +81,20 @@ internal class MainPageViewModel @Inject constructor(
 
     private fun getBookmarkUserHandler(post: PostPreviewData) = object : UserResultHandler {
         override fun handleResult(user: PostiumUser) {
-            TODO("Not yet implemented")
+            val newPost = post.copy(bookmarkStatus = post.bookmarkStatus.toOppositeStatus())
+            replacePost(post, newPost)
+
+            viewModelScope.launch {
+                try {
+                    if (newPost.bookmarkStatus == PostPreviewBookmarkStatus.BOOKMARKED) {
+                        mainpageInteractor.addBookmark(newPost)
+                    } else {
+                        mainpageInteractor.removeBookmark(newPost)
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
+            }
         }
     }
 

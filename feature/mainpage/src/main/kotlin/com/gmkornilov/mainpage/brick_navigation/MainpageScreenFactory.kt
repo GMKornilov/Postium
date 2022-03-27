@@ -11,6 +11,7 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.mainpage.MainPageViewModel
 import com.gmkornilov.mainpage.mainpage.Mainpage
+import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.source.FirebasePostSource
 import dagger.BindsInstance
@@ -39,6 +40,8 @@ class MainpageScreenFactory @Inject constructor(
         val firebasePostSource: FirebasePostSource
 
         val postLikeRepository: PostLikeRepository
+
+        val postBookmarkRepository: PostBookmarkRepository
 
         val authInteractor: AuthInteractor
 
