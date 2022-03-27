@@ -24,7 +24,8 @@ import com.gmkornilov.design.commons.posts.PostPreview
 import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.mainpage.R
-import com.gmkornilov.post.Post
+import com.gmkornilov.mainpage.model.PostPreviewData
+import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -108,7 +109,10 @@ private fun MainpageWithState(
         when (postsState) {
             is PostsState.Loading -> LoadingState()
             is PostsState.Error -> ErrorState()
-            is PostsState.Success -> SuccessState(posts = postsState.items)
+            is PostsState.Success -> SuccessState(
+                mainPageEvents = mainPageEvents,
+                posts = postsState.items
+            )
             else -> {}
         }
     }
@@ -132,7 +136,11 @@ private fun ErrorState(modifier: Modifier = Modifier) {
 
 @ExperimentalFoundationApi
 @Composable
-private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
+private fun SuccessState(
+    mainPageEvents: MainPageEvents,
+    posts: List<PostPreviewData>,
+    modifier: Modifier = Modifier
+) {
     val state = rememberLazyListState()
 
     LazyColumn(state = state, modifier = modifier) {
@@ -143,8 +151,6 @@ private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
             val cornerType: CornerType
             val bottomPadding: Dp
 
-            var isLiked by remember { mutableStateOf(false) }
-            var isDisliked by remember { mutableStateOf(false) }
             var isBookmarked by remember { mutableStateOf(false) }
 
             when {
@@ -166,24 +172,14 @@ private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
                 title = item.title,
                 userName = "",
                 avatarUrl = null,
-                isUpChecked = isLiked,
-                isDownChecked = isDisliked,
-                isBookmarkChecked = isBookmarked,
+                isUpChecked = item.likeStatus.isLiked,
+                isDownChecked = item.likeStatus.isDisliked,
+                isBookmarkChecked = false,
                 cornerType = cornerType,
                 modifier = Modifier.padding(bottom = bottomPadding),
                 onCardClick = {},
-                upClicked = {
-                    isLiked = !isLiked
-                    if (isLiked && isDisliked) {
-                        isDisliked = false
-                    }
-                },
-                downClicked = {
-                    isDisliked = !isDisliked
-                    if (isDisliked && isLiked) {
-                        isLiked = false
-                    }
-                },
+                upClicked = { mainPageEvents.likePost(item) },
+                downClicked = { mainPageEvents.dislikePost(item) },
                 boolmarkClicked = { isBookmarked = !isBookmarked }
             )
         }
@@ -198,9 +194,9 @@ private fun SuccessState(posts: List<Post>, modifier: Modifier = Modifier) {
 fun SuccessPreview() {
     PostiumTheme {
         val posts = listOf(
-            Post("1", "First title", 1, 0),
-            Post("2", "Second title", 2, 2),
-            Post("3", "Third title", 0, 100),
+            PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("2", "Second title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("3", "Third title", PostPreviewLikeStatus.NONE),
         )
 
         val state = MainPageState(
@@ -224,17 +220,17 @@ fun SuccessPreview() {
 private fun SuccessPreviewLong() {
     PostiumTheme {
         val posts = listOf(
-            Post("1", "First title", 1, 0),
-            Post("2", "Second title", 2, 2),
-            Post("3", "Third title", 0, 100),
-            Post("4", "Third title", 0, 100),
-            Post("5", "Third title", 0, 100),
-            Post("6", "Third title", 0, 100),
-            Post("7", "Third title", 0, 100),
-            Post("8", "Third title", 0, 100),
-            Post("9", "Third title", 0, 100),
-            Post("10", "Third title", 0, 100),
-            Post("11", "Third title", 0, 100),
+            PostPreviewData("1", "First title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("2", "Second title", PostPreviewLikeStatus.LIKED),
+            PostPreviewData("3", "Third title", PostPreviewLikeStatus.DISLIKED),
+            PostPreviewData("4", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("5", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("6", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("7", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("8", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("9", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("10", "Third title", PostPreviewLikeStatus.NONE),
+            PostPreviewData("11", "Third title", PostPreviewLikeStatus.NONE),
         )
 
 

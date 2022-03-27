@@ -14,6 +14,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -58,11 +59,15 @@ class RootScreenFactory @Inject constructor(
 
     interface Deps :
         AuthorizationFlowScreenFactory.Deps,
-        MainpageScreenFactory.Deps,
+        OuterDeps,
         Dependency {
         val authInteractor: AuthInteractor
 
         val router: TreeRouter
+    }
+
+    interface OuterDeps {
+        val firebaseFirestore: FirebaseFirestore
     }
 
     @RootScope
@@ -72,6 +77,8 @@ class RootScreenFactory @Inject constructor(
     )
     interface Component : AuthorizationFlowScreenFactory.Deps, MainpageScreenFactory.Deps {
         val rootViewModel: RootViewModel
+
+        override val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
     }
 
     @Scope

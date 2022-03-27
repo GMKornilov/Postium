@@ -2,9 +2,9 @@ package com.gmkornilov.mainpage.mainpage
 
 import androidx.annotation.StringRes
 import com.gmkornilov.mainpage.R
-import com.gmkornilov.post.Post
+import com.gmkornilov.mainpage.model.PostPreviewData
 
-data class MainPageState(
+internal data class MainPageState(
     val allTimeState: PostsState = PostsState.None,
     val lastDayState: PostsState = PostsState.None,
     val lastWeekState: PostsState = PostsState.None,
@@ -20,7 +20,7 @@ data class MainPageState(
     }
 }
 
-enum class PostTimeRange(@StringRes val titleRes: Int) {
+internal enum class PostTimeRange(@StringRes val titleRes: Int) {
     ALL_TIME(R.string.all_time_title),
     DAY(R.string.last_day_title),
     WEEK(R.string.last_week_title),
@@ -33,5 +33,5 @@ sealed class PostsState {
 
     data class Error(val e: Exception): PostsState()
 
-    data class Success(val items: List<Post>): PostsState()
+    data class Success(val items: List<PostPreviewData>): PostsState()
 }

@@ -10,6 +10,6 @@ class FirebasePostSource @Inject constructor(
 ) {
     suspend fun getAllPosts(): List<Post> {
         val snapshot = firestore.collection("posts").get().await()
-        return snapshot.documents.map { it.toObject(Post::class.java)!!.copy() }
+        return snapshot.documents.map { it.toObject(Post::class.java)!!.copy(id = it.id) }
     }
 }

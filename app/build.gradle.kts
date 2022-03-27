@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":core:activity-utils"))
 
     implementation(project(":data:post"))
+    implementation(project(":data:post_likes"))
 
     implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))

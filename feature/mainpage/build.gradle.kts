@@ -43,8 +43,12 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:design"))
+    implementation(project(":core:authorization"))
+
+    implementation(project(":feature:authorization"))
 
     implementation(project(":data:post"))
+    implementation(project(":data:post_likes"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
