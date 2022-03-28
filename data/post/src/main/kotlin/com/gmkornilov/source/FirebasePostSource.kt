@@ -2,7 +2,6 @@ package com.gmkornilov.source
 
 import com.gmkornilov.model.Post
 import com.gmkornilov.model.TimeRange
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
@@ -37,8 +36,7 @@ class FirebasePostSource @Inject constructor(
 
     private fun mapPosts(snapshot: QuerySnapshot): List<Post> {
         return snapshot.documents.map {
-            val ref = it["user", DocumentReference::class.java]
-            it.toObject(Post::class.java)!!.copy(id = it.id, userReference = ref)
+            it.toObject(Post::class.java)!!
         }
     }
 }
