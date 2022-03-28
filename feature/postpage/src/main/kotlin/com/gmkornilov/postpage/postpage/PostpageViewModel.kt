@@ -25,8 +25,8 @@ internal class PostpageViewModel @Inject constructor(
         return PostpageState(postPageArgument, ContentState.None)
     }
 
-    private val likeUserHandler = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser) = intent {
+    private val likeUserHandler = UserResultHandler {
+        intent {
             val argument = this.state.argument
             val newState =
                 this.state.copy(argument = argument.copy(likeStatus = argument.likeStatus.toOppositeLikeStatus()))
@@ -46,8 +46,8 @@ internal class PostpageViewModel @Inject constructor(
         }
     }
 
-    private val dislikeUserHandler = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser) = intent {
+    private val dislikeUserHandler = UserResultHandler {
+        intent {
             val argument = this.state.argument
             val newState =
                 this.state.copy(argument = argument.copy(likeStatus = argument.likeStatus.toOppositeDislikeStatus()))
@@ -67,8 +67,8 @@ internal class PostpageViewModel @Inject constructor(
         }
     }
 
-    private val bookmarkUserHandler = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser) = intent {
+    private val bookmarkUserHandler = UserResultHandler {
+        intent {
             val argument = this.state.argument
             val newState =
                 this.state.copy(argument = argument.copy(bookmarkStatus = argument.bookmarkStatus.toOppositeStatus()))

@@ -40,16 +40,13 @@ class ProfileBottomNavigationItem @Inject constructor(
         Icon(imageVector = icon, contentDescription = "home")
     }
 
-    private val userResultHandler = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser) {
-            // TODO: navigate to some screen if authorization was unsuccessful
-            user?.let {
-                // TODO: add root profile screen
-                // router.newRootScreen()
-                router.backScreen()
-            }
+    private val userResultHandler = UserResultHandler { user ->
+        // TODO: navigate to some screen if authorization was unsuccessful
+        user?.let {
+            // TODO: add root profile screen
+            // router.newRootScreen()
+            router.backScreen()
         }
-
     }
 
     @Composable

@@ -28,75 +28,69 @@ internal class MainPageViewModel @Inject constructor(
 ) : BaseViewModel<MainPageState, Unit>(), MainPageEvents {
     override fun getBaseState() = MainPageState()
 
-    private fun getLikeUserHandler(post: PostPreviewData) = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser) {
-            intent {
-                val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.LIKED) {
-                    PostPreviewLikeStatus.NONE
-                } else {
-                    PostPreviewLikeStatus.LIKED
-                }
-
-                val newPost = post.copy(likeStatus = newLikeStatus)
-                replacePost(post, newPost)
-
-                viewModelScope.launch {
-                    try {
-                        if (newLikeStatus == PostPreviewLikeStatus.LIKED) {
-                            mainpageInteractor.likePost(post)
-                        } else {
-                            mainpageInteractor.removeLikeStatus(post)
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
+    private fun getLikeUserHandler(post: PostPreviewData) = UserResultHandler {
+        intent {
+            val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.LIKED) {
+                PostPreviewLikeStatus.NONE
+            } else {
+                PostPreviewLikeStatus.LIKED
             }
-        }
-    }
 
-    private fun getDislikeUserHandler(post: PostPreviewData) = object: UserResultHandler {
-        override fun handleResult(user: PostiumUser) {
-            intent {
-                val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.DISLIKED) {
-                    PostPreviewLikeStatus.NONE
-                } else {
-                    PostPreviewLikeStatus.DISLIKED
-                }
-
-                val newPost = post.copy(likeStatus = newLikeStatus)
-                replacePost(post, newPost)
-
-                viewModelScope.launch {
-                    try {
-                        if (newLikeStatus == PostPreviewLikeStatus.DISLIKED) {
-                            mainpageInteractor.dislikePost(post)
-                        } else {
-                            mainpageInteractor.removeLikeStatus(post)
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getBookmarkUserHandler(post: PostPreviewData) = object : UserResultHandler {
-        override fun handleResult(user: PostiumUser) {
-            val newPost = post.copy(bookmarkStatus = post.bookmarkStatus.toOppositeStatus())
+            val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
             viewModelScope.launch {
                 try {
-                    if (newPost.bookmarkStatus == PostPreviewBookmarkStatus.BOOKMARKED) {
-                        mainpageInteractor.addBookmark(newPost)
+                    if (newLikeStatus == PostPreviewLikeStatus.LIKED) {
+                        mainpageInteractor.likePost(post)
                     } else {
-                        mainpageInteractor.removeBookmark(newPost)
+                        mainpageInteractor.removeLikeStatus(post)
                     }
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
+            }
+        }
+    }
+
+    private fun getDislikeUserHandler(post: PostPreviewData) = UserResultHandler {
+        intent {
+            val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.DISLIKED) {
+                PostPreviewLikeStatus.NONE
+            } else {
+                PostPreviewLikeStatus.DISLIKED
+            }
+
+            val newPost = post.copy(likeStatus = newLikeStatus)
+            replacePost(post, newPost)
+
+            viewModelScope.launch {
+                try {
+                    if (newLikeStatus == PostPreviewLikeStatus.DISLIKED) {
+                        mainpageInteractor.dislikePost(post)
+                    } else {
+                        mainpageInteractor.removeLikeStatus(post)
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
+            }
+        }
+    }
+
+    private fun getBookmarkUserHandler(post: PostPreviewData) = UserResultHandler {
+        val newPost = post.copy(bookmarkStatus = post.bookmarkStatus.toOppositeStatus())
+        replacePost(post, newPost)
+
+        viewModelScope.launch {
+            try {
+                if (newPost.bookmarkStatus == PostPreviewBookmarkStatus.BOOKMARKED) {
+                    mainpageInteractor.addBookmark(newPost)
+                } else {
+                    mainpageInteractor.removeBookmark(newPost)
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }
