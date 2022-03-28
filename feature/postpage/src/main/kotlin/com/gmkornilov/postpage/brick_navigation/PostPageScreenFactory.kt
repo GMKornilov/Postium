@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import com.alphicc.brick.BaseScreen
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
+import com.gmkornilov.authorizarion.data.AuthInteractor
+import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
@@ -50,6 +52,9 @@ class PostPageScreenFactory @Inject constructor(
         val postContentsRepository: PostContentsRepository
         val postBookmarkRepository: PostBookmarkRepository
         val postLikeRepository: PostLikeRepository
+
+        val authInteractor: AuthInteractor
+        val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
     }
 
     @dagger.Component(
