@@ -49,8 +49,8 @@ internal class RegistrationScreenFactory @Inject constructor(
     @Scope
     annotation class RegistrationScope
 
-    @RegistrationScope
     @dagger.Component(dependencies = [Deps::class], modules = [Module::class])
+    @RegistrationScope
     interface Component {
         val registrationViewModel: RegistrationViewModel
     }

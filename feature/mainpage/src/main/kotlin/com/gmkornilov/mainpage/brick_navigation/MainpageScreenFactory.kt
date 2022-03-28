@@ -17,6 +17,7 @@ import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.source.FirebasePostSource
 import dagger.BindsInstance
 import javax.inject.Inject
+import javax.inject.Scope
 
 class MainpageScreenFactory @Inject constructor(
     override val dependency: Deps,
@@ -51,10 +52,14 @@ class MainpageScreenFactory @Inject constructor(
         val postPageScreenFactory: PostPageScreenFactory
     }
 
+    @Scope
+    annotation class MainpageScope
+
     @dagger.Component(
         dependencies = [Deps::class],
         modules = [Module::class]
     )
+    @MainpageScope
     internal interface Component {
         val mainPageViewModel: MainPageViewModel
 

@@ -52,11 +52,11 @@ class AuthorizationFlowScreenFactory @Inject constructor(
     @Scope
     annotation class AuthorizationScope
 
-    @AuthorizationScope
     @dagger.Component(
         dependencies = [Deps::class],
         modules = [Module::class],
     )
+    @AuthorizationScope
     internal interface Component :
         HomeScreenFactory.Deps,
         RegistrationScreenFactory.Deps,

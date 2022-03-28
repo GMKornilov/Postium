@@ -16,6 +16,7 @@ import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val HOME_KEY = "Authorization Home"
 
@@ -59,7 +60,11 @@ internal class HomeScreenFactory @Inject constructor(
         val homeFlowEvents: HomeFlowEvents
     }
 
+    @Scope
+    annotation class HomeScope
+
     @dagger.Component(dependencies = [Deps::class, UserResultHandler::class])
+    @HomeScope
     interface Component {
         val homeViewModel: HomeViewModel
     }

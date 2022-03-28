@@ -11,6 +11,7 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import dagger.BindsInstance
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val USER_FORM_KEY = "user form"
 
@@ -41,10 +42,14 @@ internal class UserFormScreenFactory @Inject constructor(
 
     }
 
+    @Scope
+    annotation class UserFormScope
+
     @dagger.Component(
         dependencies = [Deps::class],
         modules = [Module::class],
     )
+    @UserFormScope
     interface Component {
         val viewModel: UserFormViewModel
 

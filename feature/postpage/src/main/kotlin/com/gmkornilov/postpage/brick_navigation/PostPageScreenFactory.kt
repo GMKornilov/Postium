@@ -17,6 +17,7 @@ import com.gmkornilov.postpage.postpage.Postpage
 import com.gmkornilov.postpage.postpage.PostpageViewModel
 import dagger.BindsInstance
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val POST_PAGE_SCREEN_KEY = "post_page"
 
@@ -57,10 +58,14 @@ class PostPageScreenFactory @Inject constructor(
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
     }
 
+    @Scope
+    annotation class PostPageScope
+
     @dagger.Component(
         dependencies = [Deps::class],
         modules = [Module::class]
     )
+    @PostPageScope
     internal interface Component {
         val postpageViewModel: PostpageViewModel
 

@@ -71,11 +71,11 @@ class RootScreenFactory @Inject constructor(
         val firebaseFirestore: FirebaseFirestore
     }
 
-    @RootScope
     @dagger.Component(
         dependencies = [Deps::class],
         modules = [RootModule::class],
     )
+    @RootScope
     interface Component :
         AuthorizationFlowScreenFactory.Deps,
         MainpageScreenFactory.Deps,
