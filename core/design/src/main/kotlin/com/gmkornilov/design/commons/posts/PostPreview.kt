@@ -5,25 +5,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.Bookmark
-import androidx.compose.material.icons.outlined.BookmarkAdd
-import androidx.compose.material.icons.outlined.ThumbDown
-import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.SubcomposeAsyncImage
+import com.gmkornilov.design.commons.buttons.BookmarkButton
+import com.gmkornilov.design.commons.buttons.DislikeButton
+import com.gmkornilov.design.commons.buttons.LikeButton
+import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.data.CornerType
-import com.gmkornilov.design.theme.DarkBurgundy
-import com.gmkornilov.design.theme.Green
 import com.gmkornilov.design.theme.PostiumTheme
 import com.google.accompanist.placeholder.material.placeholder
 
@@ -74,26 +68,13 @@ fun PostPreview(
             })
 
             avatarUrl?.let {
-                SubcomposeAsyncImage(
-                    model = it,
-                    loading = {
-                        Box(
-                            modifier = Modifier
-                                .height(IntrinsicSize.Max)
-                                .width(IntrinsicSize.Max)
-                                .placeholder(visible = true)
-                        )
-                    },
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .constrainAs(avatarRef) {
-                            top.linkTo(dividerRef.bottom, margin = 8.dp)
-                            start.linkTo(parent.start, margin = 8.dp)
-                            bottom.linkTo(parent.bottom, margin = 8.dp)
-                        },
-                    contentScale = ContentScale.Crop
+                UserAvatar(
+                    avatarUrl = it,
+                    modifier = Modifier.constrainAs(avatarRef) {
+                        top.linkTo(dividerRef.bottom, margin = 8.dp)
+                        start.linkTo(parent.start, margin = 8.dp)
+                        bottom.linkTo(parent.bottom, margin = 8.dp)
+                    }
                 )
             }
 
@@ -111,50 +92,32 @@ fun PostPreview(
                     }
             )
 
-            IconToggleButton(
-                checked = isUpChecked,
+            LikeButton(
+                isChecked = isUpChecked,
                 onCheckedChange = upClicked,
                 modifier = Modifier.constrainAs(upRef) {
                     end.linkTo(downRef.start, margin = 4.dp)
                     top.linkTo(dividerRef.bottom, margin = 8.dp)
-                }
-            ) {
-                Icon(
-                    imageVector = if (isUpChecked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
-                    contentDescription = null,
-                    tint = if (isUpChecked) Green else MaterialTheme.colors.onSurface,
-                )
-            }
+                },
+            )
 
-            IconToggleButton(
-                checked = isDownChecked,
+            DislikeButton(
+                isChecked = isDownChecked,
                 onCheckedChange = downClicked,
                 modifier = Modifier.constrainAs(downRef) {
                     end.linkTo(markRef.start, margin = 4.dp)
                     top.linkTo(upRef.top)
                 }
-            ) {
-                Icon(
-                    imageVector = if (isDownChecked) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown,
-                    contentDescription = null,
-                    tint = if (isDownChecked) Color.Red else MaterialTheme.colors.onSurface,
-                )
-            }
+            )
 
-            IconToggleButton(
-                checked = isBookmarkChecked,
+            BookmarkButton(
+                isChecked = isBookmarkChecked,
                 onCheckedChange = boolmarkClicked,
                 modifier = Modifier.constrainAs(markRef) {
                     end.linkTo(parent.end, margin = 16.dp)
                     top.linkTo(upRef.top)
-                }
-            ) {
-                Icon(
-                    imageVector = if (isBookmarkChecked) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkAdd,
-                    contentDescription = null,
-                    tint = if (isBookmarkChecked) DarkBurgundy else MaterialTheme.colors.onSurface,
-                )
-            }
+                },
+            )
         }
     }
 }
@@ -194,7 +157,7 @@ private fun PostsColumn(isLight: Boolean = true) {
                 isDownChecked = true,
                 cornerType = CornerType.ALL,
                 isBookmarkChecked = false,
-                modifier =  Modifier.padding(bottom = 4.dp),
+                modifier = Modifier.padding(bottom = 4.dp),
             )
 
             PostPreview(
