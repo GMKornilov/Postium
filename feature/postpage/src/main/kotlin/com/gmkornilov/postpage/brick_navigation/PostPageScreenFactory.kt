@@ -3,6 +3,8 @@ package com.gmkornilov.postpage.brick_navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.alphicc.brick.BaseScreen
+import com.alphicc.brick.Screen
+import com.alphicc.brick.TreeRouter
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
@@ -19,13 +21,16 @@ private const val POST_PAGE_SCREEN_KEY = "post_page"
 class PostPageScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<PostPageScreenFactory.Deps> {
+    private lateinit var router: TreeRouter
+
     private val screen = BaseScreen(
         key = POST_PAGE_SCREEN_KEY,
         onCreate = { _, arg ->
-            val postPageArgument = arg.get<PostPageArgument>()
+            val argument = arg.get<PostPageArgument>()
 
             val component = DaggerPostPageScreenFactory_Component.builder()
-                .postPageArgument(postPageArgument)
+                .postPageArgument(argument)
+                .router(router)
                 .deps(dependency)
                 .build()
 
@@ -36,7 +41,8 @@ class PostPageScreenFactory @Inject constructor(
         Postpage(viewModel = viewModel, modifier = Modifier.fillMaxSize())
     }
 
-    fun build(): BaseScreen<*> {
+    fun build(router: TreeRouter): Screen<*> {
+        this.router = router
         return screen
     }
 
@@ -57,6 +63,9 @@ class PostPageScreenFactory @Inject constructor(
         interface Builder {
             @BindsInstance
             fun postPageArgument(argument: PostPageArgument): Builder
+
+            @BindsInstance
+            fun router(treeRouter: TreeRouter): Builder
 
             fun deps(dependency: Deps): Builder
 

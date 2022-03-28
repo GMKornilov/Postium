@@ -1,6 +1,7 @@
 package com.gmkornilov.post_contents.repository
 
 import com.gmkornilov.post_contents.model.PostContents
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -16,6 +17,10 @@ class PostContentsRepository @Inject constructor(
             .document(postId)
             .get()
             .await()
+        return mapSnaphot(snapshot)
+    }
+
+    private fun mapSnaphot(snapshot: DocumentSnapshot): PostContents {
         return snapshot.toObject(PostContents::class.java)!!
     }
 }

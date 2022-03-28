@@ -36,7 +36,7 @@ class FirebasePostSource @Inject constructor(
 
     private fun mapPosts(snapshot: QuerySnapshot): List<Post> {
         return snapshot.documents.map {
-            it.toObject(Post::class.java)!!
+            it.toObject(Post::class.java)!!.copy(id = it.id)
         }
     }
 }

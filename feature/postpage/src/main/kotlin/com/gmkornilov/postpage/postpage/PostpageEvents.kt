@@ -1,6 +1,6 @@
 package com.gmkornilov.postpage.postpage
 
-interface PostpageEvents {
+internal interface PostpageEvents {
     fun openComments()
 
     fun likePost()

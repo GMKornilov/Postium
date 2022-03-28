@@ -10,4 +10,7 @@ internal class PostPageInteractor @Inject constructor(
     private val postBookmarkRepository: PostBookmarkRepository,
     private val postLikeRepository: PostLikeRepository,
 ) {
+    suspend fun loadContent(postId: String): String {
+        return postContentsRepository.loadPostContents(postId)!!.content
+    }
 }

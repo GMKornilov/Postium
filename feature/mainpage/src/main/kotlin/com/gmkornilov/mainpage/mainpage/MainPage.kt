@@ -249,7 +249,7 @@ private fun SuccessState(
                 isBookmarkChecked = item.bookmarkStatus.isBookmarked,
                 cornerType = cornerType,
                 modifier = Modifier.padding(bottom = bottomPadding),
-                onCardClick = {},
+                onCardClick = { mainPageEvents.openPost(item) },
                 upClicked = { mainPageEvents.likePost(item) },
                 downClicked = { mainPageEvents.dislikePost(item) },
                 boolmarkClicked = { mainPageEvents.bookmarkPost(item) }

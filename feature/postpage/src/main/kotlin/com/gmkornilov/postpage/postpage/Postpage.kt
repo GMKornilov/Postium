@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,6 +31,12 @@ internal fun Postpage(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        if (state.contentState is ContentState.None) {
+            viewModel.loadContent()
+        }
+    }
 
     PostpageWithState(state = state, postpageEvents = viewModel, modifier = modifier)
 }
@@ -55,11 +62,23 @@ private fun PostpageWithState(
 
             Divider()
 
-            Text(
-                LoremIpsum().values.joinToString(),
-                color = MaterialTheme.colors.onSurface,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp)
-            )
+            when (state.contentState) {
+                is ContentState.Error -> ContentError(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                )
+                ContentState.Loading -> ContentLoading(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                )
+                is ContentState.Success -> ContentSuccess(
+                    contentState = state.contentState,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp),
+                )
+                ContentState.None -> {}
+            }
         }
 
         Divider()
@@ -75,9 +94,37 @@ private fun PostpageWithState(
 }
 
 @Composable
+private fun ContentLoading(
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        CircularProgressIndicator(modifier = Modifier.align(Center))
+    }
+}
+
+@Composable
+private fun ContentError(
+    modifier: Modifier = Modifier,
+) {
+
+}
+
+@Composable
+private fun ContentSuccess(
+    contentState: ContentState.Success,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        contentState.content,
+        color = MaterialTheme.colors.onSurface,
+        modifier = modifier,
+    )
+}
+
+@Composable
 private fun PostHeader(
     title: String,
-    username: String,
+    username: String?,
     avatarUrl: String?,
     modifier: Modifier = Modifier,
 ) {
@@ -94,20 +141,23 @@ private fun PostHeader(
                 )
             }
 
-            val startPadding = if (avatarUrl == null) 16.dp else 12.dp
-
-            Text(
-                stringResource(R.string.by_title, username),
-                color = MaterialTheme.colors.onSurface,
-                modifier = Modifier.padding(start = startPadding)
-            )
+            username?.let {
+                val startPadding = if (avatarUrl == null) 16.dp else 12.dp
+                Text(
+                    stringResource(R.string.by_title, username),
+                    color = MaterialTheme.colors.onSurface,
+                    modifier = Modifier.padding(start = startPadding)
+                )
+            }
         }
 
         Text(
             title,
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.h4,
-            modifier = Modifier.padding(top = 8.dp).align(CenterHorizontally)
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .align(CenterHorizontally)
         )
     }
 }
@@ -163,8 +213,43 @@ private fun SuccessPreviewDark() {
     SuccessPreview()
 }
 
+@Preview(
+    name = "Loading preview light",
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun SuccessPreview() {
+private fun LoadingPreviewLight() {
+    LoadingPreview()
+}
+
+@Preview(
+    name = "Loading preview dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@Composable
+private fun LoadingPreviewDark() {
+    LoadingPreview()
+}
+
+@Composable
+private fun SuccessPreview() {
+    val argument = PostPageArgument(
+        title = "test title",
+        username = "test username",
+        avatarUrl = "",
+        id = "",
+    )
+    val content = LoremIpsum().values.joinToString()
+
+    val state = PostpageState(argument, ContentState.Success(content))
+
+    PreviewWithState(state = state)
+}
+
+@Composable
+private fun LoadingPreview() {
     val argument = PostPageArgument(
         title = "test title",
         username = "test username",
@@ -172,8 +257,13 @@ fun SuccessPreview() {
         id = "",
     )
 
-    val state = PostpageState.None(argument)
+    val state = PostpageState(argument, ContentState.Loading)
 
+    PreviewWithState(state = state)
+}
+
+@Composable
+private fun PreviewWithState(state: PostpageState) {
     PostiumTheme {
         PostpageWithState(
             state = state,

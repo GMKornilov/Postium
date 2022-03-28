@@ -10,6 +10,8 @@ import com.gmkornilov.mainpage.domain.MainpageInteractor
 import com.gmkornilov.mainpage.model.PostPreviewBookmarkStatus
 import com.gmkornilov.mainpage.model.PostPreviewData
 import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
+import com.gmkornilov.mainpage.model.toPostPageArgument
+import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -22,6 +24,7 @@ internal class MainPageViewModel @Inject constructor(
     private val router: TreeRouter,
     private val authoriztionFlowFactory: AuthorizationFlowScreenFactory,
     private val authInteractor: AuthInteractor,
+    private val postPageScreenFactory: PostPageScreenFactory,
 ) : BaseViewModel<MainPageState, Unit>(), MainPageEvents {
     override fun getBaseState() = MainPageState()
 
@@ -116,7 +119,8 @@ internal class MainPageViewModel @Inject constructor(
     }
 
     override fun openPost(post: PostPreviewData) {
-        TODO("Not yet implemented")
+        val screen = postPageScreenFactory.build(router)
+        router.addScreen(screen, post.toPostPageArgument())
     }
 
     override fun likePost(post: PostPreviewData) {

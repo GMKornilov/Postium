@@ -13,6 +13,7 @@ import com.gmkornilov.mainpage.mainpage.MainPageViewModel
 import com.gmkornilov.mainpage.mainpage.Mainpage
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
+import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.source.FirebasePostSource
 import dagger.BindsInstance
 import javax.inject.Inject
@@ -46,6 +47,8 @@ class MainpageScreenFactory @Inject constructor(
         val authInteractor: AuthInteractor
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
+
+        val postPageScreenFactory: PostPageScreenFactory
     }
 
     @dagger.Component(

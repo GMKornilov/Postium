@@ -2,12 +2,17 @@ package com.gmkornilov.postpage.postpage
 
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 
-internal sealed class PostpageState(val argument: PostPageArgument) {
-    class None(argument: PostPageArgument): PostpageState(argument)
+internal data class PostpageState(
+    val argument: PostPageArgument,
+    val contentState: ContentState
+)
 
-    class Loading(argument: PostPageArgument): PostpageState(argument)
+internal sealed class ContentState {
+    object None: ContentState()
 
-    class Success(content: String, argument: PostPageArgument): PostpageState(argument)
+    object Loading: ContentState()
 
-    class Error(e: Exception, argument: PostPageArgument): PostpageState(argument)
+    data class Success(val content: String): ContentState()
+
+    data class Error(val e: Exception): ContentState()
 }

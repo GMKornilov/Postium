@@ -14,6 +14,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
+import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
@@ -75,10 +76,15 @@ class RootScreenFactory @Inject constructor(
         dependencies = [Deps::class],
         modules = [RootModule::class],
     )
-    interface Component : AuthorizationFlowScreenFactory.Deps, MainpageScreenFactory.Deps {
+    interface Component :
+        AuthorizationFlowScreenFactory.Deps,
+        MainpageScreenFactory.Deps,
+        PostPageScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         override val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
+
+        override val postPageScreenFactory: PostPageScreenFactory
     }
 
     @Scope
@@ -94,6 +100,10 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindMainpageDeps(component: Component): MainpageScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindPostpageDeps(component: Component): PostPageScreenFactory.Deps
 
         companion object {
             @Provides
