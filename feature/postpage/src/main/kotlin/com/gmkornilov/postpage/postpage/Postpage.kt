@@ -24,6 +24,8 @@ import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.postpage.R
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.material.MaterialRichText
 
 @Composable
 internal fun Postpage(
@@ -114,11 +116,9 @@ private fun ContentSuccess(
     contentState: ContentState.Success,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        contentState.content,
-        color = MaterialTheme.colors.onSurface,
-        modifier = modifier,
-    )
+    MaterialRichText(modifier = modifier) {
+        Markdown(content = contentState.content)
+    }
 }
 
 @Composable

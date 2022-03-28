@@ -71,6 +71,9 @@ dependencies {
 
     implementation(Deps.Compose.Lottie.lottieCompose)
 
+    implementation(Deps.Compose.Richtext.materialUi)
+    implementation(Deps.Compose.Richtext.commonmark)
+
     implementation(Deps.Navigation.brickNavigation)
 
     implementation(Deps.MVI.Orbit.core)

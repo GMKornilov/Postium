@@ -82,6 +82,10 @@ object Versions {
         object Lottie {
             const val version = "5.0.3"
         }
+
+        object Richtext {
+            const val richtext = "0.11.0"
+        }
     }
 
     /**

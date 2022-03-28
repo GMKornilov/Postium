@@ -3,7 +3,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-         // Warning: this repository is going to shut down soon
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+        maven(url = "https://jitpack.io")
     }
 }
 rootProject.name = "Postium"

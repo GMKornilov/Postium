@@ -68,6 +68,11 @@ object Deps {
             const val lottieCompose =
                 "com.airbnb.android:lottie-compose:${Versions.Compose.Lottie.version}"
         }
+
+        object Richtext {
+            const val commonmark = "com.halilibo.compose-richtext:richtext-commonmark:${Versions.Compose.Richtext.richtext}"
+            const val materialUi = "com.halilibo.compose-richtext:richtext-ui-material:${Versions.Compose.Richtext.richtext}"
+        }
     }
 
     /**
