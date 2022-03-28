@@ -4,4 +4,7 @@
     <string name="last_week_title">За последнюю неделю</string>
     <string name="last_day_title">За последний день</string>
     <string name="all_time_title">За все время</string>
+
+    <string name="load_posts_error">Не получилось загрузить публикации, попробуйте зайти позже</string>
+    <string name="posts_not_found">Не удалось найти публикации по заданному фильтру :(</string>
 </resources>

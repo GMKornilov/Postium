@@ -40,7 +40,8 @@ object Deps {
         object Icons {
             const val simple =
                 "br.com.devsrsouza.compose.icons.android:simple-icons:${Versions.Compose.Icons.simpleIcons}"
-            const val tabler = "br.com.devsrsouza.compose.icons.android:tabler-icons:${Versions.Compose.Icons.tablerIcons}"
+            const val tabler =
+                "br.com.devsrsouza.compose.icons.android:tabler-icons:${Versions.Compose.Icons.tablerIcons}"
         }
 
         object Accompanist {
@@ -55,11 +56,17 @@ object Deps {
             const val pagerIndicators =
                 "com.google.accompanist:accompanist-pager-indicators:${Versions.Compose.Accompanist.pagerIndicators}"
 
-            const val placeholderMaterial = "com.google.accompanist:accompanist-placeholder-material:${Versions.Compose.Accompanist.placeholder}"
+            const val placeholderMaterial =
+                "com.google.accompanist:accompanist-placeholder-material:${Versions.Compose.Accompanist.placeholder}"
         }
 
         object Images {
             const val coil = "io.coil-kt:coil-compose:${Versions.Compose.Images.coil}"
+        }
+
+        object Lottie {
+            const val lottieCompose =
+                "com.airbnb.android:lottie-compose:${Versions.Compose.Lottie.version}"
         }
     }
 

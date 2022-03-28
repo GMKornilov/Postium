@@ -4,7 +4,6 @@ import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.mainpage.mainpage.PostTimeRange
 import com.gmkornilov.mainpage.mainpage.toTimeRange
 import com.gmkornilov.mainpage.model.PostPreviewData
-import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
 import com.gmkornilov.mainpage.model.toPostPreviewBookmarkStatus
 import com.gmkornilov.mainpage.model.toPostPreviewLikeStatus
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository

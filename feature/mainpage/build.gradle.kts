@@ -70,6 +70,8 @@ dependencies {
 
     implementation(Deps.Compose.Icons.simple)
 
+    implementation(Deps.Compose.Lottie.lottieCompose)
+
     implementation(Deps.Navigation.brickNavigation)
 
     implementation(Deps.MVI.Orbit.core)
