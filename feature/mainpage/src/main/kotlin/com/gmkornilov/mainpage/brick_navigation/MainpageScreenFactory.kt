@@ -22,10 +22,11 @@ import javax.inject.Scope
 class MainpageScreenFactory @Inject constructor(
     override val dependency: Deps,
 ) : NavigationScreenProvider<MainpageScreenFactory.Deps> {
+    private lateinit var router: TreeRouter
+
     private val mainpageScreen = BaseScreen(
         key = "Home",
-        onCreate = { _, arg ->
-            val router = arg.get<TreeRouter>()
+        onCreate = { _, _ ->
             val component = DaggerMainpageScreenFactory_Component.builder()
                 .deps(dependency)
                 .router(router)
@@ -79,7 +80,8 @@ class MainpageScreenFactory @Inject constructor(
 
     }
 
-    fun build(): Screen<*> {
+    fun build(router: TreeRouter): Screen<*> {
+        this.router = router
         return mainpageScreen
     }
 }

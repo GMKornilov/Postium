@@ -28,6 +28,6 @@ class HomeBottomNavigationItem @Inject constructor(
     }
 
     override val router: TreeRouter = rootRouter.branch(bottomNavigationScreenFactory.screenKey).apply {
-        newRootScreen(mainpageScreenFactory.build(), this)
+        newRootScreen(mainpageScreenFactory.build(this))
     }
 }
