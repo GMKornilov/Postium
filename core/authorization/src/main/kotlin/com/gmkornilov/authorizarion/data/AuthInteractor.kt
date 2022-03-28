@@ -19,7 +19,15 @@ interface AuthInteractor {
 
     suspend fun createUser(email: String, password: String): SignInResult
 
+    suspend fun resetPassword(email: String): ResetPasswordResult
+
     fun signOut()
+}
+
+sealed class ResetPasswordResult {
+    object Success: ResetPasswordResult()
+
+    object UserDoesntExist: ResetPasswordResult()
 }
 
 sealed class SignInResult {

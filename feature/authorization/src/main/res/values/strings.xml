@@ -24,4 +24,12 @@
     <string name="malformed_email">Некорректный email</string>
     <string name="user_already_exists">Данный пользователь уже зарегистрирован</string>
     <!-- endofsection -->
+
+    <!-- Password restoration screen -->
+    <string name="enter_email">Введите email:</string>
+    <string name="send_email">Отправить письмо</string>
+    <string name="email_send">Письмо было успешно отправлено. Проверьте свою электронную почту</string>
+    <string name="user_doesnt_exist">Пользователя с данным email не существует</string>
+    <string name="back">Назад</string>
+    <!-- endofscetion -->
 </resources>

@@ -1,12 +1,15 @@
 package com.gmkornilov.authorization.feature_flow
 
 import com.alphicc.brick.TreeRouter
+import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
+import com.gmkornilov.authorization.password_restoration.PasswordRestorationScreenFactory
+import com.gmkornilov.authorization.password_restoration.domain.PasswordRestorationFlowEvents
 import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.user_form.UserFormScreenFactory
@@ -41,6 +44,8 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         val facebookAuthInteractor: FacebookAuthInteractor
         val emailAuthInteractor: EmailAuthInteractor
 
+        val authInteractor: AuthInteractor
+
         val stringsProvider: StringsProvider
     }
 
@@ -52,7 +57,11 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         dependencies = [Deps::class],
         modules = [Module::class],
     )
-    internal interface Component : HomeScreenFactory.Deps, RegistrationScreenFactory.Deps, UserFormScreenFactory.Deps {
+    internal interface Component :
+        HomeScreenFactory.Deps,
+        RegistrationScreenFactory.Deps,
+        UserFormScreenFactory.Deps,
+        PasswordRestorationScreenFactory.Deps {
         val flowInteractor: AuthorizationFlowInteractor
 
         val treeRouter: TreeRouter
@@ -87,6 +96,10 @@ class AuthorizationFlowScreenFactory @Inject constructor(
 
         @AuthorizationScope
         @Binds
+        fun bindPasswordRestorationDeps(component: Component): PasswordRestorationScreenFactory.Deps
+
+        @AuthorizationScope
+        @Binds
         fun bindHomeFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): HomeFlowEvents
 
         @AuthorizationScope
@@ -96,5 +109,9 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         @AuthorizationScope
         @Binds
         fun bindUserFormFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): UserFormFlowEvents
+
+        @AuthorizationScope
+        @Binds
+        fun bindPasswordRestorationFlowEvents(authorizationFlowInteractor: AuthorizationFlowInteractor): PasswordRestorationFlowEvents
     }
 }

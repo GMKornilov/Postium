@@ -5,6 +5,7 @@ import com.gmkornilov.authorizarion.model.PostiumUserImpl
 import com.gmkornilov.authorizarion.model.toPostiumUser
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.tasks.await
@@ -44,6 +45,15 @@ class AuthInteractorImpl @Inject internal constructor(
     override suspend fun createUser(email: String, password: String): SignInResult {
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         return SignInResult.NewUser(result.user!!.toPostiumUser())
+    }
+
+    override suspend fun resetPassword(email: String): ResetPasswordResult {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            ResetPasswordResult.Success
+        } catch (e: FirebaseAuthInvalidUserException) {
+            ResetPasswordResult.UserDoesntExist
+        }
     }
 
     override fun signOut() {

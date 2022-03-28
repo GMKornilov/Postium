@@ -62,7 +62,7 @@ class RootScreenFactory @Inject constructor(
         AuthorizationFlowScreenFactory.Deps,
         OuterDeps,
         Dependency {
-        val authInteractor: AuthInteractor
+        override val authInteractor: AuthInteractor
 
         val router: TreeRouter
     }

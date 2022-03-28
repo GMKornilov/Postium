@@ -71,6 +71,8 @@ dependencies {
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.viewModel)
 
+    implementation(Deps.Logging.timber)
+
     implementation(Deps.Dagger.core)
     kapt(Deps.Dagger.kapt)
 

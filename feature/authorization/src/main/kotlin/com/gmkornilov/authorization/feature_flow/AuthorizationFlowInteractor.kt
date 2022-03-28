@@ -5,6 +5,9 @@ import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
+import com.gmkornilov.authorization.password_restoration.PasswordRestorationScreenFactory
+import com.gmkornilov.authorization.password_restoration.domain.PasswordRestorationFlowEvents
+import com.gmkornilov.authorization.password_restoration.view.PasswordRestorationEvents
 import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.user_form.UserFormScreenFactory
@@ -16,8 +19,9 @@ internal class AuthorizationFlowInteractor @Inject constructor(
     private val homeScreenFactory: HomeScreenFactory,
     private val registrationScreenFactory: RegistrationScreenFactory,
     private val userFormScreenFactory: UserFormScreenFactory,
+    private val passwordRestorationScreenFactory: PasswordRestorationScreenFactory,
     private val userResultHandler: UserResultHandler,
-): HomeFlowEvents, RegistrationFlowEvents, UserFormFlowEvents {
+): HomeFlowEvents, RegistrationFlowEvents, UserFormFlowEvents, PasswordRestorationFlowEvents {
     private var authorizationStep = AuthorizationStep.NONE
 
     fun startAuthorizationFlow() {
@@ -44,7 +48,7 @@ internal class AuthorizationFlowInteractor @Inject constructor(
 
     override fun passwordRestorationClicked() {
         authorizationStep = AuthorizationStep.FORGOT_PASSWORD
-        // TODO: router navigate to password registration screen
+        router.addScreen(passwordRestorationScreenFactory.build())
     }
 
     override fun successfulAuthorization(user: PostiumUser, isNew: Boolean) {
@@ -75,5 +79,10 @@ internal class AuthorizationFlowInteractor @Inject constructor(
         authorizationStep = AuthorizationStep.NONE
         router.backScreen()
         userResultHandler.handleResult(user)
+    }
+
+    override fun backToHomeScreen() {
+        authorizationStep = AuthorizationStep.LOGIN
+        router.backToScreen(homeScreenFactory.screenKey)
     }
 }
