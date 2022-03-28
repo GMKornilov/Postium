@@ -16,4 +16,6 @@ fun PostPreviewData.toPostPageArgument() = PostPageArgument(
     title = title,
     username = username,
     avatarUrl = avatarUrl,
+    likeStatus = likeStatus.toPostpageLikeStatus(),
+    bookmarkStatus = bookmarkStatus.toPostPageBookmarkStatus(),
 )

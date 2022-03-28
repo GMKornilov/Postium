@@ -86,6 +86,9 @@ private fun PostpageWithState(
         Divider()
 
         PostFooter(
+            isUpChecked = state.argument.likeStatus.isLiked,
+            isDownChecked = state.argument.likeStatus.isDisliked,
+            isBookmarkChecked = state.argument.bookmarkStatus.isBookmarked,
             onUpClicked = { postpageEvents.likePost() },
             onDownClicked = { postpageEvents.dislikePost() },
             onBookmarkClicked = { postpageEvents.bookmarkPost() },
@@ -164,6 +167,9 @@ private fun PostHeader(
 
 @Composable
 private fun PostFooter(
+    isUpChecked: Boolean,
+    isDownChecked: Boolean,
+    isBookmarkChecked: Boolean,
     onUpClicked: (Boolean) -> Unit,
     onDownClicked: (Boolean) -> Unit,
     onBookmarkClicked: (Boolean) -> Unit,
@@ -171,10 +177,6 @@ private fun PostFooter(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        val isUpChecked by remember { mutableStateOf(true) }
-        val isDownChecked by remember { mutableStateOf(true) }
-        val isBookmarkChecked by remember { mutableStateOf(true) }
-
         IconButton(onClick = onOpenCommentsClicked) {
             Icon(
                 imageVector = Icons.Outlined.Chat,
@@ -240,6 +242,8 @@ private fun SuccessPreview() {
         username = "test username",
         avatarUrl = "",
         id = "",
+        likeStatus = PostpageLikeStatus.LIKED,
+        bookmarkStatus = PostpageBookmarkStatus.BOOKMARKED
     )
     val content = LoremIpsum().values.joinToString()
 
@@ -255,6 +259,8 @@ private fun LoadingPreview() {
         username = "test username",
         avatarUrl = "",
         id = "",
+        likeStatus = PostpageLikeStatus.DISLIKED,
+        bookmarkStatus = PostpageBookmarkStatus.NOT_BOOKMARKED
     )
 
     val state = PostpageState(argument, ContentState.Loading)

@@ -11,6 +11,6 @@ internal class PostPageInteractor @Inject constructor(
     private val postLikeRepository: PostLikeRepository,
 ) {
     suspend fun loadContent(postId: String): String {
-        return postContentsRepository.loadPostContents(postId)!!.content
+        return postContentsRepository.loadPostContents(postId).content
     }
 }
