@@ -8,7 +8,6 @@ import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthStatus
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
-import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -61,7 +60,10 @@ internal class HomeViewModel @Inject constructor(
     @ExperimentalCoroutinesApi
     override fun handleGoogleSignInResult(activityResult: ActivityResult) = intent {
         viewModelScope.launch {
-            googleAuthInteractor.signIn(activityResult)
+            when (val signInResult = googleAuthInteractor.signIn(activityResult)) {
+                is SignInResult.ExistingUser -> handleSuccessfulResult(signInResult.user, false)
+                is SignInResult.NewUser -> handleSuccessfulResult(signInResult.user, true)
+            }
         }
     }
 
