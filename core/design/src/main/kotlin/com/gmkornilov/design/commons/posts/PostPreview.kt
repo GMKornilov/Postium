@@ -1,25 +1,21 @@
 package com.gmkornilov.design.commons.posts
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.SubcomposeAsyncImage
 import com.gmkornilov.design.commons.buttons.BookmarkButton
 import com.gmkornilov.design.commons.buttons.DislikeButton
 import com.gmkornilov.design.commons.buttons.LikeButton
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
-import com.google.accompanist.placeholder.material.placeholder
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -33,6 +29,7 @@ fun PostPreview(
     modifier: Modifier = Modifier,
     cornerType: CornerType = CornerType.ALL,
     onCardClick: () -> Unit = {},
+    userProfileClicked: () -> Unit = {},
     upClicked: (Boolean) -> Unit = {},
     downClicked: (Boolean) -> Unit = {},
     boolmarkClicked: (Boolean) -> Unit = {},
@@ -70,11 +67,15 @@ fun PostPreview(
             avatarUrl?.let {
                 UserAvatar(
                     avatarUrl = it,
-                    modifier = Modifier.constrainAs(avatarRef) {
-                        top.linkTo(dividerRef.bottom, margin = 8.dp)
-                        start.linkTo(parent.start, margin = 8.dp)
-                        bottom.linkTo(parent.bottom, margin = 8.dp)
-                    }
+                    modifier = Modifier
+                        .constrainAs(avatarRef) {
+                            top.linkTo(dividerRef.bottom, margin = 8.dp)
+                            start.linkTo(parent.start, margin = 8.dp)
+                            bottom.linkTo(parent.bottom, margin = 8.dp)
+                        }
+                        .clickable {
+                            userProfileClicked()
+                        }
                 )
             }
 
@@ -89,6 +90,9 @@ fun PostPreview(
                         start.linkTo(avatarRef.end, margin = 8.dp)
                         top.linkTo(dividerRef.bottom)
                         bottom.linkTo(parent.bottom)
+                    }
+                    .clickable {
+                        userProfileClicked()
                     }
             )
 

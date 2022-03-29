@@ -252,7 +252,8 @@ private fun SuccessState(
                 onCardClick = { mainPageEvents.openPost(item) },
                 upClicked = { mainPageEvents.likePost(item) },
                 downClicked = { mainPageEvents.dislikePost(item) },
-                boolmarkClicked = { mainPageEvents.bookmarkPost(item) }
+                boolmarkClicked = { mainPageEvents.bookmarkPost(item) },
+                userProfileClicked = { mainPageEvents.openProfile(item) },
             )
         }
     }

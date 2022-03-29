@@ -15,6 +15,7 @@ import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.source.FirebasePostSource
+import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import dagger.BindsInstance
 import javax.inject.Inject
 import javax.inject.Scope
@@ -51,6 +52,8 @@ class MainpageScreenFactory @Inject constructor(
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
 
         val postPageScreenFactory: PostPageScreenFactory
+
+        val userPageScreenFactory: UserPageScreenFactory
     }
 
     @Scope

@@ -7,6 +7,8 @@ internal interface MainPageEvents {
 
     fun openPost(post: PostPreviewData)
 
+    fun openProfile(post: PostPreviewData)
+
     fun likePost(post: PostPreviewData)
 
     fun dislikePost(post: PostPreviewData)
@@ -17,6 +19,7 @@ internal interface MainPageEvents {
         val MOCK = object : MainPageEvents {
             override fun selectTimeRange(postTimeRange: PostTimeRange) = Unit
             override fun openPost(post: PostPreviewData) = Unit
+            override fun openProfile(post: PostPreviewData) = Unit
             override fun likePost(post: PostPreviewData) = Unit
             override fun dislikePost(post: PostPreviewData) = Unit
             override fun bookmarkPost(post: PostPreviewData) = Unit

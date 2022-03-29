@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.components.LocalAvatarSize
@@ -42,7 +42,7 @@ private fun UserPageWithState(
 ) {
     Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
         UserHeader(
-            state = state,
+            state = state.headerState,
             userPageEvents = userPageEvents,
             modifier = Modifier.padding(top = 16.dp)
         )
@@ -57,26 +57,24 @@ private fun UserPageWithState(
 
 @Composable
 private fun UserHeader(
-    state: UserPageState,
+    state: HeaderState,
     userPageEvents: UserPageEvents,
     modifier: Modifier = Modifier,
 ) {
-    val avatarUrl: String? = ""
-    val username: String? = "test"
     Row(verticalAlignment = Alignment.Bottom, modifier = modifier) {
-        avatarUrl?.let {
+        state.avatarUrl?.let {
             CompositionLocalProvider(LocalAvatarSize provides 64.dp) {
                 UserAvatar(
-                    avatarUrl = avatarUrl,
+                    avatarUrl = state.avatarUrl,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
         }
 
-        username?.let {
-            val startPadding = if (avatarUrl == null) 16.dp else 12.dp
+        state.username?.let {
+            val startPadding = if (state.avatarUrl == null) 16.dp else 12.dp
             Text(
-                username,
+                state.username,
                 color = MaterialTheme.colors.onSurface,
                 style = MaterialTheme.typography.h4,
                 modifier = Modifier.padding(start = startPadding),
@@ -94,7 +92,12 @@ private fun UserContent(
 ) {
     val pagerState = rememberPagerState()
     
-    val pages = listOf("POSTS", "BOOKMARKS")
+    val pages = Tab.values()
+
+    LaunchedEffect(pagerState.currentPage) {
+        val tab = pages[pagerState.currentPage]
+        userPageEvents.tabSelected(tab)
+    }
 
     Column(modifier = modifier.fillMaxSize()) {
         TabRow(
@@ -105,9 +108,9 @@ private fun UserContent(
                 )
             }
         ) {
-            pages.forEachIndexed { index, title ->
+            pages.forEachIndexed { index, tab ->
                 Tab(
-                    text = { Text(title) },
+                    text = { Text(stringResource(tab.headerRes).toUpperCase(Locale.current)) },
                     selected = pagerState.currentPage == index,
                     onClick = {  },
                 )
@@ -118,8 +121,8 @@ private fun UserContent(
             count = pages.size,
             state = pagerState,
             modifier = Modifier.weight(1f)
-        ) { page ->
-            Text(text = pages[page])
+        ) { pageNumber ->
+            Text(text = stringResource(pages[pageNumber].headerRes))
         }
     }
 }
@@ -128,7 +131,9 @@ private fun UserContent(
 @Preview
 @Composable
 private fun PreviewSuccess() {
-    val state = UserPageState()
+    val headerState = HeaderState(username = "test", avatarUrl = "")
+
+    val state = UserPageState(headerState)
 
     PreviewWithState(state = state, modifier = Modifier.fillMaxSize())
 }
@@ -140,6 +145,6 @@ private fun PreviewWithState(
     modifier: Modifier = Modifier,
 ) {
     PostiumTheme {
-        UserPageWithState(state = state, userPageEvents = UserPageEvents.MOCK, modifier = modifier)
+        UserPageWithState(state = state, userPageEvents = UserPageEvents, modifier = modifier)
     }
 }

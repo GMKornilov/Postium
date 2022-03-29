@@ -67,6 +67,7 @@ dependencies {
     implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))
     implementation(project(":feature:postpage"))
+    implementation(project(":feature:userpage"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
