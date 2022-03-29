@@ -32,6 +32,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -118,6 +119,7 @@ private fun UserContent(
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberPagerState()
+    val scope = rememberCoroutineScope()
 
     val pages = Tab.values()
 
@@ -139,7 +141,7 @@ private fun UserContent(
                 Tab(
                     text = { Text(stringResource(tab.headerRes).toUpperCase(Locale.current)) },
                     selected = pagerState.currentPage == index,
-                    onClick = { },
+                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                 )
             }
         }
