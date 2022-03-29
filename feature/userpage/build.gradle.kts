@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":feature:authorization"))
 
     implementation(project(":data:post"))
+    implementation(project(":data:user"))
     implementation(project(":data:post_likes"))
     implementation(project(":data:post_bookmarks"))
 
@@ -74,6 +75,7 @@ dependencies {
 
     implementation(Deps.Compose.Accompanist.pager)
     implementation(Deps.Compose.Accompanist.pagerIndicators)
+    implementation(Deps.Compose.Accompanist.placeholderMaterial)
 
     implementation(Deps.Navigation.brickNavigation)
 

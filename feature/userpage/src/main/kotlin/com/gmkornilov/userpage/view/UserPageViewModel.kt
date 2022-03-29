@@ -23,13 +23,22 @@ internal class UserPageViewModel @Inject constructor(
     private val userPageInteractor: UserPageInteractor,
     private val authInteractor: AuthInteractor,
     private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
-): BaseViewModel<UserPageState, Unit>(), UserPageEvents {
+) : BaseViewModel<UserPageState, Unit>(), UserPageEvents {
     private var currentTab = Tab.POSTS
 
     override fun getBaseState(): UserPageState {
-        return UserPageState(
-            headerState = HeaderState(navArgument.username, navArgument.avatarUrl)
-        )
+        val headerState = when (navArgument) {
+            is UserPageArgument.LoadHeader -> HeaderState(
+                needLoading = true,
+                username = "",
+                avatarUrl = null,
+            )
+            is UserPageArgument.ReadyHeader -> HeaderState(
+                username = navArgument.username,
+                avatarUrl = navArgument.avatarUrl,
+            )
+        }
+        return UserPageState(headerState = headerState)
     }
 
     private fun getLikeResultHandler(postPreview: PostPreviewData) = UserResultHandler {
@@ -117,6 +126,22 @@ internal class UserPageViewModel @Inject constructor(
 
     override fun openPost(postPreviewData: PostPreviewData) {
         TODO("Not yet implemented")
+    }
+
+    override fun loadHeader() = intent {
+        viewModelScope.launch {
+            try {
+                val user = userPageInteractor.loadHeader(navArgument.id)
+                val newHeader = HeaderState(
+                    needLoading = false,
+                    username = user.name,
+                    avatarUrl = user.avatarUrl,
+                )
+                reduce { this.state.copy(headerState = newHeader) }
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
     }
 
     private fun getCurrentState() = this.container.stateFlow.value.getCurrentTabState()

@@ -27,6 +27,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -68,12 +71,23 @@ private fun UserHeader(
     userPageEvents: UserPageEvents,
     modifier: Modifier = Modifier,
 ) {
+    LaunchedEffect(state) {
+        if (state.needLoading) {
+            userPageEvents.loadHeader()
+        }
+    }
+
     Row(verticalAlignment = Alignment.Bottom, modifier = modifier) {
         state.avatarUrl?.let {
             CompositionLocalProvider(LocalAvatarSize provides 64.dp) {
                 UserAvatar(
                     avatarUrl = state.avatarUrl,
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .placeholder(
+                            visible = state.needLoading,
+                            highlight = PlaceholderHighlight.shimmer(),
+                        )
                 )
             }
         }
@@ -83,7 +97,12 @@ private fun UserHeader(
             state.username,
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.h4,
-            modifier = Modifier.padding(start = startPadding),
+            modifier = Modifier
+                .padding(start = startPadding)
+                .placeholder(
+                    visible = state.needLoading,
+                    highlight = PlaceholderHighlight.shimmer(),
+                ),
         )
     }
 }

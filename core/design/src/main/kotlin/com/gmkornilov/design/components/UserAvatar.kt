@@ -9,6 +9,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 
 val LocalAvatarSize = compositionLocalOf { 48.dp }
@@ -25,7 +27,10 @@ fun UserAvatar(
                 modifier = Modifier
                     .height(IntrinsicSize.Max)
                     .width(IntrinsicSize.Max)
-                    .placeholder(visible = true)
+                    .placeholder(
+                        visible = true,
+                        highlight = PlaceholderHighlight.fade()
+                    )
             )
         },
         contentDescription = null,

@@ -13,7 +13,7 @@ fun PostPreviewData.toPostPageArgument() = PostPageArgument(
     bookmarkStatus = bookmarkStatus,
 )
 
-fun PostPreviewData.toUserPageArgument() = UserPageArgument(
+fun PostPreviewData.toUserPageArgument() = UserPageArgument.ReadyHeader(
     id = userId,
     username = username,
     avatarUrl = avatarUrl

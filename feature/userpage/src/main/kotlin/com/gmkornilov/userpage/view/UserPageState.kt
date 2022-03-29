@@ -10,6 +10,7 @@ internal data class UserPageState(
 )
 
 data class HeaderState(
+    val needLoading: Boolean = false,
     val username: String = "",
     val avatarUrl: String? = null,
 )
@@ -27,5 +28,5 @@ sealed class TabState {
 internal enum class Tab(@StringRes val headerRes: Int) {
     POSTS(R.string.posts),
     BOOKMARKS(R.string.bookmarks),
-    // TODO: add
+    // TODO: add collections
 }

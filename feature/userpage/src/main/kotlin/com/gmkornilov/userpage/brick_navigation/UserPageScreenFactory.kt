@@ -10,6 +10,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.post.repository.PostRepository
+import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.userpage.view.UserPage
 import com.gmkornilov.userpage.view.UserPageViewModel
 import dagger.Binds
@@ -50,6 +51,7 @@ class UserPageScreenFactory @Inject constructor(
         val authInteractor: AuthInteractor
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
         val postRepository: PostRepository
+        val userRepository: UserRepository
     }
 
     @dagger.Component(
