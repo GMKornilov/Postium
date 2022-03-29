@@ -1,7 +1,7 @@
 package com.gmkornilov.mainpage.model
 
 import com.gmkornilov.post_likes.PostLikeStatus
-import com.gmkornilov.postpage.postpage.PostpageLikeStatus
+import com.gmkornilov.postpage.view.PostpageLikeStatus
 
 enum class PostPreviewLikeStatus(val isLiked: Boolean = false, val isDisliked: Boolean = false) {
     LIKED(isLiked = true),

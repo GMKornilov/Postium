@@ -2,7 +2,6 @@ package com.gmkornilov.postpage.brick_navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import com.alphicc.brick.BaseScreen
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
@@ -13,8 +12,8 @@ import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.post_likes.PostLikeRepository
-import com.gmkornilov.postpage.postpage.Postpage
-import com.gmkornilov.postpage.postpage.PostpageViewModel
+import com.gmkornilov.postpage.view.Postpage
+import com.gmkornilov.postpage.view.PostpageViewModel
 import dagger.BindsInstance
 import javax.inject.Inject
 import javax.inject.Scope

@@ -1,4 +1,4 @@
-package com.gmkornilov.postpage.postpage
+package com.gmkornilov.postpage.view
 
 enum class PostpageBookmarkStatus(val isBookmarked: Boolean = false) {
     BOOKMARKED(isBookmarked = true),

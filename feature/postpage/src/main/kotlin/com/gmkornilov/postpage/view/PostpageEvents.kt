@@ -1,4 +1,4 @@
-package com.gmkornilov.postpage.postpage
+package com.gmkornilov.postpage.view
 
 internal interface PostpageEvents {
     fun openComments()

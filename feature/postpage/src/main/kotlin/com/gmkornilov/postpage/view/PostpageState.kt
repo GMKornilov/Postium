@@ -1,4 +1,4 @@
-package com.gmkornilov.postpage.postpage
+package com.gmkornilov.postpage.view
 
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 

@@ -1,8 +1,7 @@
-package com.gmkornilov.postpage.postpage
+package com.gmkornilov.postpage.view
 
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument

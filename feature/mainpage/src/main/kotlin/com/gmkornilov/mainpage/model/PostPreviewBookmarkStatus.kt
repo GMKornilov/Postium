@@ -1,8 +1,7 @@
 package com.gmkornilov.mainpage.model
 
 import com.gmkornilov.post_bookmarks.BookmarkStatus
-import com.gmkornilov.postpage.postpage.PostpageBookmarkStatus
-import com.gmkornilov.postpage.postpage.PostpageLikeStatus
+import com.gmkornilov.postpage.view.PostpageBookmarkStatus
 
 enum class PostPreviewBookmarkStatus(val isBookmarked: Boolean = false) {
     BOOKMARKED(isBookmarked = true),

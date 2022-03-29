@@ -1,7 +1,7 @@
 package com.gmkornilov.postpage.brick_navigation
 
-import com.gmkornilov.postpage.postpage.PostpageBookmarkStatus
-import com.gmkornilov.postpage.postpage.PostpageLikeStatus
+import com.gmkornilov.postpage.view.PostpageBookmarkStatus
+import com.gmkornilov.postpage.view.PostpageLikeStatus
 
 data class PostPageArgument(
     val id: String,

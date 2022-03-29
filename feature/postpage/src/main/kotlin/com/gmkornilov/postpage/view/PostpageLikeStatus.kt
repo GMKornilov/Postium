@@ -1,4 +1,4 @@
-package com.gmkornilov.postpage.postpage
+package com.gmkornilov.postpage.view
 
 enum class PostpageLikeStatus(val isLiked: Boolean = false, val isDisliked: Boolean = false) {
     LIKED(isLiked = true),

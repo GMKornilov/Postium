@@ -3,12 +3,15 @@ package com.gmkornilov.design.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.placeholder.material.placeholder
+
+val LocalAvatarSize = compositionLocalOf { 48.dp }
 
 @Composable
 fun UserAvatar(
@@ -27,7 +30,7 @@ fun UserAvatar(
         },
         contentDescription = null,
         modifier = modifier
-            .size(48.dp)
+            .size(LocalAvatarSize.current)
             .clip(CircleShape),
         contentScale = ContentScale.Crop,
     )
