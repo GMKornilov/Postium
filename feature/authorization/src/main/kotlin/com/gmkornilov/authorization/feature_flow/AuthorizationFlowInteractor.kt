@@ -7,21 +7,30 @@ import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.password_restoration.PasswordRestorationScreenFactory
 import com.gmkornilov.authorization.password_restoration.domain.PasswordRestorationFlowEvents
-import com.gmkornilov.authorization.password_restoration.view.PasswordRestorationEvents
 import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.user_form.UserFormScreenFactory
 import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
+import com.gmkornilov.user.model.User
+import com.gmkornilov.user.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class AuthorizationFlowInteractor @Inject constructor(
     private val router: TreeRouter,
+    private val userRepository: UserRepository,
     private val homeScreenFactory: HomeScreenFactory,
     private val registrationScreenFactory: RegistrationScreenFactory,
     private val userFormScreenFactory: UserFormScreenFactory,
     private val passwordRestorationScreenFactory: PasswordRestorationScreenFactory,
     private val userResultHandler: UserResultHandler,
-): HomeFlowEvents, RegistrationFlowEvents, UserFormFlowEvents, PasswordRestorationFlowEvents {
+) : HomeFlowEvents, RegistrationFlowEvents, UserFormFlowEvents, PasswordRestorationFlowEvents {
+    private val registrationScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
     private var authorizationStep = AuthorizationStep.NONE
 
     fun startAuthorizationFlow() {
@@ -70,6 +79,17 @@ internal class AuthorizationFlowInteractor @Inject constructor(
     }
 
     private fun handleNewUser(user: PostiumUser) {
+        registrationScope.launch {
+            try {
+                userRepository.createUser(
+                    user.getUid(),
+                    User(name = user.getDisplayName().orEmpty(), user.getProfilePhotoUrl())
+                )
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+
         router.backToScreen(homeScreenFactory.screenKey)
         authorizationStep = AuthorizationStep.USER_FORM
         router.replaceScreen(userFormScreenFactory.build(), user)

@@ -25,6 +25,14 @@ class UserRepository @Inject constructor(
         return snapshot.toObject(User::class.java)!!
     }
 
+    suspend fun createUser(userId: String, user: User) {
+        firestore
+            .collection(USERS_COLLECTION)
+            .document(userId)
+            .set(user)
+            .await()
+    }
+
     suspend fun getUsers(userIds: List<String>): Map<String, User> {
         val snapshot = firestore
             .collection(USERS_COLLECTION)

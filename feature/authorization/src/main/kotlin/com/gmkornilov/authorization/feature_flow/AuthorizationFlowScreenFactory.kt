@@ -17,6 +17,7 @@ import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.strings.StringsProvider
+import com.gmkornilov.user.repository.UserRepository
 import dagger.Binds
 import dagger.BindsInstance
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,6 +46,8 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         val emailAuthInteractor: EmailAuthInteractor
 
         val authInteractor: AuthInteractor
+
+        val userRepository: UserRepository
 
         val stringsProvider: StringsProvider
     }

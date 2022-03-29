@@ -46,6 +46,8 @@ dependencies {
 
     implementation(project(":core:authorization"))
 
+    implementation(project(":data:user"))
+
     implementation(Deps.Kotlin.coroutinesAndroid)
 
     implementation(Deps.AndroidX.androidXCoreKtx)
