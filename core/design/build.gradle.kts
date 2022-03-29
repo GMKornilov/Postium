@@ -64,6 +64,8 @@ dependencies {
     implementation(Deps.Compose.Icons.simple)
     implementation(Deps.Compose.Icons.tabler)
 
+    implementation(Deps.Compose.Lottie.lottieCompose)
+
     implementation(Deps.Compose.Accompanist.placeholderMaterial)
 
     implementation(Deps.Compose.Images.coil)

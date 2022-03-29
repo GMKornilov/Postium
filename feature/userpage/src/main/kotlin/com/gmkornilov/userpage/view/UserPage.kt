@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.commons.posts.PostPreview
+import com.gmkornilov.design.components.EmptyStateContainer
+import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.LocalAvatarSize
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.data.CornerType
@@ -77,7 +79,7 @@ private fun UserHeader(
         }
     }
 
-    Row(verticalAlignment = Alignment.Bottom, modifier = modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
         state.avatarUrl?.let {
             CompositionLocalProvider(LocalAvatarSize provides 64.dp) {
                 UserAvatar(
@@ -96,9 +98,9 @@ private fun UserHeader(
         Text(
             state.username,
             color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
             modifier = Modifier
-                .padding(start = startPadding)
+                .padding(start = startPadding, bottom = 8.dp)
                 .placeholder(
                     visible = state.needLoading,
                     highlight = PlaceholderHighlight.shimmer(),
@@ -150,7 +152,7 @@ private fun UserContent(
             val contentModifier = Modifier.fillMaxSize()
             val tab = pages[pageNumber]
             when (val tabState = state.tabStates.getValue(tab)) {
-                is TabState.Error -> ErrorState()
+                is TabState.Error -> ErrorState(tab)
                 TabState.Loading -> LoadingState()
                 is TabState.Success -> if (tabState.posts.isNotEmpty()) {
                     SuccessState(
@@ -159,7 +161,7 @@ private fun UserContent(
                         modifier = contentModifier
                     )
                 } else {
-                    EmptyState()
+                    EmptyState(tab)
                 }
                 TabState.None -> {}
             }
@@ -179,13 +181,13 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ErrorState(modifier: Modifier = Modifier) {
-
+private fun ErrorState(tab: Tab, modifier: Modifier = Modifier) {
+    ErrorStateContainer(errorMessage = stringResource(tab.errorRes), modifier = modifier)
 }
 
 @Composable
-private fun EmptyState(modifier: Modifier = Modifier) {
-
+private fun EmptyState(tab: Tab, modifier: Modifier = Modifier) {
+    EmptyStateContainer(emptyStateMessage = stringResource(tab.emptyRes), modifier = modifier)
 }
 
 @ExperimentalFoundationApi

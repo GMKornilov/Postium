@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.commons.buttons.BookmarkButton
 import com.gmkornilov.design.commons.buttons.DislikeButton
 import com.gmkornilov.design.commons.buttons.LikeButton
+import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.ScrollableColumn
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.theme.PostiumTheme
@@ -113,7 +114,7 @@ private fun ContentLoading(
 private fun ContentError(
     modifier: Modifier = Modifier,
 ) {
-
+    ErrorStateContainer(errorMessage = stringResource(R.string.post_content_error), modifier = modifier)
 }
 
 @Composable

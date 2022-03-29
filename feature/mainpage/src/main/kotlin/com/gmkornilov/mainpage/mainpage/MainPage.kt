@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.*
 import com.gmkornilov.design.commons.posts.PostPreview
+import com.gmkornilov.design.components.EmptyStateContainer
+import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.letIf
@@ -118,7 +120,7 @@ private fun MainpageWithState(
         when (postsState) {
             is PostsState.Loading -> LoadingState()
             is PostsState.Error -> ErrorState()
-            is PostsState.Success -> if(postsState.items.isNotEmpty()) {
+            is PostsState.Success -> if (postsState.items.isNotEmpty()) {
                 SuccessState(
                     mainPageEvents = mainPageEvents,
                     posts = postsState.items
@@ -144,68 +146,18 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ErrorState(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error_animation))
-
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
-            .padding(16.dp),
-    ) {
-        LottieAnimation(
-            composition = composition,
-            iterations = LottieConstants.IterateForever,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = stringResource(id = R.string.load_posts_error),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.button,
-            color = MaterialTheme.colors.onSurface,
-        )
-    }
+    ErrorStateContainer(
+        errorMessage = stringResource(id = R.string.load_posts_error),
+        modifier = modifier,
+    )
 }
 
 @Composable
 private fun EmptyState(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.not_found))
-
-    val dynamicProperties = rememberLottieDynamicProperties(
-        rememberLottieDynamicProperty(
-            property = LottieProperty.STROKE_COLOR,
-            value = MaterialTheme.colors.onSurface.toArgb(),
-            keyPath = arrayOf("**"),
-        )
-    )
-
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    EmptyStateContainer(
+        emptyStateMessage = stringResource(id = R.string.posts_not_found),
         modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
-            .padding(16.dp),
-    ) {
-        LottieAnimation(
-            composition = composition,
-            iterations = LottieConstants.IterateForever,
-            dynamicProperties = dynamicProperties,
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = stringResource(id = R.string.posts_not_found),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.button,
-            color = MaterialTheme.colors.onSurface,
-        )
-    }
+    )
 }
 
 @ExperimentalFoundationApi

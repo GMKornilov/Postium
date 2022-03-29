@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="by_title">От %1$s</string>
+    <string name="post_content_error">Не удалось загрузить содержимое публикации :(</string>
 </resources>

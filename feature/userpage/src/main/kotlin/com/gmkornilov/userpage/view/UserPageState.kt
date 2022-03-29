@@ -25,8 +25,12 @@ sealed class TabState {
     data class Success(val posts: List<PostPreviewData>): TabState()
 }
 
-internal enum class Tab(@StringRes val headerRes: Int) {
-    POSTS(R.string.posts),
-    BOOKMARKS(R.string.bookmarks),
+internal enum class Tab(
+    @StringRes val headerRes: Int,
+    @StringRes val errorRes: Int,
+    @StringRes val emptyRes: Int,
+) {
+    POSTS(R.string.posts, R.string.posts_error, R.string.posts_empty),
+    BOOKMARKS(R.string.bookmarks, R.string.bookmarks_error, R.string.bookmarks_empty),
     // TODO: add collections
 }
