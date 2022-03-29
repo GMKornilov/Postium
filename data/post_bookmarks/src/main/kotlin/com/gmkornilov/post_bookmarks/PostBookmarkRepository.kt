@@ -50,6 +50,16 @@ class PostBookmarkRepository @Inject constructor(
             .await()
     }
 
+    suspend fun getUserBookmarks(userId: String): List<String> {
+        val bookmarks = firestore
+            .collection(POST_BOOKMARK_COLLECTION)
+            .document(userId)
+            .get()
+            .await()
+            .toObject(PostBookmarks::class.java)
+        return bookmarks?.bookmarks.orEmpty()
+    }
+
     suspend fun removeBookmark(userId: String, postId: String) {
         val removeMap = mapOf(
             BOOKMARKS_FIELD to FieldValue.arrayRemove(postId)
@@ -59,5 +69,6 @@ class PostBookmarkRepository @Inject constructor(
             .collection(POST_BOOKMARK_COLLECTION)
             .document(userId)
             .set(removeMap, SetOptions.merge())
+            .await()
     }
 }

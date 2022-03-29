@@ -129,7 +129,7 @@ private fun ContentSuccess(
 @Composable
 private fun PostHeader(
     title: String,
-    username: String?,
+    username: String,
     avatarUrl: String?,
     modifier: Modifier = Modifier,
 ) {
@@ -146,14 +146,12 @@ private fun PostHeader(
                 )
             }
 
-            username?.let {
-                val startPadding = if (avatarUrl == null) 16.dp else 12.dp
-                Text(
-                    stringResource(R.string.by_title, username),
-                    color = MaterialTheme.colors.onSurface,
-                    modifier = Modifier.padding(start = startPadding)
-                )
-            }
+            val startPadding = if (avatarUrl == null) 16.dp else 12.dp
+            Text(
+                stringResource(R.string.by_title, username),
+                color = MaterialTheme.colors.onSurface,
+                modifier = Modifier.padding(start = startPadding)
+            )
         }
 
         Text(

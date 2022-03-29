@@ -2,6 +2,8 @@ package com.gmkornilov.source
 
 import com.gmkornilov.model.Post
 import com.gmkornilov.model.TimeRange
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
@@ -12,6 +14,7 @@ private const val POSTS_COLLECTION = "posts"
 
 private const val DATE_FIELD = "date"
 private const val LIKE_FIELD = "likes"
+private const val USER_FIELD = "user"
 
 private const val LIMIT = 50L
 
@@ -31,6 +34,26 @@ class FirebasePostSource @Inject constructor(
             .get()
             .await()
 
+        return mapPosts(snapshot)
+    }
+
+    suspend fun getPostsWithUserReference(userReference: DocumentReference): List<Post> {
+        val snapshot = firestore
+            .collection(POSTS_COLLECTION)
+            .whereEqualTo(USER_FIELD, userReference)
+            .orderBy(DATE_FIELD)
+            .limit(LIMIT)
+            .get()
+            .await()
+        return mapPosts(snapshot)
+    }
+
+    suspend fun getPostWithIds(ids: List<String>): List<Post> {
+        val snapshot = firestore
+            .collection(POSTS_COLLECTION)
+            .whereIn(FieldPath.documentId(), ids)
+            .get()
+            .await()
         return mapPosts(snapshot)
     }
 

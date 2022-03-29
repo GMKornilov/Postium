@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":data:post_likes"))
     implementation(project(":data:post_bookmarks"))
     implementation(project(":data:post_contents"))
+    implementation(project(":data:user"))
 
     implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))

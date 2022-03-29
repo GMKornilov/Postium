@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:design"))
     implementation(project(":core:authorization"))
+    implementation(project(":core:post"))
 
     implementation(project(":feature:authorization"))
 

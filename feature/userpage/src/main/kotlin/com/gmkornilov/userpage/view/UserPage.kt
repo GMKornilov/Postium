@@ -1,10 +1,11 @@
 package com.gmkornilov.userpage.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,16 +14,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.gmkornilov.design.commons.posts.PostPreview
 import com.gmkornilov.design.components.LocalAvatarSize
 import com.gmkornilov.design.components.UserAvatar
+import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
+import com.gmkornilov.letIf
+import com.gmkornilov.post.model.PostPreviewData
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun UserPage(
     viewModel: UserPageViewModel,
@@ -33,6 +39,7 @@ internal fun UserPage(
     UserPageWithState(state = state, userPageEvents = viewModel, modifier = modifier)
 }
 
+@ExperimentalFoundationApi
 @ExperimentalPagerApi
 @Composable
 private fun UserPageWithState(
@@ -71,18 +78,17 @@ private fun UserHeader(
             }
         }
 
-        state.username?.let {
-            val startPadding = if (state.avatarUrl == null) 16.dp else 12.dp
-            Text(
-                state.username,
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.h4,
-                modifier = Modifier.padding(start = startPadding),
-            )
-        }
+        val startPadding = if (state.avatarUrl == null) 16.dp else 12.dp
+        Text(
+            state.username,
+            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.h4,
+            modifier = Modifier.padding(start = startPadding),
+        )
     }
 }
 
+@ExperimentalFoundationApi
 @ExperimentalPagerApi
 @Composable
 private fun UserContent(
@@ -91,7 +97,7 @@ private fun UserContent(
     modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberPagerState()
-    
+
     val pages = Tab.values()
 
     LaunchedEffect(pagerState.currentPage) {
@@ -112,7 +118,7 @@ private fun UserContent(
                 Tab(
                     text = { Text(stringResource(tab.headerRes).toUpperCase(Locale.current)) },
                     selected = pagerState.currentPage == index,
-                    onClick = {  },
+                    onClick = { },
                 )
             }
         }
@@ -122,12 +128,99 @@ private fun UserContent(
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) { pageNumber ->
-            Text(text = stringResource(pages[pageNumber].headerRes))
+            val contentModifier = Modifier.fillMaxSize()
+            val tab = pages[pageNumber]
+            when (val tabState = state.tabStates.getValue(tab)) {
+                is TabState.Error -> ErrorState()
+                TabState.Loading -> LoadingState()
+                is TabState.Success -> if (tabState.posts.isNotEmpty()) {
+                    SuccessState(
+                        posts = tabState.posts,
+                        userPageEvents = userPageEvents,
+                        modifier = contentModifier
+                    )
+                } else {
+                    EmptyState()
+                }
+                TabState.None -> {}
+            }
         }
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@Composable
+private fun LoadingState(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
+    ) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+}
+
+@Composable
+private fun ErrorState(modifier: Modifier = Modifier) {
+
+}
+
+@Composable
+private fun EmptyState(modifier: Modifier = Modifier) {
+
+}
+
+@ExperimentalFoundationApi
+@Composable
+private fun SuccessState(
+    userPageEvents: UserPageEvents,
+    posts: List<PostPreviewData>,
+    modifier: Modifier = Modifier
+) {
+    val state = rememberLazyListState()
+
+    LazyColumn(state = state, modifier = modifier.background(MaterialTheme.colors.background)) {
+        itemsIndexed(posts, key = { _, post -> post.id }) { index, item ->
+            val isFirst = index == 0
+            val isLast = index == posts.lastIndex
+
+            val cornerType: CornerType
+            val bottomPadding: Dp
+
+            when {
+                isFirst -> {
+                    cornerType = CornerType.BOTTOM
+                    bottomPadding = 4.dp
+                }
+                isLast -> {
+                    cornerType = CornerType.ALL
+                    bottomPadding = 0.dp
+                }
+                else -> {
+                    cornerType = CornerType.ALL
+                    bottomPadding = 4.dp
+                }
+            }
+
+            PostPreview(
+                title = item.title,
+                userName = item.username,
+                avatarUrl = item.avatarUrl.letIf(!item.avatarUrl.isNullOrEmpty()) { it },
+                isUpChecked = item.likeStatus.isLiked,
+                isDownChecked = item.likeStatus.isDisliked,
+                isBookmarkChecked = item.bookmarkStatus.isBookmarked,
+                cornerType = cornerType,
+                modifier = Modifier.padding(bottom = bottomPadding),
+                onCardClick = { userPageEvents.openPost(item) },
+                upClicked = { userPageEvents.likePost(item) },
+                downClicked = { userPageEvents.dislikePost(item) },
+                boolmarkClicked = { userPageEvents.bookmarkPost(item) },
+//                userProfileClicked = { userPageEvents.openProfile(item) },
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Preview
 @Composable
 private fun PreviewSuccess() {
@@ -138,6 +231,7 @@ private fun PreviewSuccess() {
     PreviewWithState(state = state, modifier = Modifier.fillMaxSize())
 }
 
+@ExperimentalFoundationApi
 @ExperimentalPagerApi
 @Composable
 private fun PreviewWithState(

@@ -7,6 +7,7 @@ import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.source.FirebasePostSource
 import com.gmkornilov.user.model.User
+import com.gmkornilov.user.repository.UserRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -15,10 +16,27 @@ class PostRepository @Inject constructor(
     private val likeRepository: PostLikeRepository,
     private val authInteractor: AuthInteractor,
     private val bookmarkRepository: PostBookmarkRepository,
+    private val userRepository: UserRepository,
 ) {
     suspend fun loadDataWithTimeRange(postTimeRange: SelectionTimeRange): List<PostPreviewData> {
         val postLoader = PostLoader {
             firebasePostSource.getPostsFromTimeRange(postTimeRange.toTimeRange())
+        }
+        return loadPostsPreview(postLoader)
+    }
+
+    suspend fun loadDataWithUserId(userId: String): List<PostPreviewData> {
+        val postLoader = PostLoader {
+            val reference = userRepository.getUserReference(userId)
+            firebasePostSource.getPostsWithUserReference(reference)
+        }
+        return loadPostsPreview(postLoader)
+    }
+
+    suspend fun loadUserBookmarks(userId: String): List<PostPreviewData> {
+        val postLoader = PostLoader {
+            val bookmarkIds = bookmarkRepository.getUserBookmarks(userId)
+            firebasePostSource.getPostWithIds(bookmarkIds)
         }
         return loadPostsPreview(postLoader)
     }
@@ -29,7 +47,7 @@ class PostRepository @Inject constructor(
         val posts = postLoader.loadPosts()
 
         val users = posts.map {
-            it.userReference!!.get().await().toObject(User::class.java)
+            userRepository.getByReference(it.userReference!!)
         }
 
         val postLikeStatuses = currentUser?.let {
@@ -46,8 +64,9 @@ class PostRepository @Inject constructor(
             PostPreviewData(
                 id = post.id,
                 title = post.title,
-                username = user?.name,
-                avatarUrl = user?.avatarUrl,
+                userId = post.userReference!!.id,
+                username = user.name,
+                avatarUrl = user.avatarUrl?.ifEmpty { null },
                 likeStatus = postLikeStatuses[post.id].toPostLikeStatus(),
                 bookmarkStatus = postBookmarkStatuses[post.id].toPostBookmarkStatus(),
             )

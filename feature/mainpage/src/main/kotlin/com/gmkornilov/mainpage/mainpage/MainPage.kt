@@ -242,7 +242,7 @@ private fun SuccessState(
 
             PostPreview(
                 title = item.title,
-                userName = item.username.orEmpty(),
+                userName = item.username,
                 avatarUrl = item.avatarUrl.letIf(!item.avatarUrl.isNullOrEmpty()) { it },
                 isUpChecked = item.likeStatus.isLiked,
                 isDownChecked = item.likeStatus.isDisliked,
@@ -308,6 +308,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "1",
                 "First title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,
@@ -316,6 +317,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "2",
                 "Second title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.LIKED,
@@ -324,6 +326,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "3",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.DISLIKED,
@@ -332,6 +335,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "4",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,
@@ -340,6 +344,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "5",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,
@@ -348,6 +353,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "6",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,
@@ -356,6 +362,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "7",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,
@@ -364,6 +371,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "8",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,
@@ -372,6 +380,7 @@ private fun SuccessPreview() {
             PostPreviewData(
                 "9",
                 "Third title",
+                "1",
                 "test",
                 null,
                 PostLikeStatus.NONE,

@@ -1,7 +1,7 @@
 package com.gmkornilov.userpage.view
 
 import androidx.annotation.StringRes
-import com.gmkornilov.model.Post
+import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.userpage.R
 
 internal data class UserPageState(
@@ -10,7 +10,7 @@ internal data class UserPageState(
 )
 
 data class HeaderState(
-    val username: String? = null,
+    val username: String = "",
     val avatarUrl: String? = null,
 )
 
@@ -19,7 +19,9 @@ sealed class TabState {
 
     object Loading: TabState()
 
-    data class Success(val posts: List<Post>): TabState()
+    data class Error(val e: Exception): TabState()
+
+    data class Success(val posts: List<PostPreviewData>): TabState()
 }
 
 internal enum class Tab(@StringRes val headerRes: Int) {

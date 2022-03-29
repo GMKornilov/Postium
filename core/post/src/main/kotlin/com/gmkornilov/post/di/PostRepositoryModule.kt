@@ -5,6 +5,7 @@ import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.source.FirebasePostSource
+import com.gmkornilov.user.repository.UserRepository
 import dagger.Provides
 import javax.inject.Singleton
 
@@ -17,12 +18,14 @@ class PostRepositoryModule {
         likeRepository: PostLikeRepository,
         authInteractor: AuthInteractor,
         bookmarkRepository: PostBookmarkRepository,
+        userRepository: UserRepository,
     ): PostRepository {
         return PostRepository(
             firebasePostSource,
             likeRepository,
             authInteractor,
-            bookmarkRepository
+            bookmarkRepository,
+            userRepository,
         )
     }
 }

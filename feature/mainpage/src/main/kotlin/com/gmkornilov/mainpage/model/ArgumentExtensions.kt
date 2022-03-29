@@ -14,7 +14,7 @@ fun PostPreviewData.toPostPageArgument() = PostPageArgument(
 )
 
 fun PostPreviewData.toUserPageArgument() = UserPageArgument(
-    id = "",
+    id = userId,
     username = username,
     avatarUrl = avatarUrl
 )

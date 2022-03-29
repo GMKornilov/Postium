@@ -100,7 +100,7 @@ internal class MainPageViewModel @Inject constructor(
     }
 
     override fun openProfile(post: PostPreviewData) {
-        val screen = userPageScreenFactory.build()
+        val screen = userPageScreenFactory.build(router)
         router.addScreen(screen, post.toUserPageArgument())
     }
 
