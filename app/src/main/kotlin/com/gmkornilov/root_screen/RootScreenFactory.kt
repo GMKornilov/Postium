@@ -15,6 +15,7 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
+import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
@@ -89,6 +90,8 @@ class RootScreenFactory @Inject constructor(
         override val postPageScreenFactory: PostPageScreenFactory
 
         override val userPageScreenFactory: UserPageScreenFactory
+
+        override val userAvatarRepository: UserAvatarRepository
     }
 
     @Scope

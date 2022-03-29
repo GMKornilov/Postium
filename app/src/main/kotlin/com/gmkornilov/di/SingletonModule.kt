@@ -12,6 +12,9 @@ import com.gmkornilov.post.di.PostRepositoryModule
 import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.secrets.SecretsModule
 import com.gmkornilov.strings.StringsProvider
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -39,5 +42,9 @@ interface SingletonModule {
         @Singleton
         @Provides
         fun stringsProvider(@ApplicationContext context: Context) = StringsProvider(context)
+
+        @Singleton
+        @Provides
+        fun firebaseStoreage() = FirebaseStorage.getInstance()
     }
 }

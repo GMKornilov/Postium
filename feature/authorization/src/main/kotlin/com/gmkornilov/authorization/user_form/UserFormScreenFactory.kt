@@ -3,12 +3,16 @@ package com.gmkornilov.authorization.user_form
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
+import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
+import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import com.gmkornilov.authorization.user_form.view.UserForm
 import com.gmkornilov.authorization.user_form.view.UserFormViewModel
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.user.repository.UserAvatarRepository
+import com.gmkornilov.user.repository.UserRepository
 import dagger.BindsInstance
 import javax.inject.Inject
 import javax.inject.Scope
@@ -39,7 +43,13 @@ internal class UserFormScreenFactory @Inject constructor(
     }
 
     interface Deps: Dependency {
+        val userAvatarRepository: UserAvatarRepository
 
+        val userRepository: UserRepository
+
+        val authInteractor: AuthInteractor
+
+        val userFormFlowEvents: UserFormFlowEvents
     }
 
     @Scope

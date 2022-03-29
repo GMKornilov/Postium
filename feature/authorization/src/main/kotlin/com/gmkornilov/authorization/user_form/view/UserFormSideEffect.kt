@@ -1,4 +1,7 @@
 package com.gmkornilov.authorization.user_form.view
 
-internal class UserFormSideEffect {
+internal sealed class UserFormSideEffect {
+    object UploadPhoto: UserFormSideEffect()
+
+    object ScrollToEnd: UserFormSideEffect()
 }

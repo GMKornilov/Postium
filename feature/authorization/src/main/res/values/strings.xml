@@ -31,4 +31,18 @@
     <string name="user_doesnt_exist">Пользователя с данным email не существует</string>
     <string name="back">Назад</string>
     <!-- endofscetion -->
+
+    <!-- User form screen -->
+    <string name="user_form_greeting">Похоже, вы только что зарегистрировались. Заполните информацию о себе</string>
+
+    <string name="photo_upload_label">Загрузите изображение профиля:</string>
+    <string name="photo_upload_button">Выбрать фото</string>
+
+    <string name="username_header">Выберите имя пользователя</string>
+    <string name="username_label">Имя пользователя</string>
+    <string name="username_button">Обновить</string>
+
+    <string name="userform_finished">Ну вот и все. Можно начать пользоваться Postium!</string>
+    <string name="userform_finished_button">Начать</string>
+    <!-- endofsection -->
 </resources>

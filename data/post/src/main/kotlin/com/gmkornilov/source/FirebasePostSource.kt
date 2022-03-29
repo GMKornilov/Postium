@@ -49,6 +49,9 @@ class FirebasePostSource @Inject constructor(
     }
 
     suspend fun getPostWithIds(ids: List<String>): List<Post> {
+        if (ids.isEmpty()) {
+            return emptyList()
+        }
         val snapshot = firestore
             .collection(POSTS_COLLECTION)
             .whereIn(FieldPath.documentId(), ids)

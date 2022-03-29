@@ -4,10 +4,14 @@ import com.gmkornilov.user.model.User
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 private const val USERS_COLLECTION = "users"
+
+private const val AVATAR_FIELD = "avatar_url"
+private const val USERNAME_FIELD = "name"
 
 class UserRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -30,6 +34,29 @@ class UserRepository @Inject constructor(
             .collection(USERS_COLLECTION)
             .document(userId)
             .set(user)
+            .await()
+    }
+
+    suspend fun updateUserAvatarUrl(userId: String, url: String) {
+        val updateMap = mapOf(
+            AVATAR_FIELD to url
+        )
+
+        firestore
+            .collection(USERS_COLLECTION)
+            .document(userId)
+            .set(updateMap, SetOptions.merge())
+            .await()
+    }
+
+    suspend fun updateUsername(userId: String, username: String) {
+        val updateMap = mapOf(
+            USERNAME_FIELD to username
+        )
+
+        firestore.collection(USERS_COLLECTION)
+            .document(userId)
+            .set(updateMap, SetOptions.merge())
             .await()
     }
 

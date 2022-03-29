@@ -96,6 +96,15 @@ internal class AuthorizationFlowInteractor @Inject constructor(
     }
 
     override fun userFormBack(user: PostiumUser) {
+
+
+
+
+
+
+
+
+        
         authorizationStep = AuthorizationStep.NONE
         router.backScreen()
         userResultHandler.handleResult(user)

@@ -113,6 +113,8 @@ object Deps {
 
         const val firestore = "com.google.firebase:firebase-firestore-ktx"
 
+        const val storage = "com.google.firebase:firebase-storage"
+
         const val authorization = "com.google.firebase:firebase-auth-ktx"
 
         const val coroutinesPlayServices =

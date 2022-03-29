@@ -64,6 +64,7 @@ dependencies {
     implementation(Deps.Compose.ConstraintLayout)
 
     implementation(Deps.Compose.Icons.simple)
+    implementation(Deps.Compose.Icons.tabler)
 
     implementation(Deps.Compose.Accompanist.pager)
     implementation(Deps.Compose.Accompanist.pagerIndicators)

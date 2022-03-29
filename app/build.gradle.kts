@@ -93,6 +93,7 @@ dependencies {
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.authorization)
+    implementation(Deps.Firebase.storage)
     implementation(Deps.Firebase.firestore)
 
     implementation(Deps.Facebook.login)

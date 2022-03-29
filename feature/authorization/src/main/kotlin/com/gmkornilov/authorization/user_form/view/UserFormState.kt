@@ -1,4 +1,7 @@
 package com.gmkornilov.authorization.user_form.view
 
-internal class UserFormState {
+internal data class UserFormState(
+    val avatartUrl: String? = null,
+    val username: String = "",
+) {
 }

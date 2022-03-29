@@ -17,6 +17,7 @@ import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.strings.StringsProvider
+import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.user.repository.UserRepository
 import dagger.Binds
 import dagger.BindsInstance
@@ -48,6 +49,7 @@ class AuthorizationFlowScreenFactory @Inject constructor(
         val authInteractor: AuthInteractor
 
         val userRepository: UserRepository
+        val userAvatarRepository: UserAvatarRepository
 
         val stringsProvider: StringsProvider
     }
