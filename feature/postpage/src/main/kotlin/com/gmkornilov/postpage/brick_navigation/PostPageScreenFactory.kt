@@ -9,6 +9,7 @@ import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.post_likes.PostLikeRepository
@@ -50,10 +51,10 @@ class PostPageScreenFactory @Inject constructor(
 
     interface Deps: Dependency {
         val postContentsRepository: PostContentsRepository
-        val postBookmarkRepository: PostBookmarkRepository
-        val postLikeRepository: PostLikeRepository
+        val postRepository: PostRepository
 
         val authInteractor: AuthInteractor
+
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
     }
 

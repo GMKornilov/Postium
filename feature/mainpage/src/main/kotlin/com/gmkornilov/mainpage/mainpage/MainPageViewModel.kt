@@ -2,12 +2,14 @@ package com.gmkornilov.mainpage.mainpage
 
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.letIf
 import com.gmkornilov.mainpage.domain.MainpageInteractor
-import com.gmkornilov.mainpage.model.*
+import com.gmkornilov.mainpage.model.toPostPageArgument
+import com.gmkornilov.mainpage.model.toUserPageArgument
+import com.gmkornilov.post.model.PostPreviewData
+import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.view_model.BaseViewModel
@@ -29,22 +31,14 @@ internal class MainPageViewModel @Inject constructor(
 
     private fun getLikeUserHandler(post: PostPreviewData) = UserResultHandler {
         intent {
-            val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.LIKED) {
-                PostPreviewLikeStatus.NONE
-            } else {
-                PostPreviewLikeStatus.LIKED
-            }
+            val newLikeStatus = post.likeStatus.toOppositeLikeStatus()
 
             val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
             viewModelScope.launch {
                 try {
-                    if (newLikeStatus == PostPreviewLikeStatus.LIKED) {
-                        mainpageInteractor.likePost(post)
-                    } else {
-                        mainpageInteractor.removeLikeStatus(post)
-                    }
+                    mainpageInteractor.setLikeStatus(post, newLikeStatus)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -54,22 +48,14 @@ internal class MainPageViewModel @Inject constructor(
 
     private fun getDislikeUserHandler(post: PostPreviewData) = UserResultHandler {
         intent {
-            val newLikeStatus = if (post.likeStatus == PostPreviewLikeStatus.DISLIKED) {
-                PostPreviewLikeStatus.NONE
-            } else {
-                PostPreviewLikeStatus.DISLIKED
-            }
+            val newLikeStatus = post.likeStatus.toOppositeDislikeStatus()
 
             val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
             viewModelScope.launch {
                 try {
-                    if (newLikeStatus == PostPreviewLikeStatus.DISLIKED) {
-                        mainpageInteractor.dislikePost(post)
-                    } else {
-                        mainpageInteractor.removeLikeStatus(post)
-                    }
+                    mainpageInteractor.setLikeStatus(post, newLikeStatus)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -78,16 +64,13 @@ internal class MainPageViewModel @Inject constructor(
     }
 
     private fun getBookmarkUserHandler(post: PostPreviewData) = UserResultHandler {
-        val newPost = post.copy(bookmarkStatus = post.bookmarkStatus.toOppositeStatus())
+        val newBookmarkStatus = post.bookmarkStatus.toOppositeStatus()
+        val newPost = post.copy(bookmarkStatus = newBookmarkStatus)
         replacePost(post, newPost)
 
         viewModelScope.launch {
             try {
-                if (newPost.bookmarkStatus == PostPreviewBookmarkStatus.BOOKMARKED) {
-                    mainpageInteractor.addBookmark(newPost)
-                } else {
-                    mainpageInteractor.removeBookmark(newPost)
-                }
+                mainpageInteractor.setBookmarkStatus(post, newBookmarkStatus)
             } catch (e: Exception) {
                 Timber.e(e)
             }

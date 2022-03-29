@@ -28,9 +28,9 @@ import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.letIf
 import com.gmkornilov.mainpage.R
-import com.gmkornilov.mainpage.model.PostPreviewBookmarkStatus
-import com.gmkornilov.mainpage.model.PostPreviewData
-import com.gmkornilov.mainpage.model.PostPreviewLikeStatus
+import com.gmkornilov.post.model.PostBookmarkStatus
+import com.gmkornilov.post.model.PostLikeStatus
+import com.gmkornilov.post.model.PostPreviewData
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -310,72 +310,72 @@ private fun SuccessPreview() {
                 "First title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.BOOKMARKED
             ),
             PostPreviewData(
                 "2",
                 "Second title",
                 "test",
                 null,
-                PostPreviewLikeStatus.LIKED,
-                PostPreviewBookmarkStatus.BOOKMARKED
+                PostLikeStatus.LIKED,
+                PostBookmarkStatus.BOOKMARKED
             ),
             PostPreviewData(
                 "3",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.DISLIKED,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.DISLIKED,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "4",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "5",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "6",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "7",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "8",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
             PostPreviewData(
                 "9",
                 "Third title",
                 "test",
                 null,
-                PostPreviewLikeStatus.NONE,
-                PostPreviewBookmarkStatus.NOT_BOOKMARKED
+                PostLikeStatus.NONE,
+                PostBookmarkStatus.NOT_BOOKMARKED
             ),
         )
 

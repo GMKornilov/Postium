@@ -4,6 +4,7 @@ import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorization.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
+import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 import com.gmkornilov.postpage.domain.PostPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
@@ -27,17 +28,13 @@ internal class PostpageViewModel @Inject constructor(
     private val likeUserHandler = UserResultHandler {
         intent {
             val argument = this.state.argument
-            val newState =
-                this.state.copy(argument = argument.copy(likeStatus = argument.likeStatus.toOppositeLikeStatus()))
+            val newLikeStatus = argument.likeStatus.toOppositeLikeStatus()
+            val newState = this.state.copy(argument = argument.copy(likeStatus = newLikeStatus))
             reduce { newState }
 
             viewModelScope.launch {
                 try {
-                    if (newState.argument.likeStatus == PostpageLikeStatus.LIKED) {
-                        postPageInteractor.likePost(postPageArgument.id)
-                    } else {
-                        postPageInteractor.removeLikeStatus(postPageArgument.id)
-                    }
+                    postPageInteractor.setLikeStatus(postPageArgument.id, newLikeStatus)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -48,17 +45,13 @@ internal class PostpageViewModel @Inject constructor(
     private val dislikeUserHandler = UserResultHandler {
         intent {
             val argument = this.state.argument
-            val newState =
-                this.state.copy(argument = argument.copy(likeStatus = argument.likeStatus.toOppositeDislikeStatus()))
+            val newLikeStatus = argument.likeStatus.toOppositeDislikeStatus()
+            val newState = this.state.copy(argument = argument.copy(likeStatus = newLikeStatus))
             reduce { newState }
 
             viewModelScope.launch {
                 try {
-                    if (newState.argument.likeStatus == PostpageLikeStatus.DISLIKED) {
-                        postPageInteractor.dislikePost(postPageArgument.id)
-                    } else {
-                        postPageInteractor.removeLikeStatus(postPageArgument.id)
-                    }
+                    postPageInteractor.setLikeStatus(postPageArgument.id, newLikeStatus)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -69,17 +62,14 @@ internal class PostpageViewModel @Inject constructor(
     private val bookmarkUserHandler = UserResultHandler {
         intent {
             val argument = this.state.argument
+            val newBookmarkStatus = argument.bookmarkStatus.toOppositeStatus()
             val newState =
-                this.state.copy(argument = argument.copy(bookmarkStatus = argument.bookmarkStatus.toOppositeStatus()))
+                this.state.copy(argument = argument.copy(bookmarkStatus = newBookmarkStatus))
             reduce { newState }
 
             viewModelScope.launch {
                 try {
-                    if (newState.argument.bookmarkStatus == PostpageBookmarkStatus.BOOKMARKED) {
-                        postPageInteractor.addBookmark(postPageArgument.id)
-                    } else {
-                        postPageInteractor.removeBookmark(postPageArgument.id)
-                    }
+                    postPageInteractor.setBookmarkStatus(postPageArgument.id, newBookmarkStatus)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }

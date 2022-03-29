@@ -58,6 +58,7 @@ dependencies {
     implementation(project(":core:secrets"))
     implementation(project(":core:common"))
     implementation(project(":core:activity-utils"))
+    implementation(project(":core:post"))
 
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))

@@ -22,6 +22,8 @@ import com.gmkornilov.design.commons.buttons.LikeButton
 import com.gmkornilov.design.components.ScrollableColumn
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.theme.PostiumTheme
+import com.gmkornilov.post.model.PostBookmarkStatus
+import com.gmkornilov.post.model.PostLikeStatus
 import com.gmkornilov.postpage.R
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 import com.halilibo.richtext.markdown.Markdown
@@ -242,8 +244,8 @@ private fun SuccessPreview() {
         username = "test username",
         avatarUrl = "",
         id = "",
-        likeStatus = PostpageLikeStatus.LIKED,
-        bookmarkStatus = PostpageBookmarkStatus.BOOKMARKED
+        likeStatus = PostLikeStatus.LIKED,
+        bookmarkStatus = PostBookmarkStatus.BOOKMARKED
     )
     val content = LoremIpsum().values.joinToString()
 
@@ -259,8 +261,8 @@ private fun LoadingPreview() {
         username = "test username",
         avatarUrl = "",
         id = "",
-        likeStatus = PostpageLikeStatus.DISLIKED,
-        bookmarkStatus = PostpageBookmarkStatus.NOT_BOOKMARKED
+        likeStatus = PostLikeStatus.DISLIKED,
+        bookmarkStatus = PostBookmarkStatus.NOT_BOOKMARKED
     )
 
     val state = PostpageState(argument, ContentState.Loading)

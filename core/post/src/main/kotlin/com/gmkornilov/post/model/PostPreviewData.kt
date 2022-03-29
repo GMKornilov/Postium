@@ -1,9 +1,7 @@
-package com.gmkornilov.postpage.brick_navigation
+package com.gmkornilov.post.model
 
-import com.gmkornilov.post.model.PostBookmarkStatus
-import com.gmkornilov.post.model.PostLikeStatus
 
-data class PostPageArgument(
+data class PostPreviewData(
     val id: String,
     val title: String,
     val username: String?,

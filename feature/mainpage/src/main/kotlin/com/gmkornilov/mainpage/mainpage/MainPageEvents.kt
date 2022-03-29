@@ -1,6 +1,6 @@
 package com.gmkornilov.mainpage.mainpage
 
-import com.gmkornilov.mainpage.model.PostPreviewData
+import com.gmkornilov.post.model.PostPreviewData
 
 internal interface MainPageEvents {
     fun selectTimeRange(postTimeRange: PostTimeRange)

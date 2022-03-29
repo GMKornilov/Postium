@@ -32,23 +32,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
-    }
 }
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:design"))
     implementation(project(":core:authorization"))
-    implementation(project(":core:post"))
-
-    implementation(project(":feature:authorization"))
-    implementation(project(":feature:postpage"))
-    implementation(project(":feature:userpage"))
 
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))
@@ -59,27 +47,6 @@ dependencies {
     implementation(Deps.Firebase.firestore)
     implementation(Deps.Firebase.coroutinesPlayServices)
 
-    implementation(Deps.AndroidX.androidXCoreKtx)
-    implementation(Deps.AndroidX.appCompat)
-    implementation(Deps.AndroidX.activityCompose)
-    implementation(Deps.AndroidX.lifecycleRuntime)
-
-    implementation(Deps.materialDesign)
-
-    implementation(Deps.Compose.Ui)
-    implementation(Deps.Compose.Material)
-    implementation(Deps.Compose.UiToolingPreview)
-    implementation(Deps.Compose.IconsExtended)
-
-    implementation(Deps.Compose.Icons.simple)
-
-    implementation(Deps.Compose.Lottie.lottieCompose)
-
-    implementation(Deps.Navigation.brickNavigation)
-
-    implementation(Deps.MVI.Orbit.core)
-    implementation(Deps.MVI.Orbit.viewModel)
-
     implementation(Deps.Dagger.core)
     kapt(Deps.Dagger.kapt)
 
@@ -89,9 +56,6 @@ dependencies {
     implementation(Deps.Kotlin.coroutinesViewModel)
 
     testImplementation(Deps.TestingTooling.junit)
-    testImplementation(Deps.MVI.Orbit.testing)
     androidTestImplementation(Deps.TestingTooling.androidxJunit)
     androidTestImplementation(Deps.TestingTooling.androidxEspresso)
-    androidTestImplementation(Deps.TestingTooling.composeUiTest)
-    debugImplementation(Deps.TestingTooling.composeUiTooling)
 }

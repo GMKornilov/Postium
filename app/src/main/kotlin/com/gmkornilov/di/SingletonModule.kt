@@ -8,6 +8,8 @@ import com.gmkornilov.authorizarion.facebook.FacebookModule
 import com.gmkornilov.authorizarion.firebase.FirebaseModule
 import com.gmkornilov.authorizarion.google.GoogleModule
 import com.gmkornilov.context.ApplicationContext
+import com.gmkornilov.post.di.PostRepositoryModule
+import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.secrets.SecretsModule
 import com.gmkornilov.strings.StringsProvider
 import dagger.Module
@@ -25,6 +27,7 @@ import javax.inject.Singleton
         SecretsModule::class,
         NavigationModule::class,
         PostsModule::class,
+        PostRepositoryModule::class,
     ]
 )
 interface SingletonModule {

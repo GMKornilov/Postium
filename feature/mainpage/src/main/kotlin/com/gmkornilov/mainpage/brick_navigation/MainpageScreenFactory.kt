@@ -11,6 +11,7 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.mainpage.MainPageViewModel
 import com.gmkornilov.mainpage.mainpage.Mainpage
+import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
@@ -41,18 +42,12 @@ class MainpageScreenFactory @Inject constructor(
     )
 
     interface Deps : Dependency {
-        val firebasePostSource: FirebasePostSource
-
-        val postLikeRepository: PostLikeRepository
-
-        val postBookmarkRepository: PostBookmarkRepository
+        val postRepository: PostRepository
 
         val authInteractor: AuthInteractor
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
-
         val postPageScreenFactory: PostPageScreenFactory
-
         val userPageScreenFactory: UserPageScreenFactory
     }
 

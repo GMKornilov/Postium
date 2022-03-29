@@ -2,8 +2,8 @@ package com.gmkornilov.mainpage.mainpage
 
 import androidx.annotation.StringRes
 import com.gmkornilov.mainpage.R
-import com.gmkornilov.mainpage.model.PostPreviewData
-import com.gmkornilov.model.TimeRange
+import com.gmkornilov.post.model.PostPreviewData
+import com.gmkornilov.post.model.SelectionTimeRange
 
 internal data class MainPageState(
     val allTimeState: PostsState = PostsState.None,
@@ -27,10 +27,10 @@ internal enum class PostTimeRange(@StringRes val titleRes: Int) {
     WEEK(R.string.last_week_title),
 }
 
-internal fun PostTimeRange.toTimeRange() = when(this) {
-    PostTimeRange.ALL_TIME -> TimeRange.ALL_TIME
-    PostTimeRange.DAY -> TimeRange.LAST_DAY
-    PostTimeRange.WEEK -> TimeRange.LAST_WEEK
+internal fun PostTimeRange.toSelectionTimeRange() = when (this) {
+    PostTimeRange.ALL_TIME -> SelectionTimeRange.ALL_TIME
+    PostTimeRange.DAY -> SelectionTimeRange.LAST_DAY
+    PostTimeRange.WEEK -> SelectionTimeRange.LAST_WEEK
 }
 
 sealed class PostsState {
