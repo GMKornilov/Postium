@@ -13,7 +13,7 @@ import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
-import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
@@ -29,12 +29,12 @@ import dagger.Provides
 import javax.inject.Inject
 import javax.inject.Scope
 
-private const val key = "Root screen"
+private const val key = "root_screen"
 
 @OptIn(ExperimentalAnimationApi::class)
 class RootScreenFactory @Inject constructor(
     override val dependency: Deps,
-) : NavigationScreenProvider<RootScreenFactory.Deps> {
+) : DependencyProvider<RootScreenFactory.Deps> {
 
     val screenKey = key
 

@@ -2,6 +2,6 @@ package com.gmkornilov.brick_navigation
 
 interface Dependency
 
-interface NavigationScreenProvider<D: Dependency> {
+interface DependencyProvider<D: Dependency> {
     val dependency: D
 }

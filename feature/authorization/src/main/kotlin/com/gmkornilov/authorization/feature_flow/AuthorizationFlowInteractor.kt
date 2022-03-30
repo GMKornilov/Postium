@@ -1,8 +1,8 @@
 package com.gmkornilov.authorization.feature_flow
 
 import com.alphicc.brick.TreeRouter
-import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorizarion.domain.UserResultHandler
+import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.password_restoration.PasswordRestorationScreenFactory
@@ -11,6 +11,7 @@ import com.gmkornilov.authorization.registration.RegistrationScreenFactory
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.user_form.UserFormScreenFactory
 import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
+import com.gmkornilov.brick_navigation.dropLastScreen
 import com.gmkornilov.user.model.User
 import com.gmkornilov.user.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
@@ -33,13 +34,20 @@ internal class AuthorizationFlowInteractor @Inject constructor(
 
     private var authorizationStep = AuthorizationStep.NONE
 
+    private val currentKey
+        get() = router.screen.value?.key.orEmpty()
+
+    private val startScreen by lazy {
+        homeScreenFactory.build(userResultHandler)
+    }
+
     fun startAuthorizationFlow() {
         if (authorizationStep != AuthorizationStep.NONE) {
             return
         }
 
         authorizationStep = AuthorizationStep.LOGIN
-        router.addScreen(homeScreenFactory.build(), userResultHandler)
+        router.addScreen(startScreen)
     }
 
     private enum class AuthorizationStep {
@@ -52,19 +60,19 @@ internal class AuthorizationFlowInteractor @Inject constructor(
 
     override fun registerClicked() {
         authorizationStep = AuthorizationStep.REGISTRATION
-        router.addScreen(registrationScreenFactory.build())
+        router.addScreen(registrationScreenFactory.build(currentKey))
     }
 
     override fun passwordRestorationClicked() {
         authorizationStep = AuthorizationStep.FORGOT_PASSWORD
-        router.addScreen(passwordRestorationScreenFactory.build())
+        router.addScreen(passwordRestorationScreenFactory.build(currentKey))
     }
 
     override fun successfulAuthorization(user: PostiumUser, isNew: Boolean) {
         if (isNew) {
             handleNewUser(user)
         } else {
-            router.backToScreen(homeScreenFactory.screenKey)
+            router.backToScreen(startScreen.key)
             router.backScreen()
             userResultHandler.handleResult(user)
         }
@@ -90,21 +98,12 @@ internal class AuthorizationFlowInteractor @Inject constructor(
             }
         }
 
-        router.backToScreen(homeScreenFactory.screenKey)
+        router.backToScreen(startScreen.key)
         authorizationStep = AuthorizationStep.USER_FORM
-        router.replaceScreen(userFormScreenFactory.build(), user)
+        router.replaceScreen(userFormScreenFactory.build(user, currentKey.dropLastScreen()))
     }
 
     override fun userFormBack(user: PostiumUser) {
-
-
-
-
-
-
-
-
-        
         authorizationStep = AuthorizationStep.NONE
         router.backScreen()
         userResultHandler.handleResult(user)
@@ -112,6 +111,6 @@ internal class AuthorizationFlowInteractor @Inject constructor(
 
     override fun backToHomeScreen() {
         authorizationStep = AuthorizationStep.LOGIN
-        router.backToScreen(homeScreenFactory.screenKey)
+        router.backToScreen(startScreen.key)
     }
 }

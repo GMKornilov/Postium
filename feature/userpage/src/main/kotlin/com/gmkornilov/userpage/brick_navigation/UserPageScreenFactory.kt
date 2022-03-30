@@ -1,51 +1,63 @@
 package com.gmkornilov.userpage.brick_navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.alphicc.brick.DataContainer
 import com.alphicc.brick.Screen
-import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
-import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.brick_navigation.DependencyProvider
+import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.userpage.view.UserPage
 import com.gmkornilov.userpage.view.UserPageListener
 import com.gmkornilov.userpage.view.UserPageViewModel
-import dagger.Binds
+import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
+import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 import javax.inject.Scope
 
-private const val USER_PAGE_SCREEN_KEY = "user page"
+private const val USER_PAGE_SCREEN_KEY = "user_page"
 
 class UserPageScreenFactory @Inject constructor(
     override val dependency: Deps
-): NavigationScreenProvider<UserPageScreenFactory.Deps> {
-    private lateinit var listener: UserPageListener
+): DependencyProvider<UserPageScreenFactory.Deps> {
+    private inner class Factory(
+        val listener: UserPageListener,
+        val userPageArgument: UserPageArgument,
+    ): ScreenFactory() {
+        override fun buildKey(): String {
+            return "${USER_PAGE_SCREEN_KEY}_${userPageArgument.id}"
+        }
 
-    private val screen = BaseScreen(
-        key = USER_PAGE_SCREEN_KEY,
-        onCreate = { _, arg ->
-            val userPageArgument = arg.get<UserPageArgument>()
+        override fun onCreate(
+            flow: SharedFlow<DataContainer>,
+            arg: DataContainer
+        ): BaseViewModel<*, *> {
             val component = DaggerUserPageScreenFactory_Component.builder()
                 .deps(dependency)
                 .listener(listener)
                 .argument(userPageArgument)
                 .build()
 
-            component.viewModel
+            return component.viewModel
         }
-    ) {
-        val viewModel = it.get<UserPageViewModel>()
 
-        UserPage(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+        @Composable
+        override fun Content(arg: DataContainer) {
+            val viewModel = arg.get<UserPageViewModel>()
+
+            UserPage(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+        }
+
     }
 
-    fun build(listener: UserPageListener): Screen<*> {
-        this.listener = listener
-        return screen
+    fun build(listener: UserPageListener, userPageArgument: UserPageArgument, prevPath: String): Screen<*> {
+        return Factory(listener, userPageArgument).build(prevPath)
     }
 
     interface Deps : Dependency {

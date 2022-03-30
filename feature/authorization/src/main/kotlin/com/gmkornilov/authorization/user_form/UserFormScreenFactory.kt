@@ -1,7 +1,9 @@
 package com.gmkornilov.authorization.user_form
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.alphicc.brick.DataContainer
 import com.alphicc.brick.Screen
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
@@ -10,36 +12,49 @@ import com.gmkornilov.authorization.user_form.view.UserForm
 import com.gmkornilov.authorization.user_form.view.UserFormViewModel
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
-import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.brick_navigation.DependencyProvider
+import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.user.repository.UserRepository
+import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
+import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 import javax.inject.Scope
 
-private const val USER_FORM_KEY = "user form"
+private const val USER_FORM_KEY = "user_form"
 
 internal class UserFormScreenFactory @Inject constructor(
     override val dependency: Deps,
-): NavigationScreenProvider<UserFormScreenFactory.Deps> {
-    private val userFormScreen = BaseScreen(
-        USER_FORM_KEY,
-        onCreate = { _, arg ->
-            val user = arg.get<PostiumUser>()
+): DependencyProvider<UserFormScreenFactory.Deps> {
+    private inner class Factory(
+        private val postiumUser: PostiumUser,
+    ): ScreenFactory() {
+        override fun buildKey(): String {
+            return USER_FORM_KEY
+        }
+
+        override fun onCreate(
+            flow: SharedFlow<DataContainer>,
+            arg: DataContainer
+        ): BaseViewModel<*, *> {
             val component = DaggerUserFormScreenFactory_Component.builder()
                 .deps(dependency)
-                .user(user)
+                .user(postiumUser)
                 .build()
-            component.viewModel
+            return component.viewModel
         }
-    ) {
-        val viewModel = it.get<UserFormViewModel>()
 
-        UserForm(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+        @Composable
+        override fun Content(arg: DataContainer) {
+            val viewModel = arg.get<UserFormViewModel>()
+
+            UserForm(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+        }
     }
 
-    fun build(): Screen<UserFormViewModel> {
-        return userFormScreen
+    fun build(postiumUser: PostiumUser, prevPath: String): Screen<*> {
+        return Factory(postiumUser).build(prevPath)
     }
 
     interface Deps: Dependency {

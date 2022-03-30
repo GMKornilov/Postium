@@ -1,47 +1,60 @@
 package com.gmkornilov.postcreatepage.brick_navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.alphicc.brick.DataContainer
 import com.alphicc.brick.Screen
-import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
-import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.brick_navigation.DependencyProvider
+import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.postcreatepage.view.PostCreate
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postcreatepage.view.PostCreateViewModel
 import com.gmkornilov.source.FirebasePostSource
 import com.gmkornilov.user.repository.UserRepository
+import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
+import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 import javax.inject.Scope
 
-private const val POST_CREATE_PAGE_KEY = "create post"
+private const val POST_CREATE_PAGE_KEY = "create_post"
 
 class PostCreatePageScreenFactory @Inject constructor(
     override val dependency: Deps,
-): NavigationScreenProvider<PostCreatePageScreenFactory.Deps> {
-    private lateinit var listener: PostCreateListener
+): DependencyProvider<PostCreatePageScreenFactory.Deps> {
+    private inner class Factory(
+        val listener: PostCreateListener,
+    ): ScreenFactory() {
+        override fun buildKey(): String {
+            return POST_CREATE_PAGE_KEY
+        }
 
-    private val screen = BaseScreen(
-        POST_CREATE_PAGE_KEY,
-        onCreate = { _, _ ->
+        override fun onCreate(
+            flow: SharedFlow<DataContainer>,
+            arg: DataContainer
+        ): BaseViewModel<*, *> {
             val component = DaggerPostCreatePageScreenFactory_Component.builder()
                 .listener(listener)
                 .deps(dependency)
                 .build()
-            component.postCreateViewModel
+            return component.postCreateViewModel
         }
-    ) {
-        val viewModel = it.get<PostCreateViewModel>()
-        PostCreate(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+
+        @Composable
+        override fun Content(arg: DataContainer) {
+            val viewModel = arg.get<PostCreateViewModel>()
+            PostCreate(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+        }
+
     }
 
-    fun build(listener: PostCreateListener): Screen<*> {
-        this.listener = listener
-        return screen
+    fun build(listener: PostCreateListener, prevPath: String): Screen<*> {
+        return Factory(listener).build(prevPath)
     }
 
     interface Deps: Dependency {

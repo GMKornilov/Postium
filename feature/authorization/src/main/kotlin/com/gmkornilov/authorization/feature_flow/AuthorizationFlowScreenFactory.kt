@@ -15,7 +15,7 @@ import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.user_form.UserFormScreenFactory
 import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import com.gmkornilov.brick_navigation.Dependency
-import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.strings.StringsProvider
 import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.user.repository.UserRepository
@@ -29,7 +29,7 @@ import javax.inject.Scope
 @OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
 class AuthorizationFlowScreenFactory @Inject constructor(
     override val dependency: Deps,
-) : NavigationScreenProvider<AuthorizationFlowScreenFactory.Deps> {
+) : DependencyProvider<AuthorizationFlowScreenFactory.Deps> {
 
     fun start(userResultHandler: UserResultHandler, router: TreeRouter) {
         val component = DaggerAuthorizationFlowScreenFactory_Component.builder()

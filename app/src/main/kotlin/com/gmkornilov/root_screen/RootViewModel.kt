@@ -18,7 +18,6 @@ import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
@@ -40,9 +39,13 @@ class RootViewModel @Inject constructor(
     private val currentRouter
         get() = bottomNavigationItems[routerIndexFlow.value].router
 
+    private val currentKey
+        get() = currentRouter.screen.value?.key.orEmpty()
+
     private val userProfileResultHandler = UserResultHandler {
-        val screen = userPageScreenFactory.build(this)
-        currentRouter.addScreen(screen, UserPageArgument.LoadHeader(it.getUid()))
+        val arg = UserPageArgument.LoadHeader(it.getUid())
+        val screen = userPageScreenFactory.build(this, arg, currentKey)
+        currentRouter.addScreen(screen)
     }
 
     fun onMenuItemClicked(index: Int) = intent {
@@ -52,7 +55,12 @@ class RootViewModel @Inject constructor(
         if (item.router.isEmpty()) {
             when (item) {
                 is HomeBottomNavigationItem -> {
-                    item.router.newRootScreen(mainpageScreenFactory.build(this@RootViewModel))
+                    item.router.newRootScreen(
+                        mainpageScreenFactory.build(
+                            this@RootViewModel,
+                            currentKey
+                        )
+                    )
                 }
                 is ProfileBottomNavigationItem -> {
                     val user = authInteractor.getPostiumUser()
@@ -72,18 +80,18 @@ class RootViewModel @Inject constructor(
 
     override fun openPost(postPreviewData: PostPreviewData) {
         val argument = postPreviewData.toPostPageArgument()
-        val screen = postPageScreenFactory.build(this)
-        currentRouter.addScreen(screen, argument)
+        val screen = postPageScreenFactory.build(this, argument, currentKey)
+        currentRouter.addScreen(screen)
     }
 
     override fun openUserProfile(postPreviewData: PostPreviewData) {
         val userPageArgument = postPreviewData.toUserPageArgument()
-        val screen = userPageScreenFactory.build(this)
-        currentRouter.addScreen(screen, userPageArgument)
+        val screen = userPageScreenFactory.build(this, userPageArgument, currentKey)
+        currentRouter.addScreen(screen)
     }
 
     override fun createPost() {
-        val screen = postCreatePageScreenFactory.build(this)
+        val screen = postCreatePageScreenFactory.build(this, currentKey)
         currentRouter.addScreen(screen)
     }
 

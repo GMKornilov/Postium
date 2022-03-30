@@ -6,7 +6,7 @@ import com.alphicc.brick.Screen
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.flow.SharedFlow
 
-inline fun <reified D: BaseViewModel<*, *>> BaseScreen (
+inline fun <reified D : BaseViewModel<*, *>> BaseScreen(
     key: String,
     noinline onCreate: ((SharedFlow<DataContainer>, DataContainer) -> D)? = null,
     noinline onDestroy: ((DataContainer) -> Unit)? = null,
@@ -21,3 +21,5 @@ inline fun <reified D: BaseViewModel<*, *>> BaseScreen (
 
     return Screen(key, onCreate, screenOnDestroy, content)
 }
+
+fun String.dropLastScreen() = this.split("/").dropLast(1).joinToString("/")
