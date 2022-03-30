@@ -13,11 +13,7 @@ internal class UserPageInteractor @Inject constructor(
     private val userRepository: UserRepository,
 ) {
     suspend fun loadPosts(userId: String): List<PostPreviewData> {
-        val posts = postRepository.loadDataWithUserId(userId)
-
-        return posts.map {
-            it.copy(avatarUrl = null, username = "")
-        }
+        return postRepository.loadDataWithUserId(userId)
     }
 
     suspend fun loadHeader(userId: String): User {

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.alphicc.brick.TreeRouter
 
-interface BottomNavigationItem {
+sealed interface BottomNavigationItem {
     @Composable
     fun IconComposable()
 
@@ -12,6 +12,4 @@ interface BottomNavigationItem {
     fun TitleComposable()
 
     val router: TreeRouter
-
-    fun onSelected() {}
 }

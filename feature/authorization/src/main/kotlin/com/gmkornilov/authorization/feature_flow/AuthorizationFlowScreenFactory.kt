@@ -5,7 +5,7 @@ import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
-import com.gmkornilov.authorization.domain.UserResultHandler
+import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.password_restoration.PasswordRestorationScreenFactory

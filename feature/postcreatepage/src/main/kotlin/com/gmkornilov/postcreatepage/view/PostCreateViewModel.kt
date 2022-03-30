@@ -1,6 +1,5 @@
 package com.gmkornilov.postcreatepage.view
 
-import com.alphicc.brick.TreeRouter
 import com.gmkornilov.postcreatepage.domain.PostCreateInteractor
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.launch
@@ -11,8 +10,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class PostCreateViewModel @Inject constructor(
-    private val router: TreeRouter,
     private val postCreateInteractor: PostCreateInteractor,
+    private val listener: PostCreateListener,
 ) : BaseViewModel<PostCreateState, PostCreateSideEffect>(), PostCreateEvents {
     override fun getBaseState(): PostCreateState {
         return PostCreateState()
@@ -23,7 +22,7 @@ internal class PostCreateViewModel @Inject constructor(
     }
 
     fun backConfirmed() = intent {
-        router.back()
+        listener.exitScreen()
     }
 
     override fun createPost(title: String, content: String) = intent {
@@ -43,7 +42,7 @@ internal class PostCreateViewModel @Inject constructor(
                 reduce { PostCreateState(isLoading = false) }
 
                 if (isSuccessful) {
-                    router.back()
+                    listener.exitScreen()
                 } else {
                     postSideEffect(PostCreateSideEffect.Error)
                 }
@@ -53,4 +52,8 @@ internal class PostCreateViewModel @Inject constructor(
             }
         }
     }
+}
+
+interface PostCreateListener {
+    fun exitScreen()
 }

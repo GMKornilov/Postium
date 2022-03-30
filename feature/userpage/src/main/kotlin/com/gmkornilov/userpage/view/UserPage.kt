@@ -176,7 +176,8 @@ private fun UserContent(
                     SuccessState(
                         posts = tabState.posts,
                         userPageEvents = userPageEvents,
-                        modifier = contentModifier
+                        modifier = contentModifier,
+                        hideAvatar = tab == Tab.POSTS,
                     )
                 } else {
                     EmptyState(tab)
@@ -213,7 +214,8 @@ private fun EmptyState(tab: Tab, modifier: Modifier = Modifier) {
 private fun SuccessState(
     userPageEvents: UserPageEvents,
     posts: List<PostPreviewData>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hideAvatar: Boolean = false,
 ) {
     val state = rememberLazyListState()
 
@@ -242,8 +244,8 @@ private fun SuccessState(
 
             PostPreview(
                 title = item.title,
-                userName = item.username,
-                avatarUrl = item.avatarUrl.letIf(!item.avatarUrl.isNullOrEmpty()) { it },
+                userName = item.username.letIf(!hideAvatar) { it } ?: "",
+                avatarUrl = item.avatarUrl.letIf(!item.avatarUrl.isNullOrEmpty() && !hideAvatar) { it },
                 isUpChecked = item.likeStatus.isLiked,
                 isDownChecked = item.likeStatus.isDisliked,
                 isBookmarkChecked = item.bookmarkStatus.isBookmarked,

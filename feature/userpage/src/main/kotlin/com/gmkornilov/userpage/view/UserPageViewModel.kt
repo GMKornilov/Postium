@@ -1,14 +1,11 @@
 package com.gmkornilov.userpage.view
 
 import android.util.Log
-import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.domain.UserResultHandler
-import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
+import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.letIf
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
-import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.domain.UserPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
@@ -20,11 +17,9 @@ import javax.inject.Inject
 
 internal class UserPageViewModel @Inject constructor(
     private val navArgument: UserPageArgument,
-    private val router: TreeRouter,
     private val userPageInteractor: UserPageInteractor,
     private val authInteractor: AuthInteractor,
-    private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
-    private val postCreatePageScreenFactory: PostCreatePageScreenFactory,
+    private val listener: UserPageListener,
 ) : BaseViewModel<UserPageState, Unit>(), UserPageEvents {
     private var currentTab = Tab.POSTS
 
@@ -118,7 +113,7 @@ internal class UserPageViewModel @Inject constructor(
         val currentUser = authInteractor.getPostiumUser()
         currentUser?.let {
             userResultHandler.handleResult(currentUser)
-        } ?: authorizationFlowScreenFactory.start(userResultHandler, router)
+        } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
     override fun dislikePost(postPreviewData: PostPreviewData) {
@@ -126,7 +121,7 @@ internal class UserPageViewModel @Inject constructor(
         val currentUser = authInteractor.getPostiumUser()
         currentUser?.let {
             userResultHandler.handleResult(currentUser)
-        } ?: authorizationFlowScreenFactory.start(userResultHandler, router)
+        } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
     override fun bookmarkPost(postPreviewData: PostPreviewData) {
@@ -134,11 +129,11 @@ internal class UserPageViewModel @Inject constructor(
         val currentUser = authInteractor.getPostiumUser()
         currentUser?.let {
             userResultHandler.handleResult(currentUser)
-        } ?: authorizationFlowScreenFactory.start(userResultHandler, router)
+        } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
     override fun openPost(postPreviewData: PostPreviewData) {
-        TODO("Not yet implemented")
+        listener.openPost(postPreviewData)
     }
 
     override fun loadHeader() = intent {
@@ -158,8 +153,7 @@ internal class UserPageViewModel @Inject constructor(
     }
 
     override fun createPost() {
-        val screen = postCreatePageScreenFactory.build(router)
-        router.addScreen(screen)
+        listener.createPost()
     }
 
     private fun getCurrentState() = this.container.stateFlow.value.getCurrentTabState()
@@ -221,4 +215,14 @@ internal class UserPageViewModel @Inject constructor(
         }
         return this.copy(tabStates = newTabStates)
     }
+}
+
+interface UserPageListener {
+    fun openPost(postPreviewData: PostPreviewData)
+
+    fun openUserProfile(postPreviewData: PostPreviewData)
+
+    fun createPost()
+
+    fun startAuthorizationFlow(userResultHandler: UserResultHandler)
 }

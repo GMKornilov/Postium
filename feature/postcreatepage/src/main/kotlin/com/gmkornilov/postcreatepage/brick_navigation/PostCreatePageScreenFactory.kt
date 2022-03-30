@@ -10,24 +10,26 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.postcreatepage.view.PostCreate
+import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postcreatepage.view.PostCreateViewModel
 import com.gmkornilov.source.FirebasePostSource
 import com.gmkornilov.user.repository.UserRepository
 import dagger.BindsInstance
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val POST_CREATE_PAGE_KEY = "create post"
 
 class PostCreatePageScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<PostCreatePageScreenFactory.Deps> {
-    private lateinit var router: TreeRouter
+    private lateinit var listener: PostCreateListener
 
     private val screen = BaseScreen(
         POST_CREATE_PAGE_KEY,
         onCreate = { _, _ ->
             val component = DaggerPostCreatePageScreenFactory_Component.builder()
-                .router(router)
+                .listener(listener)
                 .deps(dependency)
                 .build()
             component.postCreateViewModel
@@ -37,8 +39,8 @@ class PostCreatePageScreenFactory @Inject constructor(
         PostCreate(viewModel = viewModel, modifier = Modifier.fillMaxSize())
     }
 
-    fun build(router: TreeRouter): Screen<*> {
-        this.router = router
+    fun build(listener: PostCreateListener): Screen<*> {
+        this.listener = listener
         return screen
     }
 
@@ -49,16 +51,20 @@ class PostCreatePageScreenFactory @Inject constructor(
         val authInteractor: AuthInteractor
     }
 
+    @Scope
+    annotation class PostCreateScope
+
     @dagger.Component(
         dependencies = [Deps::class]
     )
+    @PostCreateScope
     internal interface Component {
         val postCreateViewModel: PostCreateViewModel
 
         @dagger.Component.Builder
         interface Builder {
             @BindsInstance
-            fun router(treeRouter: TreeRouter): Builder
+            fun listener(listener: PostCreateListener): Builder
 
             fun deps(dependency: Deps): Builder
 

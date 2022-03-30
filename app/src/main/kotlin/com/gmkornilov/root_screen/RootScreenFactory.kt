@@ -1,6 +1,7 @@
 package com.gmkornilov.root_screen
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.alphicc.brick.Screen
@@ -14,10 +15,13 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
+import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
+import com.gmkornilov.postpage.view.PostpageListener
 import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
+import com.gmkornilov.userpage.view.UserPageListener
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
@@ -50,6 +54,10 @@ class RootScreenFactory @Inject constructor(
 
                 val router = state.selectedRouter
                 val index = state.selectedIndex
+
+                LaunchedEffect(viewModel) {
+                    viewModel.onMenuItemClicked(index)
+                }
 
                 BottomMenuScreen(
                     index,
@@ -87,23 +95,51 @@ class RootScreenFactory @Inject constructor(
         PostCreatePageScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
-        override val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
+        val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
 
-        override val postPageScreenFactory: PostPageScreenFactory
+        val postPageScreenFactory: PostPageScreenFactory
 
-        override val userPageScreenFactory: UserPageScreenFactory
+        val userPageScreenFactory: UserPageScreenFactory
 
         override val userAvatarRepository: UserAvatarRepository
 
-        override val postCreatePageScreenFactory: PostCreatePageScreenFactory
+        val postCreatePageScreenFactory: PostCreatePageScreenFactory
     }
 
     @Scope
     annotation class RootScope
 
-    @Module
+    @Module(includes = [DepsModule::class, ListenersModule::class])
     interface RootModule {
+        companion object {
+            @Provides
+            @RootScope
+            fun bottomNavigationItems(
+                homeBottomNavigationItem: HomeBottomNavigationItem,
+                profileBottomNavigationItem: ProfileBottomNavigationItem
+            ): List<BottomNavigationItem> {
+                return listOf(homeBottomNavigationItem, profileBottomNavigationItem)
+            }
+        }
+    }
 
+    @Module
+    interface ListenersModule {
+        @RootScope
+        @Binds
+        fun bindUserPageListener(rootViewModel: RootViewModel): UserPageListener
+
+        @RootScope
+        @Binds
+        fun bindMainPageListener(rootViewModel: RootViewModel): MainPageListener
+
+        @RootScope
+        @Binds
+        fun postpageListener(rootViewModel: RootViewModel): PostpageListener
+    }
+
+    @Module
+    interface DepsModule {
         @Binds
         @RootScope
         fun bindAuthorizationDeps(component: Component): AuthorizationFlowScreenFactory.Deps
@@ -123,16 +159,5 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindCreatePostDeps(component: Component): PostCreatePageScreenFactory.Deps
-
-        companion object {
-            @Provides
-            @RootScope
-            fun bottomNavigationItems(
-                homeBottomNavigationItem: HomeBottomNavigationItem,
-                profileBottomNavigationItem: ProfileBottomNavigationItem
-            ): List<BottomNavigationItem> {
-                return listOf(homeBottomNavigationItem, profileBottomNavigationItem)
-            }
-        }
     }
 }

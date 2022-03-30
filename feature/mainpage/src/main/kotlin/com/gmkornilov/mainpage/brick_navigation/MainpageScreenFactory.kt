@@ -5,18 +5,13 @@ import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.mainpage.mainpage.MainPageViewModel
 import com.gmkornilov.mainpage.mainpage.Mainpage
 import com.gmkornilov.post.repository.PostRepository
-import com.gmkornilov.post_bookmarks.PostBookmarkRepository
-import com.gmkornilov.post_likes.PostLikeRepository
-import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
-import com.gmkornilov.source.FirebasePostSource
-import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import dagger.BindsInstance
 import javax.inject.Inject
 import javax.inject.Scope
@@ -24,14 +19,14 @@ import javax.inject.Scope
 class MainpageScreenFactory @Inject constructor(
     override val dependency: Deps,
 ) : NavigationScreenProvider<MainpageScreenFactory.Deps> {
-    private lateinit var router: TreeRouter
+    private lateinit var listener: MainPageListener
 
     private val mainpageScreen = BaseScreen(
         key = "Home",
         onCreate = { _, _ ->
             val component = DaggerMainpageScreenFactory_Component.builder()
                 .deps(dependency)
-                .router(router)
+                .listener(listener)
                 .build()
             component.mainPageViewModel
         },
@@ -45,10 +40,6 @@ class MainpageScreenFactory @Inject constructor(
         val postRepository: PostRepository
 
         val authInteractor: AuthInteractor
-
-        val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
-        val postPageScreenFactory: PostPageScreenFactory
-        val userPageScreenFactory: UserPageScreenFactory
     }
 
     @Scope
@@ -65,7 +56,7 @@ class MainpageScreenFactory @Inject constructor(
         @dagger.Component.Builder
         interface Builder {
             @BindsInstance
-            fun router(router: TreeRouter): Builder
+            fun listener(listener: MainPageListener): Builder
 
             fun deps(deps: Deps): Builder
 
@@ -78,8 +69,8 @@ class MainpageScreenFactory @Inject constructor(
 
     }
 
-    fun build(router: TreeRouter): Screen<*> {
-        this.router = router
+    fun build(listener: MainPageListener): Screen<*> {
+        this.listener = listener
         return mainpageScreen
     }
 }

@@ -5,15 +5,13 @@ import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.post.repository.PostRepository
-import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_contents.repository.PostContentsRepository
-import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.postpage.view.Postpage
+import com.gmkornilov.postpage.view.PostpageListener
 import com.gmkornilov.postpage.view.PostpageViewModel
 import dagger.BindsInstance
 import javax.inject.Inject
@@ -24,7 +22,7 @@ private const val POST_PAGE_SCREEN_KEY = "post_page"
 class PostPageScreenFactory @Inject constructor(
     override val dependency: Deps,
 ): NavigationScreenProvider<PostPageScreenFactory.Deps> {
-    private lateinit var router: TreeRouter
+    private lateinit var listener: PostpageListener
 
     private val screen = BaseScreen(
         key = POST_PAGE_SCREEN_KEY,
@@ -33,7 +31,7 @@ class PostPageScreenFactory @Inject constructor(
 
             val component = DaggerPostPageScreenFactory_Component.builder()
                 .postPageArgument(argument)
-                .router(router)
+                .listener(listener)
                 .deps(dependency)
                 .build()
 
@@ -44,8 +42,8 @@ class PostPageScreenFactory @Inject constructor(
         Postpage(viewModel = viewModel, modifier = Modifier.fillMaxSize())
     }
 
-    fun build(router: TreeRouter): Screen<*> {
-        this.router = router
+    fun build(listener: PostpageListener): Screen<*> {
+        this.listener = listener
         return screen
     }
 
@@ -54,8 +52,6 @@ class PostPageScreenFactory @Inject constructor(
         val postRepository: PostRepository
 
         val authInteractor: AuthInteractor
-
-        val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
     }
 
     @Scope
@@ -74,10 +70,10 @@ class PostPageScreenFactory @Inject constructor(
             @BindsInstance
             fun postPageArgument(argument: PostPageArgument): Builder
 
-            @BindsInstance
-            fun router(treeRouter: TreeRouter): Builder
-
             fun deps(dependency: Deps): Builder
+
+            @BindsInstance
+            fun listener(postpageListener: PostpageListener): Builder
 
             fun build(): Component
         }

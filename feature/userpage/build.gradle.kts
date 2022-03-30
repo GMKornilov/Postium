@@ -46,9 +46,6 @@ dependencies {
     implementation(project(":core:authorization"))
     implementation(project(":core:post"))
 
-    implementation(project(":feature:authorization"))
-    implementation(project(":feature:postcreatepage"))
-
     implementation(project(":data:post"))
     implementation(project(":data:user"))
     implementation(project(":data:post_likes"))

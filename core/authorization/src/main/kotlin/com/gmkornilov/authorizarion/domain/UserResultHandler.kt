@@ -1,4 +1,4 @@
-package com.gmkornilov.authorization.domain
+package com.gmkornilov.authorizarion.domain
 
 import com.gmkornilov.authorizarion.model.PostiumUser
 

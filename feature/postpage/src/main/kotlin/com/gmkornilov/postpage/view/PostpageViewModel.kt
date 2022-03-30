@@ -2,8 +2,8 @@ package com.gmkornilov.postpage.view
 
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.domain.UserResultHandler
-import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
+import com.gmkornilov.authorizarion.domain.UserResultHandler
+import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 import com.gmkornilov.postpage.domain.PostPageInteractor
@@ -16,10 +16,9 @@ import javax.inject.Inject
 
 internal class PostpageViewModel @Inject constructor(
     private val postPageArgument: PostPageArgument,
-    private val router: TreeRouter,
     private val postPageInteractor: PostPageInteractor,
-    private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
     private val authInteractor: AuthInteractor,
+    private val listener: PostpageListener,
 ) : BaseViewModel<PostpageState, Unit>(), PostpageEvents {
     override fun getBaseState(): PostpageState {
         return PostpageState(postPageArgument, ContentState.None)
@@ -99,7 +98,7 @@ internal class PostpageViewModel @Inject constructor(
 
         currentUser?.let {
             likeUserHandler.handleResult(currentUser)
-        } ?: authorizationFlowScreenFactory.start(likeUserHandler, router)
+        } ?: listener.startAuthorizationFlow(likeUserHandler)
     }
 
     override fun dislikePost() {
@@ -107,7 +106,7 @@ internal class PostpageViewModel @Inject constructor(
 
         currentUser?.let {
             dislikeUserHandler.handleResult(currentUser)
-        } ?: authorizationFlowScreenFactory.start(dislikeUserHandler, router)
+        } ?: listener.startAuthorizationFlow(dislikeUserHandler)
     }
 
     override fun bookmarkPost() {
@@ -115,6 +114,12 @@ internal class PostpageViewModel @Inject constructor(
 
         currentUser?.let {
             bookmarkUserHandler.handleResult(currentUser)
-        } ?: authorizationFlowScreenFactory.start(bookmarkUserHandler, router)
+        } ?: listener.startAuthorizationFlow(bookmarkUserHandler)
     }
+}
+
+interface PostpageListener {
+    fun startAuthorizationFlow(userResultHandler: UserResultHandler)
+
+    fun openUserProfile(postPreviewData: PostPreviewData)
 }

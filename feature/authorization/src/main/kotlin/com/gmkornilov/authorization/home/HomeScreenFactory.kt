@@ -6,7 +6,7 @@ import com.alphicc.brick.Screen
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.facebook.FacebookAuthInteractor
 import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
-import com.gmkornilov.authorization.domain.UserResultHandler
+import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.home.view.Home
 import com.gmkornilov.authorization.home.view.HomeViewModel

@@ -5,25 +5,25 @@ import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.post.repository.PostRepository
-import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.userpage.view.UserPage
+import com.gmkornilov.userpage.view.UserPageListener
 import com.gmkornilov.userpage.view.UserPageViewModel
 import dagger.Binds
 import dagger.BindsInstance
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val USER_PAGE_SCREEN_KEY = "user page"
 
 class UserPageScreenFactory @Inject constructor(
     override val dependency: Deps
 ): NavigationScreenProvider<UserPageScreenFactory.Deps> {
-    private lateinit var router: TreeRouter
+    private lateinit var listener: UserPageListener
 
     private val screen = BaseScreen(
         key = USER_PAGE_SCREEN_KEY,
@@ -31,7 +31,7 @@ class UserPageScreenFactory @Inject constructor(
             val userPageArgument = arg.get<UserPageArgument>()
             val component = DaggerUserPageScreenFactory_Component.builder()
                 .deps(dependency)
-                .router(router)
+                .listener(listener)
                 .argument(userPageArgument)
                 .build()
 
@@ -43,29 +43,31 @@ class UserPageScreenFactory @Inject constructor(
         UserPage(viewModel = viewModel, modifier = Modifier.fillMaxSize())
     }
 
-    fun build(router: TreeRouter): Screen<*> {
-        this.router = router
+    fun build(listener: UserPageListener): Screen<*> {
+        this.listener = listener
         return screen
     }
 
     interface Deps : Dependency {
         val authInteractor: AuthInteractor
-        val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
-        val postCreatePageScreenFactory: PostCreatePageScreenFactory
         val postRepository: PostRepository
         val userRepository: UserRepository
     }
 
+    @Scope
+    annotation class UserPageScope
+
     @dagger.Component(
         dependencies = [Deps::class]
     )
+    @UserPageScope
     internal interface Component {
         val viewModel: UserPageViewModel
 
         @dagger.Component.Builder
         interface Builder {
             @BindsInstance
-            fun router(router: TreeRouter): Builder
+            fun listener(listener: UserPageListener): Builder
 
             @BindsInstance
             fun argument(userPageArgument: UserPageArgument): Builder

@@ -1,17 +1,11 @@
 package com.gmkornilov.mainpage.mainpage
 
-import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.authorization.domain.UserResultHandler
-import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
+import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.letIf
 import com.gmkornilov.mainpage.domain.MainpageInteractor
-import com.gmkornilov.mainpage.model.toPostPageArgument
-import com.gmkornilov.mainpage.model.toUserPageArgument
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
-import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
-import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -21,11 +15,8 @@ import javax.inject.Inject
 
 internal class MainPageViewModel @Inject constructor(
     private val mainpageInteractor: MainpageInteractor,
-    private val router: TreeRouter,
-    private val authoriztionFlowFactory: AuthorizationFlowScreenFactory,
     private val authInteractor: AuthInteractor,
-    private val postPageScreenFactory: PostPageScreenFactory,
-    private val userPageScreenFactory: UserPageScreenFactory,
+    private val listener: MainPageListener,
 ) : BaseViewModel<MainPageState, Unit>(), MainPageEvents {
     override fun getBaseState() = MainPageState()
 
@@ -95,13 +86,11 @@ internal class MainPageViewModel @Inject constructor(
     }
 
     override fun openPost(post: PostPreviewData) {
-        val screen = postPageScreenFactory.build(router)
-        router.addScreen(screen, post.toPostPageArgument())
+        listener.openPost(post)
     }
 
     override fun openProfile(post: PostPreviewData) {
-        val screen = userPageScreenFactory.build(router)
-        router.addScreen(screen, post.toUserPageArgument())
+        listener.openUserProfile(post)
     }
 
     override fun likePost(post: PostPreviewData) {
@@ -109,7 +98,7 @@ internal class MainPageViewModel @Inject constructor(
         val user = authInteractor.getPostiumUser()
         user?.let {
             likeUserHandler.handleResult(user)
-        } ?: authoriztionFlowFactory.start(likeUserHandler, router)
+        } ?: listener.startAuthorizationFlow(likeUserHandler)
     }
 
     override fun dislikePost(post: PostPreviewData) {
@@ -117,7 +106,7 @@ internal class MainPageViewModel @Inject constructor(
         val user = authInteractor.getPostiumUser()
         user?.let {
             dislikeUserHandler.handleResult(user)
-        } ?: authoriztionFlowFactory.start(dislikeUserHandler, router)
+        } ?: listener.startAuthorizationFlow(dislikeUserHandler)
     }
 
     override fun bookmarkPost(post: PostPreviewData) {
@@ -125,7 +114,7 @@ internal class MainPageViewModel @Inject constructor(
         val user = authInteractor.getPostiumUser()
         user?.let {
             bookmarkUserHandler.handleResult(user)
-        } ?: authoriztionFlowFactory.start(bookmarkUserHandler, router)
+        } ?: listener.startAuthorizationFlow(bookmarkUserHandler)
     }
 
     private fun replacePost(oldPost: PostPreviewData, newPost: PostPreviewData) = intent {
@@ -159,4 +148,12 @@ internal class MainPageViewModel @Inject constructor(
             PostTimeRange.WEEK -> state.copy(lastWeekState = postsState)
         }
     }
+}
+
+interface MainPageListener {
+    fun openPost(postPreviewData: PostPreviewData)
+
+    fun startAuthorizationFlow(userResultHandler: UserResultHandler)
+
+    fun openUserProfile(postPreviewData: PostPreviewData)
 }

@@ -2,7 +2,7 @@ package com.gmkornilov.authorization.feature_flow
 
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.model.PostiumUser
-import com.gmkornilov.authorization.domain.UserResultHandler
+import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.home.HomeScreenFactory
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.authorization.password_restoration.PasswordRestorationScreenFactory
