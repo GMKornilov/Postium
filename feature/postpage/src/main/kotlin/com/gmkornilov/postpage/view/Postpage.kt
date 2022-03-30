@@ -3,6 +3,7 @@ package com.gmkornilov.postpage.view
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -69,6 +70,7 @@ private fun PostpageWithState(
                 title = state.argument.title,
                 username = state.argument.username,
                 avatarUrl = state.argument.avatarUrl,
+                postpageEvents = postpageEvents,
                 modifier = Modifier.bottomBorder(1.dp, 16.dp)
             )
 
@@ -151,6 +153,7 @@ private fun PostHeader(
     title: String,
     username: String,
     avatarUrl: String?,
+    postpageEvents: PostpageEvents,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -158,7 +161,11 @@ private fun PostHeader(
             .fillMaxWidth()
             .padding(top = 8.dp)
     ) {
-        Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.height(48.dp)) {
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .height(48.dp)
+                .clickable { postpageEvents.openProfile() }) {
             avatarUrl?.let {
                 UserAvatar(
                     avatarUrl = avatarUrl,
@@ -265,6 +272,7 @@ private fun ShortPreview() {
         username = "test username",
         avatarUrl = "",
         id = "",
+        userId = "",
         likeStatus = PostLikeStatus.LIKED,
         bookmarkStatus = PostBookmarkStatus.BOOKMARKED
     )
@@ -282,6 +290,7 @@ private fun SuccessPreview() {
         username = "test username",
         avatarUrl = "",
         id = "",
+        userId = "",
         likeStatus = PostLikeStatus.LIKED,
         bookmarkStatus = PostBookmarkStatus.BOOKMARKED
     )
@@ -298,6 +307,7 @@ private fun LoadingPreview() {
         title = "test title",
         username = "test username",
         avatarUrl = "",
+        userId = "",
         id = "",
         likeStatus = PostLikeStatus.DISLIKED,
         bookmarkStatus = PostBookmarkStatus.NOT_BOOKMARKED

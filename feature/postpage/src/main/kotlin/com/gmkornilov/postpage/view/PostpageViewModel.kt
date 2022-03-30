@@ -1,11 +1,11 @@
 package com.gmkornilov.postpage.view
 
-import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
+import com.gmkornilov.postpage.brick_navigation.toPostPreviewData
 import com.gmkornilov.postpage.domain.PostPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.launch
@@ -91,6 +91,10 @@ internal class PostpageViewModel @Inject constructor(
     }
 
     override fun openComments() {
+    }
+
+    override fun openProfile() {
+        listener.openUserProfile(postPageArgument.toPostPreviewData())
     }
 
     override fun likePost() {

@@ -8,6 +8,7 @@ import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 fun PostPreviewData.toPostPageArgument() = PostPageArgument(
     id = id,
     title = title,
+    userId = userId,
     username = username,
     avatarUrl = avatarUrl,
     likeStatus = likeStatus,
