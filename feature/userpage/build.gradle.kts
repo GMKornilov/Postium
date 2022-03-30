@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":core:post"))
 
     implementation(project(":feature:authorization"))
+    implementation(project(":feature:postcreatepage"))
 
     implementation(project(":data:post"))
     implementation(project(":data:user"))
@@ -70,6 +71,7 @@ dependencies {
     implementation(Deps.Compose.IconsExtended)
 
     implementation(Deps.Compose.Icons.simple)
+    implementation(Deps.Compose.Icons.tabler)
 
     implementation(Deps.Compose.Lottie.lottieCompose)
 

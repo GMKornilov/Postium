@@ -1,5 +1,6 @@
 package com.gmkornilov.postcreatepage.view
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -44,11 +45,26 @@ internal fun PostCreate(
     var enteredContent by remember { mutableStateOf("") }
 
     val onTitleChanged = { value: String -> enteredTitle = value }
-    val onContentChanged = { value: String -> enteredTitle = value }
+    val onContentChanged = { value: String -> enteredContent = value }
+
+    var exitDialogOpened by remember { mutableStateOf(false) }
+    val exitDialogConfirmed = {
+        exitDialogOpened = false
+        viewModel.backConfirmed()
+    }
+    val onDismissDialog = { exitDialogOpened = false }
+
+    BackHandler {
+        viewModel.backPressed()
+    }
 
     LaunchedEffect(viewModel) {
         viewModel.container.sideEffectFlow.collect(FlowCollector {
-
+            when (it) {
+                PostCreateSideEffect.ShowExitDialog -> {
+                    exitDialogOpened = true
+                }
+            }
         })
     }
 
@@ -62,6 +78,36 @@ internal fun PostCreate(
         onContentChanged = onContentChanged,
         coroutineScope = scope,
         modifier = modifier
+    )
+
+    if (exitDialogOpened) {
+        ExitDialog(onConfirm = exitDialogConfirmed, onDismiss = onDismissDialog)
+    }
+}
+
+@Composable
+private fun ExitDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(stringResource(R.string.dialog_title))
+        },
+        text = {
+            Text(stringResource(R.string.dialog_text))
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.dialog_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.dialog_dismiss))
+            }
+        }
     )
 }
 

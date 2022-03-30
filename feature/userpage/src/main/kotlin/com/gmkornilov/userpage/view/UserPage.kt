@@ -32,6 +32,8 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Plus
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
@@ -53,18 +55,32 @@ private fun UserPageWithState(
     userPageEvents: UserPageEvents,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
-        UserHeader(
-            state = state.headerState,
-            userPageEvents = userPageEvents,
-            modifier = Modifier.padding(top = 16.dp)
-        )
+    Box(modifier = modifier.background(MaterialTheme.colors.surface)) {
+        Column(modifier = modifier.fillMaxSize()) {
+            UserHeader(
+                state = state.headerState,
+                userPageEvents = userPageEvents,
+                modifier = Modifier.padding(top = 16.dp)
+            )
 
-        UserContent(
-            state = state,
-            userPageEvents = userPageEvents,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+            UserContent(
+                state = state,
+                userPageEvents = userPageEvents,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
+        if (state.createPostButtonVisible) {
+            FloatingActionButton(
+                onClick = { userPageEvents.createPost() },
+                backgroundColor = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 16.dp, bottom = 16.dp)
+            ) {
+                Icon(TablerIcons.Plus, null)
+            }
+        }
     }
 }
 
@@ -249,7 +265,7 @@ private fun SuccessState(
 private fun PreviewSuccess() {
     val headerState = HeaderState(username = "test", avatarUrl = "")
 
-    val state = UserPageState(headerState)
+    val state = UserPageState(headerState, createPostButtonVisible = true)
 
     PreviewWithState(state = state, modifier = Modifier.fillMaxSize())
 }

@@ -10,6 +10,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.post.repository.PostRepository
+import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.userpage.view.UserPage
 import com.gmkornilov.userpage.view.UserPageViewModel
@@ -50,6 +51,7 @@ class UserPageScreenFactory @Inject constructor(
     interface Deps : Dependency {
         val authInteractor: AuthInteractor
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
+        val postCreatePageScreenFactory: PostCreatePageScreenFactory
         val postRepository: PostRepository
         val userRepository: UserRepository
     }

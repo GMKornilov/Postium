@@ -8,6 +8,7 @@ import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.letIf
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
+import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.domain.UserPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
@@ -23,10 +24,22 @@ internal class UserPageViewModel @Inject constructor(
     private val userPageInteractor: UserPageInteractor,
     private val authInteractor: AuthInteractor,
     private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
+    private val postCreatePageScreenFactory: PostCreatePageScreenFactory,
 ) : BaseViewModel<UserPageState, Unit>(), UserPageEvents {
     private var currentTab = Tab.POSTS
 
+    init {
+        viewModelScope.launch {
+            authInteractor.authState.collect {
+                val canCreatePost = it?.getUid() == navArgument.id
+                intent { reduce { this.state.copy(createPostButtonVisible = canCreatePost) } }
+            }
+        }
+    }
+
     override fun getBaseState(): UserPageState {
+        val canCreatePost = authInteractor.getPostiumUser()?.getUid() == navArgument.id
+
         val headerState = when (navArgument) {
             is UserPageArgument.LoadHeader -> HeaderState(
                 needLoading = true,
@@ -38,7 +51,7 @@ internal class UserPageViewModel @Inject constructor(
                 avatarUrl = navArgument.avatarUrl,
             )
         }
-        return UserPageState(headerState = headerState)
+        return UserPageState(headerState = headerState, createPostButtonVisible = canCreatePost)
     }
 
     private fun getLikeResultHandler(postPreview: PostPreviewData) = UserResultHandler {
@@ -142,6 +155,11 @@ internal class UserPageViewModel @Inject constructor(
                 Timber.e(e)
             }
         }
+    }
+
+    override fun createPost() {
+        val screen = postCreatePageScreenFactory.build()
+        router.addScreen(screen)
     }
 
     private fun getCurrentState() = this.container.stateFlow.value.getCurrentTabState()

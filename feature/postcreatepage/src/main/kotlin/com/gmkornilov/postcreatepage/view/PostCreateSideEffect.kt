@@ -1,4 +1,5 @@
 package com.gmkornilov.postcreatepage.view
 
-internal class PostCreateSideEffect {
+internal sealed class PostCreateSideEffect {
+    object ShowExitDialog: PostCreateSideEffect()
 }

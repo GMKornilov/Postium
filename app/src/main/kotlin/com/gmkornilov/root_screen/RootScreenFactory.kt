@@ -14,6 +14,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
+import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
@@ -82,7 +83,8 @@ class RootScreenFactory @Inject constructor(
         AuthorizationFlowScreenFactory.Deps,
         MainpageScreenFactory.Deps,
         PostPageScreenFactory.Deps,
-        UserPageScreenFactory.Deps {
+        UserPageScreenFactory.Deps,
+        PostCreatePageScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         override val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -92,6 +94,8 @@ class RootScreenFactory @Inject constructor(
         override val userPageScreenFactory: UserPageScreenFactory
 
         override val userAvatarRepository: UserAvatarRepository
+
+        override val postCreatePageScreenFactory: PostCreatePageScreenFactory
     }
 
     @Scope
@@ -115,6 +119,10 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindUserpageDeps(component: Component): UserPageScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindCreatePostDeps(component: Component): PostCreatePageScreenFactory.Deps
 
         companion object {
             @Provides

@@ -15,6 +15,8 @@ internal interface UserPageEvents {
 
     fun loadHeader()
 
+    fun createPost()
+
     companion object : UserPageEvents {
         override fun tabSelected(tab: Tab) = Unit
         override fun likePost(postPreviewData: PostPreviewData) = Unit
@@ -22,5 +24,6 @@ internal interface UserPageEvents {
         override fun bookmarkPost(postPreviewData: PostPreviewData) = Unit
         override fun openPost(postPreviewData: PostPreviewData) = Unit
         override fun loadHeader() = Unit
+        override fun createPost() = Unit
     }
 }
