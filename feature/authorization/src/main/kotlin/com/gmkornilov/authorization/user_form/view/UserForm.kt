@@ -26,9 +26,11 @@ import com.google.accompanist.pager.*
 import compose.icons.TablerIcons
 import compose.icons.tablericons.CameraOff
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, InternalCoroutinesApi::class)
 @Composable
 internal fun UserForm(
     viewModel: UserFormViewModel,
@@ -54,12 +56,12 @@ internal fun UserForm(
         }
 
     LaunchedEffect(viewModel) {
-        viewModel.container.sideEffectFlow.collect {
+        viewModel.container.sideEffectFlow.collect( FlowCollector {
             when (it) {
                 UserFormSideEffect.UploadPhoto -> selectImageLauncher.launch("image/*")
                 UserFormSideEffect.ScrollToEnd -> pagerState.animateScrollToPage(UserFormStep.values().lastIndex)
             }
-        }
+        })
     }
 
     UserFormWithState(
