@@ -11,6 +11,15 @@ private const val POST_CONTENTS_COLLECTION = "post_contents"
 class PostContentsRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) {
+    suspend fun uploadPostContent(postId: String, contents: String) {
+        val postContents = PostContents(contents)
+        firestore
+            .collection(POST_CONTENTS_COLLECTION)
+            .document(postId)
+            .set(postContents)
+            .await()
+    }
+
     suspend fun loadPostContents(postId: String): PostContents {
         val snapshot = firestore
             .collection(POST_CONTENTS_COLLECTION)

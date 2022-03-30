@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
+import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.NavigationScreenProvider
+import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.postcreatepage.view.PostCreate
 import com.gmkornilov.postcreatepage.view.PostCreateViewModel
+import com.gmkornilov.source.FirebasePostSource
+import com.gmkornilov.user.repository.UserRepository
 import dagger.BindsInstance
 import javax.inject.Inject
 
@@ -39,7 +43,10 @@ class PostCreatePageScreenFactory @Inject constructor(
     }
 
     interface Deps: Dependency {
-
+        val firebasePostSource: FirebasePostSource
+        val postContentsRepository: PostContentsRepository
+        val userRepository: UserRepository
+        val authInteractor: AuthInteractor
     }
 
     @dagger.Component(

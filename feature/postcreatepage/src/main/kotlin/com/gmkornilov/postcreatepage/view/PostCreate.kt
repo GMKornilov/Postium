@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
@@ -27,7 +28,6 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Send
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 
 @OptIn(InternalCoroutinesApi::class, ExperimentalPagerApi::class)
@@ -37,6 +37,9 @@ internal fun PostCreate(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
@@ -59,13 +62,28 @@ internal fun PostCreate(
     }
 
     LaunchedEffect(viewModel) {
-        viewModel.container.sideEffectFlow.collect(FlowCollector {
+        viewModel.container.sideEffectFlow.collect {
             when (it) {
                 PostCreateSideEffect.ShowExitDialog -> {
                     exitDialogOpened = true
                 }
+                PostCreateSideEffect.EmptyContent -> showError(
+                    context.getString(R.string.content_cant_be_empty),
+                    scope,
+                    snackbarHostState
+                )
+                PostCreateSideEffect.EmptyTitle -> showError(
+                    context.getString(R.string.title_cant_be_empty),
+                    scope,
+                    snackbarHostState
+                )
+                PostCreateSideEffect.Error -> showError(
+                    context.getString(R.string.something_went_wrong),
+                    scope,
+                    snackbarHostState
+                )
             }
-        })
+        }
     }
 
     PostCreateWithState(
@@ -82,6 +100,16 @@ internal fun PostCreate(
 
     if (exitDialogOpened) {
         ExitDialog(onConfirm = exitDialogConfirmed, onDismiss = onDismissDialog)
+    }
+}
+
+private fun showError(
+    message: String,
+    coroutineScope: CoroutineScope,
+    snackbarHostState: SnackbarHostState
+) {
+    coroutineScope.launch {
+        snackbarHostState.showSnackbar(message = message)
     }
 }
 
@@ -173,13 +201,17 @@ private fun PostCreateWithState(
         }
 
         FloatingActionButton(
-            onClick = { },
+            onClick = { postCreateEvents.createPost(enteredTitle, enteredContent) },
             backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 16.dp, bottom = 16.dp)
         ) {
-            Icon(TablerIcons.Send, null)
+            if (state.isLoading) {
+                CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+            } else {
+                Icon(TablerIcons.Send, null)
+            }
         }
     }
 }
@@ -276,6 +308,7 @@ private fun PreviewPost(
         when {
             content.isBlank() -> Text(
                 stringResource(R.string.empty_content),
+                color = LocalContentColor.current.copy(ContentAlpha.disabled),
                 modifier = contentModifier
             )
             LocalInspectionMode.current -> Text(content, modifier = contentModifier)
@@ -307,6 +340,17 @@ private fun PreviewPreview() {
 private fun EmptyPreview() {
     PostCreateWithStatePreview(
         state = PostCreateState(),
+        title = "",
+        content = "",
+        startPage = 2,
+    )
+}
+
+@Preview
+@Composable
+private fun LoadingPreview() {
+    PostCreateWithStatePreview(
+        state = PostCreateState(isLoading = true),
         title = "",
         content = "",
         startPage = 2,

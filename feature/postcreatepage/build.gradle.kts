@@ -47,6 +47,8 @@ dependencies {
     implementation(project(":core:post"))
 
     implementation(project(":data:post_contents"))
+    implementation(project(":data:post"))
+    implementation(project(":data:user"))
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)

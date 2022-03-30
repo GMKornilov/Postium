@@ -13,4 +13,8 @@
     <string name="dialog_dismiss">Отмена</string>
     <string name="dialog_title">Вы точно хотите выйти?</string>
     <string name="dialog_text">Введенные вами данные нигде не сохранятся</string>
+
+    <string name="title_cant_be_empty">Заголовок не может быть пустым</string>
+    <string name="content_cant_be_empty">Содержимое не может быть пустым</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
 </resources>

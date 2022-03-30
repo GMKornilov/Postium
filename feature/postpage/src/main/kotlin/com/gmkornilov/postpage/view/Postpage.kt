@@ -90,8 +90,9 @@ private fun PostpageWithState(
                 is ContentState.Success -> ContentSuccess(
                     contentState = state.contentState,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .topBorder(1.dp, 16.dp)
-                        .padding(start = 16.dp, end = 16.dp, top = 4.dp),
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
                 )
                 ContentState.None -> {}
             }
@@ -252,6 +253,26 @@ private fun LoadingPreviewLight() {
 @Composable
 private fun LoadingPreviewDark() {
     LoadingPreview()
+}
+
+@Preview(
+    name = "Short preview"
+)
+@Composable
+private fun ShortPreview() {
+    val argument = PostPageArgument(
+        title = "test title",
+        username = "test username",
+        avatarUrl = "",
+        id = "",
+        likeStatus = PostLikeStatus.LIKED,
+        bookmarkStatus = PostBookmarkStatus.BOOKMARKED
+    )
+    val content = "Short content"
+
+    val state = PostpageState(argument, ContentState.Success(content))
+
+    PreviewWithState(state = state)
 }
 
 @Composable
