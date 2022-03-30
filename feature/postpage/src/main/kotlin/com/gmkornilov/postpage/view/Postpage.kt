@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Chat
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
@@ -22,6 +26,8 @@ import com.gmkornilov.design.commons.buttons.LikeButton
 import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.ScrollableColumn
 import com.gmkornilov.design.components.UserAvatar
+import com.gmkornilov.design.modifiers.bottomBorder
+import com.gmkornilov.design.modifiers.topBorder
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.post.model.PostBookmarkStatus
 import com.gmkornilov.post.model.PostLikeStatus
@@ -63,24 +69,29 @@ private fun PostpageWithState(
                 title = state.argument.title,
                 username = state.argument.username,
                 avatarUrl = state.argument.avatarUrl,
+                modifier = Modifier.bottomBorder(1.dp, 16.dp)
             )
 
-            Divider()
+            Spacer(modifier = Modifier.size(8.dp))
 
             when (state.contentState) {
                 is ContentState.Error -> ContentError(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
+                        .topBorder(1.dp, 16.dp)
                 )
                 ContentState.Loading -> ContentLoading(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
+                        .topBorder(1.dp, 16.dp)
                 )
                 is ContentState.Success -> ContentSuccess(
                     contentState = state.contentState,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp),
+                    modifier = Modifier
+                        .topBorder(1.dp, 16.dp)
+                        .padding(start = 16.dp, end = 16.dp, top = 4.dp),
                 )
                 ContentState.None -> {}
             }
@@ -114,7 +125,10 @@ private fun ContentLoading(
 private fun ContentError(
     modifier: Modifier = Modifier,
 ) {
-    ErrorStateContainer(errorMessage = stringResource(R.string.post_content_error), modifier = modifier)
+    ErrorStateContainer(
+        errorMessage = stringResource(R.string.post_content_error),
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -122,8 +136,12 @@ private fun ContentSuccess(
     contentState: ContentState.Success,
     modifier: Modifier = Modifier,
 ) {
-    MaterialRichText(modifier = modifier) {
-        Markdown(content = contentState.content)
+    if (LocalInspectionMode.current) {
+        Text(contentState.content, color = MaterialTheme.colors.onSurface, modifier = modifier)
+    } else {
+        MaterialRichText(modifier = modifier) {
+            Markdown(content = contentState.content)
+        }
     }
 }
 

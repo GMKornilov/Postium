@@ -1,5 +1,8 @@
 package com.gmkornilov.design.modifiers
 
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -9,7 +12,24 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 
-fun Modifier.bottomBorder(strokeWidth: Dp, color: Color, cornerRadius: Dp): Modifier {
+data class BorderColors(
+    val borderColor: Color
+)
+
+@Composable
+fun defaultBorderColors(
+    borderColor: Color = MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
+): BorderColors {
+    return BorderColors(borderColor)
+}
+
+@Composable
+fun Modifier.bottomBorder(
+    strokeWidth: Dp,
+    cornerRadius: Dp,
+    colors: BorderColors = defaultBorderColors()
+): Modifier {
+    val color = colors.borderColor
     return this.drawWithContent {
         drawContent()
 
@@ -53,7 +73,9 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color, cornerRadius: Dp): Modi
     }
 }
 
-fun Modifier.topBorder(strokeWidth: Dp, color: Color, cornerRadius: Dp): Modifier {
+@Composable
+fun Modifier.topBorder(strokeWidth: Dp, cornerRadius: Dp, colors: BorderColors = defaultBorderColors()): Modifier {
+    val color = colors.borderColor
     return this.drawWithContent {
         drawContent()
 

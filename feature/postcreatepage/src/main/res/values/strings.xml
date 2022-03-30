@@ -6,6 +6,9 @@
     <string name="title_label">Название публикации</string>
     <string name="content_label">Содержимое публикации</string>
 
+    <string name="empty_title">&lt;название отсутствует&gt;</string>
+    <string name="empty_content">Содержимое отсутствует</string>
+
     <string name="dialog_confirm">Выйти</string>
     <string name="dialog_dismiss">Отмена</string>
     <string name="dialog_title">Вы точно хотите выйти?</string>

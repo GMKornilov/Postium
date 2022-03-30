@@ -169,20 +169,6 @@ private fun PostCreateWithState(
                         contentModifier
                     )
                 }
-//                when (val tabState = state.tabStates.getValue(tab)) {
-//                    is TabState.Error -> ErrorState(tab)
-//                    TabState.Loading -> LoadingState()
-//                    is TabState.Success -> if (tabState.posts.isNotEmpty()) {
-//                        SuccessState(
-//                            posts = tabState.posts,
-//                            userPageEvents = userPageEvents,
-//                            modifier = contentModifier
-//                        )
-//                    } else {
-//                        EmptyState(tab)
-//                    }
-//                    TabState.None -> {}
-//                }
             }
         }
 
@@ -227,7 +213,7 @@ private fun EditPost(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .bottomBorder(1.dp, MaterialTheme.colors.background, 16.dp),
+                .bottomBorder(1.dp, 16.dp),
         )
 
         Spacer(modifier = Modifier.size(8.dp))
@@ -245,7 +231,7 @@ private fun EditPost(
             ),
             modifier = Modifier
                 .fillMaxSize()
-                .topBorder(1.dp, MaterialTheme.colors.background, 16.dp),
+                .topBorder(1.dp, 16.dp),
         )
     }
 }
@@ -257,25 +243,43 @@ private fun PreviewPost(
     modifier: Modifier = Modifier,
 ) {
     ScrollableColumn(modifier = modifier) {
-        Text(
-            title,
-            color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.h4,
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.size(8.dp))
-
-        Divider()
-
-        Spacer(modifier = Modifier.size(8.dp))
-
-        if (LocalInspectionMode.current) {
-            Text(content, modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp))
+        val titleModifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+            .height(48.dp)
+            .bottomBorder(1.dp, 16.dp)
+        if (title.isNotBlank()) {
+            Text(
+                title,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onSurface,
+                style = MaterialTheme.typography.h4,
+                modifier = titleModifier,
+            )
         } else {
-            MaterialRichText(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp)) {
+            Text(
+                stringResource(R.string.empty_title),
+                textAlign = TextAlign.Center,
+                color = LocalContentColor.current.copy(ContentAlpha.disabled),
+                style = MaterialTheme.typography.subtitle1,
+                modifier = titleModifier,
+            )
+        }
+
+        Spacer(modifier = Modifier.size(8.dp))
+
+
+        val contentModifier = Modifier
+            .fillMaxWidth()
+            .topBorder(1.dp, 16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+        when {
+            content.isBlank() -> Text(
+                stringResource(R.string.empty_content),
+                modifier = contentModifier
+            )
+            LocalInspectionMode.current -> Text(content, modifier = contentModifier)
+            else -> MaterialRichText(modifier = contentModifier) {
                 Markdown(content = content)
             }
         }
@@ -285,24 +289,34 @@ private fun PreviewPost(
 @Preview
 @Composable
 private fun DefaultPreview() {
-    PostCreateWithStatePreview(state = PostCreateState())
+    PostCreateWithStatePreview()
 }
 
 @Preview
 @Composable
 private fun PreviewPreview() {
     PostCreateWithStatePreview(
-        state = PostCreateState(),
         title = "title",
         content = "content",
         startPage = 1,
     )
 }
 
+@Preview
+@Composable
+private fun EmptyPreview() {
+    PostCreateWithStatePreview(
+        state = PostCreateState(),
+        title = "",
+        content = "",
+        startPage = 2,
+    )
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun PostCreateWithStatePreview(
-    state: PostCreateState,
+    state: PostCreateState = PostCreateState(),
     title: String = "",
     content: String = "",
     startPage: Int = 0,
