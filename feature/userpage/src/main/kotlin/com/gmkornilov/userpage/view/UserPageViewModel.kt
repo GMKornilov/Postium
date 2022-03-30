@@ -158,7 +158,7 @@ internal class UserPageViewModel @Inject constructor(
     }
 
     override fun createPost() {
-        val screen = postCreatePageScreenFactory.build()
+        val screen = postCreatePageScreenFactory.build(router)
         router.addScreen(screen)
     }
 
