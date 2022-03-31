@@ -156,10 +156,21 @@ internal class UserPageViewModel @Inject constructor(
         listener.createPost()
     }
 
+    override fun refreshData() {
+        when (currentTab) {
+            Tab.POSTS -> loadUserPosts(true)
+            Tab.BOOKMARKS -> loadUserBookmarks(true)
+        }
+    }
+
     private fun getCurrentState() = this.container.stateFlow.value.getCurrentTabState()
 
-    private fun loadUserPosts() = intent {
-        reduce { this.state.changeTabState(Tab.POSTS, TabState.Loading) }
+    private fun loadUserPosts(isRefresh: Boolean = false) = intent {
+        if (isRefresh) {
+            reduce { this.state.copy(isRefresh = true) }
+        } else {
+            reduce { this.state.changeTabState(Tab.POSTS, TabState.Loading) }
+        }
 
         viewModelScope.launch {
             try {
@@ -172,8 +183,12 @@ internal class UserPageViewModel @Inject constructor(
         }
     }
 
-    private fun loadUserBookmarks() = intent {
-        reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Loading) }
+    private fun loadUserBookmarks(isRefresh: Boolean = false) = intent {
+        if (isRefresh) {
+            reduce { this.state.copy(isRefresh = true) }
+        } else {
+            reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Loading) }
+        }
 
         viewModelScope.launch {
             try {
@@ -209,11 +224,11 @@ internal class UserPageViewModel @Inject constructor(
 
     private fun UserPageState.getCurrentTabState() = this.tabStates.getValue(currentTab)
 
-    private fun UserPageState.changeTabState(tab: Tab, tabState: TabState): UserPageState {
+    private fun UserPageState.changeTabState(tab: Tab, tabState: TabState, isRefresh: Boolean = false): UserPageState {
         val newTabStates = this.tabStates.toMutableMap().apply {
             this[tab] = tabState
         }
-        return this.copy(tabStates = newTabStates)
+        return this.copy(tabStates = newTabStates, isRefresh = isRefresh)
     }
 }
 

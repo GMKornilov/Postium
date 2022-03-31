@@ -11,6 +11,8 @@ internal data class MainPageState(
     val lastWeekState: PostsState = PostsState.None,
 
     val currentRange: PostTimeRange = PostTimeRange.ALL_TIME,
+
+    val isRefresh: Boolean = false,
 ) {
     fun currentPageState(): PostsState {
         return when (currentRange) {

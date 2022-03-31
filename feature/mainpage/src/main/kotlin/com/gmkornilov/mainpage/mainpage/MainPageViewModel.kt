@@ -68,9 +68,13 @@ internal class MainPageViewModel @Inject constructor(
         }
     }
 
-    fun loadAllPosts() = intent {
+    fun loadAllPosts(isRefresh: Boolean = false) = intent {
         viewModelScope.launch {
-            reduce { changeCurrentSelectionState(this.state, PostsState.Loading) }
+            if (isRefresh) {
+                reduce { this.state.copy(isRefresh = true) }
+            } else {
+                reduce { changeCurrentSelectionState(this.state, PostsState.Loading) }
+            }
             try {
                 val posts = mainpageInteractor.loadDataWithTimeRange(this@intent.state.currentRange)
                 reduce { changeCurrentSelectionState(this.state, PostsState.Success(posts)) }
@@ -79,6 +83,10 @@ internal class MainPageViewModel @Inject constructor(
                 reduce { changeCurrentSelectionState(this.state, PostsState.Error(e)) }
             }
         }
+    }
+
+    override fun refreshData() {
+        loadAllPosts(true)
     }
 
     override fun selectTimeRange(postTimeRange: PostTimeRange) = intent {
@@ -140,12 +148,13 @@ internal class MainPageViewModel @Inject constructor(
 
     private fun changeCurrentSelectionState(
         state: MainPageState,
-        postsState: PostsState
+        postsState: PostsState,
+        isRefresh: Boolean = false,
     ): MainPageState {
         return when (state.currentRange) {
-            PostTimeRange.ALL_TIME -> state.copy(allTimeState = postsState)
-            PostTimeRange.DAY -> state.copy(lastDayState = postsState)
-            PostTimeRange.WEEK -> state.copy(lastWeekState = postsState)
+            PostTimeRange.ALL_TIME -> state.copy(allTimeState = postsState, isRefresh = isRefresh)
+            PostTimeRange.DAY -> state.copy(lastDayState = postsState, isRefresh = isRefresh)
+            PostTimeRange.WEEK -> state.copy(lastWeekState = postsState, isRefresh = isRefresh)
         }
     }
 }

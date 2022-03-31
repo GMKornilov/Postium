@@ -67,6 +67,8 @@ dependencies {
     implementation(Deps.Compose.UiToolingPreview)
     implementation(Deps.Compose.IconsExtended)
 
+    implementation(Deps.Compose.Accompanist.swipeRefresh)
+
     implementation(Deps.Compose.Icons.simple)
 
     implementation(Deps.Compose.Lottie.lottieCompose)

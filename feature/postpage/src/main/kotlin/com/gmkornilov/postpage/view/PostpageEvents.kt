@@ -11,6 +11,8 @@ internal interface PostpageEvents {
 
     fun bookmarkPost()
 
+    fun refreshData()
+
     companion object {
         val MOCK = object : PostpageEvents {
             override fun openComments() = Unit
@@ -18,6 +20,7 @@ internal interface PostpageEvents {
             override fun likePost() = Unit
             override fun dislikePost() = Unit
             override fun bookmarkPost() = Unit
+            override fun refreshData() = Unit
         }
     }
 }

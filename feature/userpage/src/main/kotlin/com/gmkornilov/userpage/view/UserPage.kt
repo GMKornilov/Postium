@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,6 +34,8 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Plus
 import kotlinx.coroutines.launch
@@ -169,20 +173,41 @@ private fun UserContent(
         ) { pageNumber ->
             val contentModifier = Modifier.fillMaxSize()
             val tab = pages[pageNumber]
-            when (val tabState = state.tabStates.getValue(tab)) {
-                is TabState.Error -> ErrorState(tab)
-                TabState.Loading -> LoadingState()
-                is TabState.Success -> if (tabState.posts.isNotEmpty()) {
-                    SuccessState(
-                        posts = tabState.posts,
-                        userPageEvents = userPageEvents,
-                        modifier = contentModifier,
-                        hideAvatar = tab == Tab.POSTS,
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(state.isRefresh),
+                onRefresh = { userPageEvents.refreshData() }
+            ) {
+                when (val tabState = state.tabStates.getValue(tab)) {
+                    is TabState.Error -> ErrorState(
+                        tab,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(
+                                rememberScrollState()
+                            )
                     )
-                } else {
-                    EmptyState(tab)
+                    TabState.Loading -> LoadingState(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    )
+                    is TabState.Success -> if (tabState.posts.isNotEmpty()) {
+                        SuccessState(
+                            posts = tabState.posts,
+                            userPageEvents = userPageEvents,
+                            modifier = contentModifier,
+                            hideAvatar = tab == Tab.POSTS,
+                        )
+                    } else {
+                        EmptyState(
+                            tab,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        )
+                    }
+                    TabState.None -> {}
                 }
-                TabState.None -> {}
             }
         }
     }

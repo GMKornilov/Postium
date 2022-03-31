@@ -1,9 +1,7 @@
 package com.gmkornilov.mainpage.mainpage
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,14 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.LottieProperty
-import com.airbnb.lottie.compose.*
 import com.gmkornilov.design.commons.posts.PostPreview
 import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
@@ -33,6 +27,8 @@ import com.gmkornilov.mainpage.R
 import com.gmkornilov.post.model.PostBookmarkStatus
 import com.gmkornilov.post.model.PostLikeStatus
 import com.gmkornilov.post.model.PostPreviewData
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -64,6 +60,8 @@ private fun MainpageWithState(
     val postsState = state.currentPageState()
 
     var menuExpanded by remember { mutableStateOf(false) }
+
+    val isRefreshing = state.isRefresh
 
     Column(modifier = modifier.background(MaterialTheme.colors.background)) {
         Row(
@@ -117,18 +115,34 @@ private fun MainpageWithState(
             }
         }
 
-        when (postsState) {
-            is PostsState.Loading -> LoadingState()
-            is PostsState.Error -> ErrorState()
-            is PostsState.Success -> if (postsState.items.isNotEmpty()) {
-                SuccessState(
-                    mainPageEvents = mainPageEvents,
-                    posts = postsState.items
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = { mainPageEvents.refreshData() },
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            when (postsState) {
+                is PostsState.Loading -> LoadingState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(
+                            rememberScrollState()
+                        )
                 )
-            } else {
-                EmptyState()
+                is PostsState.Error -> ErrorState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                )
+                is PostsState.Success -> if (postsState.items.isNotEmpty()) {
+                    SuccessState(
+                        mainPageEvents = mainPageEvents,
+                        posts = postsState.items
+                    )
+                } else {
+                    EmptyState()
+                }
+                else -> {}
             }
-            else -> {}
         }
     }
 }
@@ -136,9 +150,7 @@ private fun MainpageWithState(
 @Composable
 private fun LoadingState(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier = modifier.background(MaterialTheme.colors.surface)
     ) {
         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }

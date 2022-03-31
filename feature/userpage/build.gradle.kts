@@ -75,6 +75,7 @@ dependencies {
     implementation(Deps.Compose.Accompanist.pager)
     implementation(Deps.Compose.Accompanist.pagerIndicators)
     implementation(Deps.Compose.Accompanist.placeholderMaterial)
+    implementation(Deps.Compose.Accompanist.swipeRefresh)
 
     implementation(Deps.Navigation.brickNavigation)
 

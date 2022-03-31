@@ -8,6 +8,7 @@ internal data class UserPageState(
     val headerState: HeaderState = HeaderState(),
     val tabStates: Map<Tab, TabState> = Tab.values().map { it to TabState.None }.toMap(),
     val createPostButtonVisible: Boolean = false,
+    val isRefresh: Boolean = false,
 )
 
 data class HeaderState(

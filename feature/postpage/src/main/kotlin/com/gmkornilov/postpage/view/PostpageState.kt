@@ -4,7 +4,8 @@ import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 
 internal data class PostpageState(
     val argument: PostPageArgument,
-    val contentState: ContentState
+    val contentState: ContentState,
+    val isRefresh: Boolean = false,
 )
 
 internal sealed class ContentState {

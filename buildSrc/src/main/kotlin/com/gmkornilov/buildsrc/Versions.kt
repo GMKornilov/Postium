@@ -73,6 +73,8 @@ object Versions {
             const val pagerIndicators = "0.22.0-rc"
 
             const val placeholder = "0.22.0-rc"
+
+            const val swipeRefresh = "0.22.0-rc"
         }
 
         object Images {

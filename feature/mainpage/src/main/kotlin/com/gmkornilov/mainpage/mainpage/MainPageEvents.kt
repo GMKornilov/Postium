@@ -3,6 +3,8 @@ package com.gmkornilov.mainpage.mainpage
 import com.gmkornilov.post.model.PostPreviewData
 
 internal interface MainPageEvents {
+    fun refreshData()
+
     fun selectTimeRange(postTimeRange: PostTimeRange)
 
     fun openPost(post: PostPreviewData)
@@ -17,6 +19,7 @@ internal interface MainPageEvents {
 
     companion object {
         val MOCK = object : MainPageEvents {
+            override fun refreshData() = Unit
             override fun selectTimeRange(postTimeRange: PostTimeRange) = Unit
             override fun openPost(post: PostPreviewData) = Unit
             override fun openProfile(post: PostPreviewData) = Unit

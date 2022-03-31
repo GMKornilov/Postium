@@ -68,6 +68,8 @@ dependencies {
 
     implementation(Deps.Compose.Icons.simple)
 
+    implementation(Deps.Compose.Accompanist.swipeRefresh)
+
     implementation(Deps.Compose.Lottie.lottieCompose)
 
     implementation(Deps.Compose.Richtext.materialUi)

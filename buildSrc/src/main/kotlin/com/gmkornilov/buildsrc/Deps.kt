@@ -58,6 +58,9 @@ object Deps {
 
             const val placeholderMaterial =
                 "com.google.accompanist:accompanist-placeholder-material:${Versions.Compose.Accompanist.placeholder}"
+
+            const val swipeRefresh =
+                "com.google.accompanist:accompanist-swiperefresh:${Versions.Compose.Accompanist.swipeRefresh}"
         }
 
         object Images {

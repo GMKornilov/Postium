@@ -76,16 +76,24 @@ internal class PostpageViewModel @Inject constructor(
         }
     }
 
-    fun loadContent() = intent {
-        reduce { this.state.copy(contentState = ContentState.Loading) }
-
+    fun loadContent(isRefresh: Boolean = false) = intent {
+        if (isRefresh) {
+            reduce { this.state.copy(isRefresh = true) }
+        } else {
+            reduce { this.state.copy(contentState = ContentState.Loading) }
+        }
         viewModelScope.launch {
             try {
                 val content = postPageInteractor.loadContent(postPageArgument.id)
-                reduce { this.state.copy(contentState = ContentState.Success(content)) }
+                reduce {
+                    this.state.copy(
+                        contentState = ContentState.Success(content),
+                        isRefresh = false,
+                    )
+                }
             } catch (e: Exception) {
                 Timber.e(e)
-                reduce { this.state.copy(contentState = ContentState.Error(e)) }
+                reduce { this.state.copy(contentState = ContentState.Error(e), isRefresh = false) }
             }
         }
     }
@@ -119,6 +127,10 @@ internal class PostpageViewModel @Inject constructor(
         currentUser?.let {
             bookmarkUserHandler.handleResult(currentUser)
         } ?: listener.startAuthorizationFlow(bookmarkUserHandler)
+    }
+
+    override fun refreshData() {
+        loadContent(true)
     }
 }
 

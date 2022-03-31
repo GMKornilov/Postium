@@ -1,10 +1,9 @@
 package com.gmkornilov.postpage.view
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Chat
@@ -25,7 +24,6 @@ import com.gmkornilov.design.commons.buttons.BookmarkButton
 import com.gmkornilov.design.commons.buttons.DislikeButton
 import com.gmkornilov.design.commons.buttons.LikeButton
 import com.gmkornilov.design.components.ErrorStateContainer
-import com.gmkornilov.design.components.ScrollableColumn
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.modifiers.bottomBorder
 import com.gmkornilov.design.modifiers.topBorder
@@ -34,6 +32,8 @@ import com.gmkornilov.post.model.PostBookmarkStatus
 import com.gmkornilov.post.model.PostLikeStatus
 import com.gmkornilov.postpage.R
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material.MaterialRichText
 
@@ -61,42 +61,54 @@ private fun PostpageWithState(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
-        ScrollableColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize()
+        SwipeRefresh(state = rememberSwipeRefreshState(state.isRefresh),
+            onRefresh = { postpageEvents.refreshData() }
         ) {
-            PostHeader(
-                title = state.argument.title,
-                username = state.argument.username,
-                avatarUrl = state.argument.avatarUrl,
-                postpageEvents = postpageEvents,
-                modifier = Modifier.bottomBorder(1.dp, 16.dp)
-            )
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+            ) {
+                item {
+                    PostHeader(
+                        title = state.argument.title,
+                        username = state.argument.username,
+                        avatarUrl = state.argument.avatarUrl,
+                        postpageEvents = postpageEvents,
+                        modifier = Modifier.bottomBorder(1.dp, 16.dp)
+                    )
+                }
 
-            Spacer(modifier = Modifier.size(8.dp))
+                item {
+                    Spacer(modifier = Modifier.size(8.dp))
+                }
 
-            when (state.contentState) {
-                is ContentState.Error -> ContentError(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                        .topBorder(1.dp, 16.dp)
-                )
-                ContentState.Loading -> ContentLoading(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                        .topBorder(1.dp, 16.dp)
-                )
-                is ContentState.Success -> ContentSuccess(
-                    contentState = state.contentState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .topBorder(1.dp, 16.dp)
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                )
-                ContentState.None -> {}
+                item {
+                    when (state.contentState) {
+                        is ContentState.Error -> ContentError(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                                .weight(1f)
+                                .topBorder(1.dp, 16.dp)
+                                .verticalScroll(rememberScrollState())
+                        )
+                        is ContentState.Loading -> ContentLoading(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                                .weight(1f)
+                                .topBorder(1.dp, 16.dp)
+                                .verticalScroll(rememberScrollState())
+                        )
+                        is ContentState.Success -> ContentSuccess(
+                            contentState = state.contentState,
+                            modifier = Modifier
+                                .fillParentMaxWidth()
+                                .topBorder(1.dp, 16.dp)
+                                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        )
+                        ContentState.None -> {}
+                    }
+                }
             }
         }
 
