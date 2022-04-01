@@ -1,10 +1,10 @@
-package com.gmkornilov.post_comments.repostiory
+package com.gmkornilov.comments.repostiory
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.comment_likes.repository.CommentLikesRepository
-import com.gmkornilov.post_comments.model.CommentLikeStatus
-import com.gmkornilov.post_comments.model.CommentPreviewData
-import com.gmkornilov.post_comments.model.toCommentLikeStatus
+import com.gmkornilov.comments.model.CommentLikeStatus
+import com.gmkornilov.comments.model.CommentPreviewData
+import com.gmkornilov.comments.model.toCommentLikeStatus
 import com.gmkornilov.post_comments.repository.PostCommentRepository
 import com.gmkornilov.user.repository.UserRepository
 import javax.inject.Inject

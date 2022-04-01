@@ -6,9 +6,13 @@ import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
+import com.gmkornilov.commentpage.brick_navigation.PostCommentArgument
+import com.gmkornilov.commentpage.brick_navigation.PostCommentPageFactory
+import com.gmkornilov.commentpage.view.CommentpageListener
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.post.model.PostPreviewData
+import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
@@ -32,8 +36,9 @@ class RootViewModel @Inject constructor(
     private val userPageScreenFactory: UserPageScreenFactory,
     private val postCreatePageScreenFactory: PostCreatePageScreenFactory,
     private val mainpageScreenFactory: MainpageScreenFactory,
+    private val commentScreenFactory: PostCommentPageFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
-    PostCreateListener {
+    PostCreateListener, CommentpageListener {
     private val routerIndexFlow = MutableStateFlow(0)
 
     private val currentRouter
@@ -78,6 +83,12 @@ class RootViewModel @Inject constructor(
         authorizationFlowScreenFactory.start(userResultHandler, currentRouter)
     }
 
+    override fun openUserProfile(comment: CommentPreviewData) {
+        val userPageArgument = comment.toUserPageArgument()
+        val screen = userPageScreenFactory.build(this, userPageArgument, currentKey)
+        currentRouter.addScreen(screen)
+    }
+
     override fun openPost(postPreviewData: PostPreviewData) {
         val argument = postPreviewData.toPostPageArgument()
         val screen = postPageScreenFactory.build(this, argument, currentKey)
@@ -87,6 +98,12 @@ class RootViewModel @Inject constructor(
     override fun openUserProfile(postPreviewData: PostPreviewData) {
         val userPageArgument = postPreviewData.toUserPageArgument()
         val screen = userPageScreenFactory.build(this, userPageArgument, currentKey)
+        currentRouter.addScreen(screen)
+    }
+
+    override fun openComments(postId: String) {
+        val commentPageArgument = PostCommentArgument(postId)
+        val screen = commentScreenFactory.build(commentPageArgument, currentKey)
         currentRouter.addScreen(screen)
     }
 

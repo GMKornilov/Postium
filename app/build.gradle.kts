@@ -59,18 +59,22 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:activity-utils"))
     implementation(project(":core:post"))
+    implementation(project(":core:post_comments"))
 
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))
     implementation(project(":data:post_bookmarks"))
     implementation(project(":data:post_contents"))
     implementation(project(":data:user"))
+    implementation(project(":data:post_comments"))
+    implementation(project(":data:comment_likes"))
 
     implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))
     implementation(project(":feature:postpage"))
     implementation(project(":feature:userpage"))
     implementation(project(":feature:postcreatepage"))
+    implementation(project(":feature:commentpage"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)

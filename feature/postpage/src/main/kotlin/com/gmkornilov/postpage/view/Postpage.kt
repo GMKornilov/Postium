@@ -61,14 +61,12 @@ private fun PostpageWithState(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
-        SwipeRefresh(state = rememberSwipeRefreshState(state.isRefresh),
-            onRefresh = { postpageEvents.refreshData() }
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(state.isRefresh),
+            onRefresh = { postpageEvents.refreshData() },
+            modifier = Modifier.weight(1f),
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize()
-            ) {
+            LazyColumn {
                 item {
                     PostHeader(
                         title = state.argument.title,

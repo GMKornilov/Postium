@@ -1,8 +1,8 @@
 package com.gmkornilov.commentpage.view
 
-import com.gmkornilov.post_comments.model.CommentPreviewData
+import com.gmkornilov.comments.model.CommentPreviewData
 
-interface CommentPageEvents {
+internal interface CommentPageEvents {
     fun likeComment(comment: CommentPreviewData)
 
     fun dislikeComment(comment: CommentPreviewData)

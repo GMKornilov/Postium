@@ -1,12 +1,12 @@
 package com.gmkornilov.commentpage.domain
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.post_comments.model.CommentLikeStatus
-import com.gmkornilov.post_comments.model.CommentPreviewData
-import com.gmkornilov.post_comments.repostiory.CommentRepository
+import com.gmkornilov.comments.model.CommentLikeStatus
+import com.gmkornilov.comments.model.CommentPreviewData
+import com.gmkornilov.comments.repostiory.CommentRepository
 import javax.inject.Inject
 
-class CommentPageInteractor @Inject constructor(
+internal class CommentPageInteractor @Inject constructor(
     private val commentRepository: CommentRepository,
     private val authInteractor: AuthInteractor,
 ) {

@@ -5,7 +5,7 @@ import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.commentpage.brick_navigation.PostCommentArgument
 import com.gmkornilov.commentpage.domain.CommentPageInteractor
 import com.gmkornilov.letIf
-import com.gmkornilov.post_comments.model.CommentPreviewData
+import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -99,7 +99,7 @@ internal class CommentPageViewModel @Inject constructor(
     }
 
     override fun openProfile(comment: CommentPreviewData) {
-        listener.openProfile(comment)
+        listener.openUserProfile(comment)
     }
 
     override fun reloadData() {
@@ -156,5 +156,5 @@ internal class CommentPageViewModel @Inject constructor(
 interface CommentpageListener {
     fun startAuthorizationFlow(userResultHandler: UserResultHandler)
 
-    fun openProfile(comment: CommentPreviewData)
+    fun openUserProfile(comment: CommentPreviewData)
 }

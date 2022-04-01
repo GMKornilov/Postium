@@ -19,17 +19,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.LightGray
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.gmkornilov.commentpage.R
+import com.gmkornilov.comments.model.CommentLikeStatus
+import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.design.commons.posts.Comment
 import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.theme.PostiumTheme
-import com.gmkornilov.post_comments.model.CommentLikeStatus
-import com.gmkornilov.post_comments.model.CommentPreviewData
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.derivedWindowInsetsTypeOf
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import compose.icons.TablerIcons
@@ -42,6 +46,10 @@ internal fun CommentPage(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.loadData()
+    }
 
     CommentPageWithState(state = state, commentPageEvents = viewModel, modifier = modifier)
 }
@@ -87,12 +95,20 @@ private fun CommentPageWithState(
             }
         }
 
+        val inset = LocalWindowInsets.current.ime
+
+        // FIXME: magical constant of navigation bar height
+        val bottomPadding = with (LocalDensity.current) {
+            max(inset.bottom.toDp() - 56.dp, 0.dp)
+        }
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.surface)
-                .height(IntrinsicSize.Min),
+                .height(IntrinsicSize.Min)
+                .padding(bottom = bottomPadding),
         ) {
             BasicTextField(
                 value = enteredComment,
@@ -102,7 +118,6 @@ private fun CommentPageWithState(
                     .weight(1f)
                     .align(Alignment.Top)
                     .fillMaxHeight(),
-                maxLines = 4,
             ) { innerTextField ->
                 Box(
                     modifier = Modifier

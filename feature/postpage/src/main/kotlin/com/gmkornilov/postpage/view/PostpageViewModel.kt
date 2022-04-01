@@ -99,6 +99,7 @@ internal class PostpageViewModel @Inject constructor(
     }
 
     override fun openComments() {
+        listener.openComments(postPageArgument.id)
     }
 
     override fun openProfile() {
@@ -138,4 +139,6 @@ interface PostpageListener {
     fun startAuthorizationFlow(userResultHandler: UserResultHandler)
 
     fun openUserProfile(postPreviewData: PostPreviewData)
+
+    fun openComments(postId: String)
 }

@@ -1,4 +1,4 @@
-package com.gmkornilov.post_comments.model
+package com.gmkornilov.comments.model
 
 import com.gmkornilov.comment_likes.model.CommentLikeStatus as DataLikeStatus
 

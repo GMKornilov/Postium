@@ -1,4 +1,4 @@
-package com.gmkornilov.post_comments.model
+package com.gmkornilov.comments.model
 
 data class CommentPreviewData(
     val id: String,

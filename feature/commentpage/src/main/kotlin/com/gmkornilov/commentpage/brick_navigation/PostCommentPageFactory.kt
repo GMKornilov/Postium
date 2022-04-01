@@ -12,7 +12,7 @@ import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.commentpage.view.CommentPage
 import com.gmkornilov.commentpage.view.CommentPageViewModel
 import com.gmkornilov.commentpage.view.CommentpageListener
-import com.gmkornilov.post_comments.repostiory.CommentRepository
+import com.gmkornilov.comments.repostiory.CommentRepository
 import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
 import kotlinx.coroutines.flow.SharedFlow

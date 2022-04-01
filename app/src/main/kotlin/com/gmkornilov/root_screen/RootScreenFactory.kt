@@ -14,6 +14,8 @@ import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
+import com.gmkornilov.commentpage.brick_navigation.PostCommentPageFactory
+import com.gmkornilov.commentpage.view.CommentpageListener
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
@@ -92,7 +94,8 @@ class RootScreenFactory @Inject constructor(
         MainpageScreenFactory.Deps,
         PostPageScreenFactory.Deps,
         UserPageScreenFactory.Deps,
-        PostCreatePageScreenFactory.Deps {
+        PostCreatePageScreenFactory.Deps,
+        PostCommentPageFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -136,6 +139,10 @@ class RootScreenFactory @Inject constructor(
         @RootScope
         @Binds
         fun postpageListener(rootViewModel: RootViewModel): PostpageListener
+
+        @RootScope
+        @Binds
+        fun commentpageListener(rootViewModel: RootViewModel): CommentpageListener
     }
 
     @Module
@@ -159,5 +166,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindCreatePostDeps(component: Component): PostCreatePageScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindCommentDeps(component: Component): PostCommentPageFactory.Deps
     }
 }
