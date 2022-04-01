@@ -66,7 +66,7 @@ class PostRepository @Inject constructor(
                 title = post.title,
                 userId = post.userReference!!.id,
                 username = user.name,
-                avatarUrl = user.avatarUrl?.ifEmpty { null },
+                avatarUrl = user.avatarUrl?.ifBlank { null },
                 likeStatus = postLikeStatuses[post.id].toPostLikeStatus(),
                 bookmarkStatus = postBookmarkStatuses[post.id].toPostBookmarkStatus(),
             )
@@ -86,7 +86,7 @@ class PostRepository @Inject constructor(
     }
 
     suspend fun setBookmarkStatus(postId: String, bookmarkStatus: PostBookmarkStatus) {
-        if (postId.isEmpty()) {
+        if (postId.isBlank()) {
             return
         }
         val currentUser = authInteractor.getPostiumUser() ?: return

@@ -56,7 +56,7 @@ fun UserAvatar(
     } else {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
+            modifier = modifier
                 .size(LocalAvatarSize.current)
                 .clip(CircleShape)
                 .border(1.dp, MaterialTheme.colors.onSurface, CircleShape),
