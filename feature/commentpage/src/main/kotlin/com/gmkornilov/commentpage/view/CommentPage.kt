@@ -2,6 +2,7 @@ package com.gmkornilov.commentpage.view
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,10 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,11 +31,12 @@ import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.theme.PostiumTheme
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.derivedWindowInsetsTypeOf
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import compose.icons.TablerIcons
 import compose.icons.tablericons.MessageCircle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -47,11 +46,44 @@ internal fun CommentPage(
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    var enteredComment by remember { mutableStateOf("") }
+    val onCommentChanged = { comment: String -> enteredComment = comment }
+
     LaunchedEffect(viewModel) {
         viewModel.loadData()
+
+        viewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is CommentPageSideEffect.ShowSnackbar -> showError(
+                    it.message,
+                    scope,
+                    snackbarHostState
+                )
+                CommentPageSideEffect.ClearTextField -> enteredComment = ""
+            }
+        }
     }
 
-    CommentPageWithState(state = state, commentPageEvents = viewModel, modifier = modifier)
+    CommentPageWithState(
+        state = state,
+        commentPageEvents = viewModel,
+        enteredComment = enteredComment,
+        onCommentChanged = onCommentChanged,
+        modifier = modifier
+    )
+}
+
+private fun showError(
+    message: String,
+    coroutineScope: CoroutineScope,
+    snackbarHostState: SnackbarHostState
+) {
+    coroutineScope.launch {
+        snackbarHostState.showSnackbar(message = message)
+    }
 }
 
 @ExperimentalFoundationApi
@@ -59,11 +91,10 @@ internal fun CommentPage(
 private fun CommentPageWithState(
     state: CommentPageState,
     commentPageEvents: CommentPageEvents,
+    enteredComment: String,
+    onCommentChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var enteredComment by remember { mutableStateOf("") }
-    val onCommentChanged = { comment: String -> enteredComment = comment }
-
     Column(modifier = modifier) {
         val contentModifier = Modifier
             .weight(1f)
@@ -98,7 +129,7 @@ private fun CommentPageWithState(
         val inset = LocalWindowInsets.current.ime
 
         // FIXME: magical constant of navigation bar height
-        val bottomPadding = with (LocalDensity.current) {
+        val bottomPadding = with(LocalDensity.current) {
             max(inset.bottom.toDp() - 56.dp, 0.dp)
         }
 
@@ -200,7 +231,9 @@ private fun ContentState(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = bottomPadding)
-                    .animateItemPlacement(),
+                    .animateItemPlacement(
+                        animationSpec = tween(600)
+                    ),
             )
         }
     }
@@ -251,6 +284,8 @@ private fun CommentWithStatePreview(state: CommentPageState) {
         CommentPageWithState(
             state = state,
             commentPageEvents = CommentPageEvents,
+            enteredComment = "",
+            onCommentChanged = {},
             modifier = Modifier.fillMaxSize(),
         )
     }

@@ -2,4 +2,6 @@
 <resources>
     <string name="comments_error">Не удалось загрузить комментарии к публикации.</string>
     <string name="comments_empty">Не нашло комментариев к публикации. Будьте первыми!</string>
+
+    <string name="comment_send_error">Не удалось отправить комментарий</string>
 </resources>

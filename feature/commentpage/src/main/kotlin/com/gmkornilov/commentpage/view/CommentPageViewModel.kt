@@ -4,11 +4,13 @@ import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.commentpage.brick_navigation.PostCommentArgument
 import com.gmkornilov.commentpage.domain.CommentPageInteractor
+import com.gmkornilov.commentpage.domain.CommentPageStringProvider
 import com.gmkornilov.letIf
 import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,7 +20,8 @@ internal class CommentPageViewModel @Inject constructor(
     private val commentPageInteractor: CommentPageInteractor,
     private val authInteractor: AuthInteractor,
     private val listener: CommentpageListener,
-) : BaseViewModel<CommentPageState, Unit>(), CommentPageEvents {
+    private val stringProvider: CommentPageStringProvider,
+) : BaseViewModel<CommentPageState, CommentPageSideEffect>(), CommentPageEvents {
     private fun getLikeUserHandler(comment: CommentPreviewData) = UserResultHandler {
         intent {
             val newLikeStatus = comment.likeStatus.toOppositeLikeStatus()
@@ -121,9 +124,11 @@ internal class CommentPageViewModel @Inject constructor(
                         { it.listState }
                     )
                 reduce { this.state.copy(sendCommentState = SendCommentState.None, listState = newListState) }
+                postSideEffect(CommentPageSideEffect.ClearTextField)
             } catch (e: Exception) {
                 Timber.e(e)
                 reduce { this.state.copy(sendCommentState = SendCommentState.None) }
+                postSideEffect(CommentPageSideEffect.ShowSnackbar(stringProvider.getSendCommentError()))
             }
         }
     }

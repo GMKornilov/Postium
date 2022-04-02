@@ -13,6 +13,7 @@ import com.gmkornilov.commentpage.view.CommentPage
 import com.gmkornilov.commentpage.view.CommentPageViewModel
 import com.gmkornilov.commentpage.view.CommentpageListener
 import com.gmkornilov.comments.repostiory.CommentRepository
+import com.gmkornilov.strings.StringsProvider
 import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
 import kotlinx.coroutines.flow.SharedFlow
@@ -56,6 +57,7 @@ class PostCommentPageFactory @Inject constructor(
         val commentRepository: CommentRepository
         val authInteractor: AuthInteractor
         val commentpageListener: CommentpageListener
+        val stringsProvider: StringsProvider
     }
 
     @dagger.Component(
