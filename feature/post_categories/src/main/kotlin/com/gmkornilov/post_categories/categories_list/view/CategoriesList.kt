@@ -130,8 +130,7 @@ private fun SuccessState(
                 key(category.id) {
                     Chip(
                         text = category.name,
-                        isSelectable = false,
-                        onSelected = { categoriesEvents.openCategory(category) }
+                        onCLick = { categoriesEvents.openCategory(category) }
                     )
                 }
             }

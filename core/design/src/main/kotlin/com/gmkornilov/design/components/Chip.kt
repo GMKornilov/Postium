@@ -26,9 +26,31 @@ import compose.icons.tablericons.Checks
 fun Chip(
     text: String,
     modifier: Modifier = Modifier,
-    isSelectable: Boolean = true,
-    isSelected: Boolean = false,
-    onSelected: (Boolean) -> Unit = {},
+    onCLick: () -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colors.primary)
+            .clickable { onCLick() }
+            .padding(horizontal = 12.dp),
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.onPrimary,
+            modifier = Modifier.padding(top = 4.dp, bottom = 6.dp, end = 16.dp, start = 16.dp)
+        )
+    }
+}
+
+@Composable
+fun SelectableChip(
+    text: String,
+    isSelected: Boolean,
+    onSelected: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val background by animateColorAsState(
         if (isSelected) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
@@ -41,9 +63,9 @@ fun Chip(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(8.dp))
             .background(background)
-            .optionalClickable(isSelectable) { onSelected(!isSelected) }
+            .clickable { onSelected(!isSelected) }
             .padding(horizontal = 12.dp),
     ) {
         AnimatedVisibility(visible = isSelected) {
@@ -59,15 +81,11 @@ fun Chip(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
             color = textColor,
-            modifier = Modifier.padding(top = 8.dp, bottom = 12.dp, end = 16.dp, start = startPadding)
+            modifier = Modifier.padding(top = 4.dp, bottom = 6.dp, end = 16.dp, start = startPadding)
         )
     }
-}
-
-private fun Modifier.optionalClickable(isClickable: Boolean, onCLick: () -> Unit): Modifier {
-    return if (isClickable) this.clickable { onCLick() } else this
 }
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_NO)
@@ -75,11 +93,11 @@ private fun Modifier.optionalClickable(isClickable: Boolean, onCLick: () -> Unit
 private fun ChipPreview() {
     PostiumTheme {
         Row {
-            Chip("test", isSelected = true)
+            SelectableChip("test", isSelected = true, {})
 
             Spacer(Modifier.size(4.dp))
 
-            Chip("test", isSelected = false)
+            SelectableChip("test", isSelected = false, {})
         }
     }
 }
@@ -89,11 +107,11 @@ private fun ChipPreview() {
 private fun ChipPreviewDark() {
     PostiumTheme {
         Row {
-            Chip("test", isSelected = true)
+            SelectableChip("test", isSelected = true, {})
 
             Spacer(Modifier.size(4.dp))
 
-            Chip("test", isSelected = false)
+            SelectableChip("test", isSelected = false, {})
         }
     }
 }
