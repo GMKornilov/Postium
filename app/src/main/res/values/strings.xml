@@ -3,4 +3,5 @@
 
     <string name="home_tab">Главная</string>
     <string name="profile_tab">Профиль</string>
+    <string name="category_tab">Категории</string>
 </resources>

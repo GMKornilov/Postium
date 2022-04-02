@@ -4,8 +4,10 @@ import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
+import com.gmkornilov.bottom_navigation_items.CategoriesBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
+import com.gmkornilov.categories.model.Category
 import com.gmkornilov.commentpage.brick_navigation.PostCommentArgument
 import com.gmkornilov.commentpage.brick_navigation.PostCommentPageFactory
 import com.gmkornilov.commentpage.view.CommentpageListener
@@ -13,6 +15,8 @@ import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.comments.model.CommentPreviewData
+import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
+import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
@@ -31,6 +35,7 @@ class RootViewModel @Inject constructor(
 
     private val authInteractor: AuthInteractor,
 
+    private val categoriesListScreenFactory: CategoriesListScreenFactory,
     private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
     private val postPageScreenFactory: PostPageScreenFactory,
     private val userPageScreenFactory: UserPageScreenFactory,
@@ -38,7 +43,7 @@ class RootViewModel @Inject constructor(
     private val mainpageScreenFactory: MainpageScreenFactory,
     private val commentScreenFactory: PostCommentPageFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
-    PostCreateListener, CommentpageListener {
+    PostCreateListener, CommentpageListener, CategoriesListener {
     private val routerIndexFlow = MutableStateFlow(0)
 
     private val currentRouter
@@ -72,6 +77,11 @@ class RootViewModel @Inject constructor(
                     user?.let {
                         userProfileResultHandler.handleResult(user)
                     } ?: startAuthorizationFlow(userProfileResultHandler)
+                }
+                is CategoriesBottomNavigationItem -> {
+                    item.router.newRootScreen(
+                        categoriesListScreenFactory.build(currentKey)
+                    )
                 }
             }
         }
@@ -120,5 +130,9 @@ class RootViewModel @Inject constructor(
 
     override fun getBaseState(): RootState {
         return RootState(0, bottomNavigationItems.first().router)
+    }
+
+    override fun openCategory(category: Category) {
+        TODO("Not yet implemented")
     }
 }

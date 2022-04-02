@@ -9,6 +9,7 @@ import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
 import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
+import com.gmkornilov.bottom_navigation_items.CategoriesBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
 import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
 import com.gmkornilov.brick_navigation.BaseScreen
@@ -18,6 +19,8 @@ import com.gmkornilov.commentpage.brick_navigation.PostCommentPageFactory
 import com.gmkornilov.commentpage.view.CommentpageListener
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
+import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
+import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
@@ -95,7 +98,8 @@ class RootScreenFactory @Inject constructor(
         PostPageScreenFactory.Deps,
         UserPageScreenFactory.Deps,
         PostCreatePageScreenFactory.Deps,
-        PostCommentPageFactory.Deps {
+        PostCommentPageFactory.Deps,
+        CategoriesListScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -119,9 +123,14 @@ class RootScreenFactory @Inject constructor(
             @RootScope
             fun bottomNavigationItems(
                 homeBottomNavigationItem: HomeBottomNavigationItem,
+                categoriesBottomNavigationItem: CategoriesBottomNavigationItem,
                 profileBottomNavigationItem: ProfileBottomNavigationItem
             ): List<BottomNavigationItem> {
-                return listOf(homeBottomNavigationItem, profileBottomNavigationItem)
+                return listOf(
+                    homeBottomNavigationItem,
+                    categoriesBottomNavigationItem,
+                    profileBottomNavigationItem
+                )
             }
         }
     }
@@ -143,6 +152,10 @@ class RootScreenFactory @Inject constructor(
         @RootScope
         @Binds
         fun commentpageListener(rootViewModel: RootViewModel): CommentpageListener
+
+        @RootScope
+        @Binds
+        fun categoryListener(rootViewModel: RootViewModel): CategoriesListener
     }
 
     @Module
@@ -170,5 +183,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindCommentDeps(component: Component): PostCommentPageFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindCategories(component: Component): CategoriesListScreenFactory.Deps
     }
 }

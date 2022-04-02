@@ -66,6 +66,7 @@ dependencies {
     implementation(project(":data:post_bookmarks"))
     implementation(project(":data:post_contents"))
     implementation(project(":data:user"))
+    implementation(project(":data:categories"))
     implementation(project(":data:post_comments"))
     implementation(project(":data:comment_likes"))
 
@@ -75,6 +76,7 @@ dependencies {
     implementation(project(":feature:userpage"))
     implementation(project(":feature:postcreatepage"))
     implementation(project(":feature:commentpage"))
+    implementation(project(":feature:post_categories"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
@@ -92,6 +94,8 @@ dependencies {
 
     implementation(Deps.MVI.Orbit.core)
     implementation(Deps.MVI.Orbit.testing)
+
+    implementation(Deps.Compose.Icons.tabler)
 
     implementation(Deps.Navigation.composeNavigation)
     implementation(Deps.Navigation.brickNavigation)

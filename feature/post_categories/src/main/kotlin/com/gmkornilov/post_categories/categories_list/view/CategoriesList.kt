@@ -4,12 +4,15 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -101,21 +104,36 @@ private fun SuccessState(
     categoriesEvents: CategoriesEvents,
     modifier: Modifier = Modifier
 ) {
-    FlowRow(
-        mainAxisSpacing = 8.dp,
-        crossAxisSpacing = 12.dp,
-        mainAxisAlignment = FlowMainAxisAlignment.Start,
+    Column(
         modifier = modifier
             .background(MaterialTheme.colors.surface)
             .padding(8.dp),
     ) {
-        state.forEach { category ->
-            key(category.id) {
-                Chip(
-                    text = category.name,
-                    isSelectable = false,
-                    onSelected = { categoriesEvents.openCategory(category) }
-                )
+        Text(
+            stringResource(R.string.categories_title),
+            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.h4,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 8.dp, bottom = 8.dp),
+        )
+
+        Divider()
+
+        FlowRow(
+            mainAxisSpacing = 8.dp,
+            crossAxisSpacing = 12.dp,
+            mainAxisAlignment = FlowMainAxisAlignment.Start,
+            modifier = Modifier.padding(top = 12.dp)
+        ) {
+            state.forEach { category ->
+                key(category.id) {
+                    Chip(
+                        text = category.name,
+                        isSelectable = false,
+                        onSelected = { categoriesEvents.openCategory(category) }
+                    )
+                }
             }
         }
     }
