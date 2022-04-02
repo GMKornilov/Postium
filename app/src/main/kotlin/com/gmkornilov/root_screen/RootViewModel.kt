@@ -60,11 +60,6 @@ class RootViewModel @Inject constructor(
     init {
         Timber.log(Log.ERROR, "new root view model")
         Thread.dumpStack()
-        viewModelScope.launch {
-            this@RootViewModel.container.stateFlow.onEach {
-                Timber.log(Log.ERROR, "$it")
-            }.collect()
-        }
     }
 
     private val currentRouter

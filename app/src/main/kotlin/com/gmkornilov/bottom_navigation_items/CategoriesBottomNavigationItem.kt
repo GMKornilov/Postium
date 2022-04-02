@@ -6,14 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.postium.R
-import com.gmkornilov.root_screen.RootScreenFactory
+import com.gmkornilov.root_screen.ROOT_KEY
 import compose.icons.TablerIcons
 import compose.icons.tablericons.LayoutGrid
 import javax.inject.Inject
 
 class CategoriesBottomNavigationItem @Inject constructor(
     rootRouter: TreeRouter,
-    bottomNavigationScreenFactory: RootScreenFactory,
 ): BottomNavigationItem {
     @Composable
     override fun IconComposable() {
@@ -25,5 +24,5 @@ class CategoriesBottomNavigationItem @Inject constructor(
         Text(stringResource(R.string.category_tab))
     }
 
-    override val router: TreeRouter = rootRouter.branch(bottomNavigationScreenFactory.screenKey)
+    override val router: TreeRouter = rootRouter.branch(ROOT_KEY)
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.postium.R
-import com.gmkornilov.root_screen.RootScreenFactory
+import com.gmkornilov.root_screen.ROOT_KEY
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -21,7 +21,6 @@ import javax.inject.Inject
 class ProfileBottomNavigationItem @Inject constructor(
     private val authInteractor: AuthInteractor,
     rootRouter: TreeRouter,
-    bottomNavigationScreenFactory: RootScreenFactory,
 ) : BottomNavigationItem {
     @Composable
     override fun IconComposable() {
@@ -41,5 +40,5 @@ class ProfileBottomNavigationItem @Inject constructor(
         Text(stringResource(R.string.profile_tab))
     }
 
-    override val router: TreeRouter = rootRouter.branch(bottomNavigationScreenFactory.screenKey)
+    override val router: TreeRouter = rootRouter.branch(ROOT_KEY)
 }

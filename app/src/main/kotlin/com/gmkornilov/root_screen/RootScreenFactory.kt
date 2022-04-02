@@ -37,18 +37,15 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Scope
 
-private const val key = "root_screen"
+const val ROOT_KEY = "root_screen"
 
 @OptIn(ExperimentalAnimationApi::class)
 class RootScreenFactory @Inject constructor(
     override val dependency: Deps,
 ) : DependencyProvider<RootScreenFactory.Deps> {
-
-    val screenKey = key
-
-    fun build(): Screen<RootViewModel> {
+    fun build(): Screen<*> {
         return BaseScreen(
-            key = key,
+            key = ROOT_KEY,
             onCreate = { _, _ ->
                 val component = DaggerRootScreenFactory_Component.builder()
                     .deps(dependency)

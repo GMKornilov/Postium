@@ -82,7 +82,7 @@ internal class CategoryPostsViewModel @Inject constructor(
                 reduce { this.state.copy(listState = ListState.Loading) }
             }
             try {
-                val posts = categoryPostsInteractor.loadPosts("")
+                val posts = categoryPostsInteractor.loadPosts(category.id)
                 reduce { this.state.copy(listState = ListState.Success(posts)) }
             } catch (e: Exception) {
                 Timber.e(e)
