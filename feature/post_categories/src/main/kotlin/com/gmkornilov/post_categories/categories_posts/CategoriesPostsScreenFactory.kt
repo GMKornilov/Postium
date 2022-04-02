@@ -24,8 +24,11 @@ private const val CATEGORY_POSTS_KEY = "category_posts"
 
 class CategoriesPostsScreenFactory @Inject constructor(
     override val dependency: Deps
-): DependencyProvider<CategoriesPostsScreenFactory.Deps> {
-    private inner class Factory(private val category: Category): ScreenFactory() {
+) : DependencyProvider<CategoriesPostsScreenFactory.Deps> {
+    private inner class Factory(
+        private val listener: CategoryPostsListener,
+        private val category: Category
+    ) : ScreenFactory() {
         override fun buildKey(): String {
             return "${CATEGORY_POSTS_KEY}_${category.id}_${category.name}"
         }
@@ -37,6 +40,7 @@ class CategoriesPostsScreenFactory @Inject constructor(
             val component = DaggerCategoriesPostsScreenFactory_Component.builder()
                 .deps(dependency)
                 .category(category)
+                .listener(listener)
                 .build()
             return component.viewModel
         }
@@ -50,19 +54,17 @@ class CategoriesPostsScreenFactory @Inject constructor(
 
     }
 
-    fun build(category: Category, prevPath: String): Screen<*> {
-        return Factory(category).build(prevPath)
+    fun build(listener: CategoryPostsListener, category: Category, prevPath: String): Screen<*> {
+        return Factory(listener, category).build(prevPath)
     }
 
     @Scope
     annotation class CategoriesPostsScope
 
-    interface Deps: Dependency {
+    interface Deps : Dependency {
         val postsRepository: PostRepository
 
         val authInteractor: AuthInteractor
-
-        val categoryPostsListener: CategoryPostsListener
     }
 
     @CategoriesPostsScope
@@ -76,6 +78,9 @@ class CategoriesPostsScreenFactory @Inject constructor(
 
             @BindsInstance
             fun category(category: Category): Builder
+
+            @BindsInstance
+            fun listener(listener: CategoryPostsListener): Builder
 
             fun build(): Component
         }

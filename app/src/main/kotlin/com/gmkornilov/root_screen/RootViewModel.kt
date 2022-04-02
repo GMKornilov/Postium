@@ -96,7 +96,7 @@ class RootViewModel @Inject constructor(
                 }
                 is CategoriesBottomNavigationItem -> {
                     item.router.newRootScreen(
-                        categoriesListScreenFactory.build(currentKey)
+                        categoriesListScreenFactory.build(this@RootViewModel, currentKey)
                     )
                 }
             }
@@ -147,7 +147,7 @@ class RootViewModel @Inject constructor(
     }
 
     override fun openCategory(category: Category) {
-        val screen = categoryPostsScreenFactory.build(category, currentKey)
+        val screen = categoryPostsScreenFactory.build(this, category, currentKey)
         currentRouter.addScreen(screen)
     }
 }
