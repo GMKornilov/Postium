@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":data:post_contents"))
     implementation(project(":data:post"))
     implementation(project(":data:user"))
+    implementation(project(":data:categories"))
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)
@@ -76,6 +77,7 @@ dependencies {
 
     implementation(Deps.Compose.Accompanist.pager)
     implementation(Deps.Compose.Accompanist.pagerIndicators)
+    implementation(Deps.Compose.Accompanist.flowLayouts)
 
     implementation(Deps.Navigation.brickNavigation)
 

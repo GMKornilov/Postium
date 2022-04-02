@@ -10,6 +10,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.brick_navigation.ScreenFactory
+import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.postcreatepage.view.PostCreate
 import com.gmkornilov.postcreatepage.view.PostCreateListener
@@ -62,6 +63,7 @@ class PostCreatePageScreenFactory @Inject constructor(
         val postContentsRepository: PostContentsRepository
         val userRepository: UserRepository
         val authInteractor: AuthInteractor
+        val categoriesRepository: CategoriesRepository
     }
 
     @Scope

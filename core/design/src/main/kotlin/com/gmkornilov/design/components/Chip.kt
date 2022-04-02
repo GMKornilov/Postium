@@ -4,6 +4,8 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -68,7 +70,11 @@ fun SelectableChip(
             .clickable { onSelected(!isSelected) }
             .padding(horizontal = 12.dp),
     ) {
-        AnimatedVisibility(visible = isSelected) {
+        AnimatedVisibility(
+            visible = isSelected,
+            enter = expandHorizontally(),
+            exit = shrinkHorizontally(),
+        ) {
             Icon(
                 TablerIcons.Checks,
                 null,

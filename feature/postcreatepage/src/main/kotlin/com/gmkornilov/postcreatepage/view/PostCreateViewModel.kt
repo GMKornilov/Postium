@@ -1,5 +1,8 @@
 package com.gmkornilov.postcreatepage.view
 
+import com.gmkornilov.categories.model.Category
+import com.gmkornilov.lazy_column.ListState
+import com.gmkornilov.postcreatepage.domain.PostCreateCategory
 import com.gmkornilov.postcreatepage.domain.PostCreateInteractor
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,19 @@ internal class PostCreateViewModel @Inject constructor(
 
     fun backConfirmed() = intent {
         listener.exitScreen()
+    }
+
+    fun loadCategories() = intent {
+        reduce { this.state.copy(categoryState = ListState.Loading) }
+        try {
+            val categories = postCreateInteractor.getCategories().map {
+                PostCreateCategory(it, false)
+            }
+            reduce { this.state.copy(categoryState = ListState.Success(categories)) }
+        } catch (e: Exception) {
+            Timber.e(e)
+            reduce { this.state.copy(categoryState = ListState.Error(e)) }
+        }
     }
 
     override fun createPost(title: String, content: String) = intent {
@@ -51,6 +67,26 @@ internal class PostCreateViewModel @Inject constructor(
                 Timber.e(e)
                 postSideEffect(PostCreateSideEffect.Error)
             }
+        }
+    }
+
+    override fun markPost(isMarked: Boolean, category: PostCreateCategory) = intent {
+        if (isMarked) {
+            postCreateInteractor.addCategory(category.category)
+        } else {
+            postCreateInteractor.removeCategory(category.category)
+        }
+
+        val state = this.state.categoryState
+        if (state is ListState.Success) {
+            val newCategory = category.copy(isMarked = isMarked)
+            val categories = state.contents.toMutableList().apply {
+                val index = this.indexOf(category)
+                if (index != -1) {
+                    this[index] = newCategory
+                }
+            }
+            reduce { this.state.copy(categoryState = ListState.Success(categories)) }
         }
     }
 }

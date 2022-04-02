@@ -16,11 +16,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.gmkornilov.design.components.EmptyStateContainer
+import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.ScrollableColumn
+import com.gmkornilov.design.components.SelectableChip
 import com.gmkornilov.design.modifiers.bottomBorder
 import com.gmkornilov.design.modifiers.topBorder
 import com.gmkornilov.design.theme.PostiumTheme
+import com.gmkornilov.lazy_column.ListState
 import com.gmkornilov.postcreatepage.R
+import com.gmkornilov.postcreatepage.domain.PostCreateCategory
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.pager.*
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material.MaterialRichText
@@ -83,6 +90,15 @@ internal fun PostCreate(
                     snackbarHostState
                 )
             }
+        }
+    }
+
+    LaunchedEffect(pagerState.currentPage, state.categoryState) {
+        if (
+            pagerState.currentPage == Tab.values().indexOf(Tab.EDITOR)
+            && state.categoryState is ListState.None
+        ) {
+            viewModel.loadCategories()
         }
     }
 
@@ -160,13 +176,14 @@ private fun PostCreateWithState(
             .background(MaterialTheme.colors.surface)
     ) {
         Column(modifier = modifier.fillMaxSize()) {
-            TabRow(
+            ScrollableTabRow(
                 selectedTabIndex = pagerState.currentPage,
                 indicator = { tabPositions ->
                     TabRowDefaults.Indicator(
                         Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                     )
-                }
+                },
+                edgePadding = 0.dp
             ) {
                 pages.forEachIndexed { index, tab ->
                     Tab(
@@ -196,6 +213,16 @@ private fun PostCreateWithState(
                         enteredContent,
                         contentModifier
                     )
+                    Tab.CATEGORIES -> when (state.categoryState) {
+                        is ListState.Error -> ErrorState(contentModifier)
+                        ListState.Loading -> LoadingState(contentModifier)
+                        is ListState.Success -> SuccessState(
+                            state = state.categoryState.contents,
+                            postCreateEvents = postCreateEvents,
+                            modifier = contentModifier
+                        )
+                        ListState.None -> {}
+                    }
                 }
             }
         }
@@ -314,6 +341,61 @@ private fun PreviewPost(
             LocalInspectionMode.current -> Text(content, modifier = contentModifier)
             else -> MaterialRichText(modifier = contentModifier) {
                 Markdown(content = content)
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoadingState(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.background(MaterialTheme.colors.surface)
+    ) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+}
+
+@Composable
+private fun ErrorState(modifier: Modifier = Modifier) {
+    ErrorStateContainer(
+        errorMessage = stringResource(id = R.string.category_error),
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun EmptyState(modifier: Modifier = Modifier) {
+    EmptyStateContainer(
+        emptyStateMessage = stringResource(id = R.string.category_empty),
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SuccessState(
+    state: List<PostCreateCategory>,
+    postCreateEvents: PostCreateEvents,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colors.surface)
+            .padding(8.dp),
+    ) {
+        FlowRow(
+            mainAxisSpacing = 8.dp,
+            crossAxisSpacing = 12.dp,
+            mainAxisAlignment = FlowMainAxisAlignment.Start,
+            modifier = Modifier.padding(top = 12.dp)
+        ) {
+            state.forEach { item ->
+                key(item.category.id) {
+                    SelectableChip(
+                        text = item.category.name,
+                        isSelected = item.isMarked,
+                        onSelected = { postCreateEvents.markPost(it, item) }
+                    )
+                }
             }
         }
     }

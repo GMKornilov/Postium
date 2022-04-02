@@ -5,7 +5,6 @@ import com.gmkornilov.model.TimeRange
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
-import java.util.*
 import javax.inject.Inject
 
 private const val POSTS_COLLECTION = "posts"
@@ -21,11 +20,16 @@ private const val LIMIT = 50L
 class FirebasePostSource @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) {
-    suspend fun createPost(userReference: DocumentReference, title: String): Post {
+    suspend fun createPost(
+        userReference: DocumentReference,
+        title: String,
+        categoryReferences: List<DocumentReference>
+    ): Post {
         val newPost = mapOf(
             DATE_FIELD to FieldValue.serverTimestamp(),
             USER_FIELD to userReference,
             TITLE_FIELD to title,
+            CATEGORIES_FIELD to categoryReferences
         )
 
         val reference = firestore

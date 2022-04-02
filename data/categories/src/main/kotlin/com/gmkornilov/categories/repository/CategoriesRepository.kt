@@ -16,6 +16,10 @@ class CategoriesRepository @Inject constructor(
         return firestore.collection(CATEGORY_COLLECTION).document(categoryId)
     }
 
+    fun getReferences(categoryIds: List<String>): List<DocumentReference> {
+        return categoryIds.map { getReference(it) }
+    }
+
     suspend fun getCategoryByReference(categoryReference: DocumentReference): Category {
         val snapshot = categoryReference.get().await()
         return parseSnapshot(snapshot)
