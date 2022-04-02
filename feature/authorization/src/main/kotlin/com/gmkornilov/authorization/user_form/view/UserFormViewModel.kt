@@ -5,6 +5,7 @@ import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.user_form.domain.UserFormFlowEvents
 import com.gmkornilov.authorization.user_form.domain.UserFormInteractor
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -31,7 +32,7 @@ internal class UserFormViewModel @Inject constructor(
     override fun photoUploaded(uri: Uri?) = intent {
         reduce { this.state.copy(avatartUrl = uri?.toString()) }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             uri?.let {
                 try {
                     userFormInteractor.uploadPhoto(uri)
@@ -48,7 +49,7 @@ internal class UserFormViewModel @Inject constructor(
         }
         val trimmedUsername = username.trim()
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 userFormInteractor.updateUsername(trimmedUsername)
             } catch (e: Exception) {

@@ -10,6 +10,7 @@ import com.gmkornilov.authorizarion.google.GoogleAuthInteractor
 import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.home.domain.HomeFlowEvents
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -31,7 +32,7 @@ internal class HomeViewModel @Inject constructor(
             return@intent
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             reduce { HomeState.Loading }
             val result = emailAuthInteractor.signIn(login, password)
             reduce {
@@ -59,7 +60,7 @@ internal class HomeViewModel @Inject constructor(
 
     @ExperimentalCoroutinesApi
     override fun handleGoogleSignInResult(activityResult: ActivityResult) = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             when (val signInResult = googleAuthInteractor.signIn(activityResult)) {
                 is SignInResult.ExistingUser -> handleSuccessfulResult(signInResult.user, false)
                 is SignInResult.NewUser -> handleSuccessfulResult(signInResult.user, true)
@@ -73,7 +74,7 @@ internal class HomeViewModel @Inject constructor(
 
     @ExperimentalCoroutinesApi
     override fun facebookSignIn() = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             when (val facebookAuthStatus = facebookAuthInteractor.signIn()) {
                 FacebookAuthStatus.AuthCancelled -> {
                 }

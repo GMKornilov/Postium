@@ -1,5 +1,6 @@
 package com.gmkornilov.root_screen
 
+import android.util.Log
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
@@ -11,10 +12,10 @@ import com.gmkornilov.categories.model.Category
 import com.gmkornilov.commentpage.brick_navigation.PostCommentArgument
 import com.gmkornilov.commentpage.brick_navigation.PostCommentPageFactory
 import com.gmkornilov.commentpage.view.CommentpageListener
+import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.post.model.PostPreviewData
-import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
 import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
 import com.gmkornilov.post_categories.categories_posts.CategoriesPostsScreenFactory
@@ -27,9 +28,12 @@ import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
 import com.gmkornilov.view_model.BaseViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
+import timber.log.Timber
 import javax.inject.Inject
 
 class RootViewModel @Inject constructor(
@@ -47,10 +51,24 @@ class RootViewModel @Inject constructor(
     private val commentScreenFactory: PostCommentPageFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
     PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener {
-    private val routerIndexFlow = MutableStateFlow(0)
+    private var currentRouterIndex = 0
+        set(value) {
+            Timber.log(Log.ERROR, "index changed to $value")
+            field = value
+        }
+
+    init {
+        Timber.log(Log.ERROR, "new root view model")
+        Thread.dumpStack()
+        viewModelScope.launch {
+            this@RootViewModel.container.stateFlow.onEach {
+                Timber.log(Log.ERROR, "$it")
+            }.collect()
+        }
+    }
 
     private val currentRouter
-        get() = bottomNavigationItems[routerIndexFlow.value].router
+        get() = bottomNavigationItems[currentRouterIndex].router
 
     private val currentKey
         get() = currentRouter.screen.value?.key.orEmpty()
@@ -63,7 +81,7 @@ class RootViewModel @Inject constructor(
 
     fun onMenuItemClicked(index: Int) = intent {
         val item = bottomNavigationItems[index]
-        routerIndexFlow.value = index
+        currentRouterIndex = index
 
         if (item.router.isEmpty()) {
             when (item) {

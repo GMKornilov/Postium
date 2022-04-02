@@ -9,6 +9,7 @@ import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.post_categories.categories_posts.domain.CategoryPostsInteractor
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -32,7 +33,7 @@ internal class CategoryPostsViewModel @Inject constructor(
             val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     categoryPostsInteractor.setLikeStatus(post.id, newLikeStatus)
                 } catch (e: Exception) {
@@ -49,7 +50,7 @@ internal class CategoryPostsViewModel @Inject constructor(
             val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     categoryPostsInteractor.setLikeStatus(post.id, newLikeStatus)
                 } catch (e: Exception) {
@@ -64,7 +65,7 @@ internal class CategoryPostsViewModel @Inject constructor(
         val newPost = post.copy(bookmarkStatus = newBookmarkStatus)
         replacePost(post, newPost)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 categoryPostsInteractor.setBookmarkStatus(post.id, newBookmarkStatus)
             } catch (e: Exception) {
@@ -74,7 +75,7 @@ internal class CategoryPostsViewModel @Inject constructor(
     }
 
     fun loadAllPosts(isRefresh: Boolean = false) = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (isRefresh) {
                 reduce { this.state.copy(isRefreshing = true) }
             } else {

@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Scope
 
@@ -52,6 +53,7 @@ class RootScreenFactory @Inject constructor(
                 val component = DaggerRootScreenFactory_Component.builder()
                     .deps(dependency)
                     .build()
+                Timber.e("new on create in root")
                 return@BaseScreen component.rootViewModel
             },
             content = {

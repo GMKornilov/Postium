@@ -4,6 +4,7 @@ import com.gmkornilov.categories.model.Category
 import com.gmkornilov.lazy_column.ListState
 import com.gmkornilov.post_categories.categories_list.domain.CategoriesListInteractor
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -25,7 +26,7 @@ internal class CategoriesViewModel @Inject constructor(
             reduce { this.state.copy(listState = ListState.Loading) }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val categories = categoriesListInteractor.loadCategories()
                 reduce {

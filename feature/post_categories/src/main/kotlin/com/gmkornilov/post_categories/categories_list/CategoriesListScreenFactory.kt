@@ -15,6 +15,7 @@ import com.gmkornilov.post_categories.categories_list.view.CategoriesViewModel
 import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val CATEGORIES_KEY = "categories"
 
@@ -45,6 +46,9 @@ class CategoriesListScreenFactory @Inject constructor(
 
     }
 
+    @Scope
+    annotation class CategoriesListScope
+
     fun build(prevPath: String): Screen<*> {
         return Factory().build(prevPath)
     }
@@ -55,6 +59,7 @@ class CategoriesListScreenFactory @Inject constructor(
         val categoriesRepository: CategoriesRepository
     }
 
+    @CategoriesListScope
     @dagger.Component(dependencies = [Deps::class])
     internal interface Component {
         val viewModel: CategoriesViewModel

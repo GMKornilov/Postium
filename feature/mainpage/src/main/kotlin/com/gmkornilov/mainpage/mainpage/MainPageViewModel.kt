@@ -7,6 +7,7 @@ import com.gmkornilov.mainpage.domain.MainpageInteractor
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -27,7 +28,7 @@ internal class MainPageViewModel @Inject constructor(
             val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     mainpageInteractor.setLikeStatus(post, newLikeStatus)
                 } catch (e: Exception) {
@@ -44,7 +45,7 @@ internal class MainPageViewModel @Inject constructor(
             val newPost = post.copy(likeStatus = newLikeStatus)
             replacePost(post, newPost)
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     mainpageInteractor.setLikeStatus(post, newLikeStatus)
                 } catch (e: Exception) {
@@ -59,7 +60,7 @@ internal class MainPageViewModel @Inject constructor(
         val newPost = post.copy(bookmarkStatus = newBookmarkStatus)
         replacePost(post, newPost)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 mainpageInteractor.setBookmarkStatus(post, newBookmarkStatus)
             } catch (e: Exception) {
@@ -69,7 +70,7 @@ internal class MainPageViewModel @Inject constructor(
     }
 
     fun loadAllPosts(isRefresh: Boolean = false) = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (isRefresh) {
                 reduce { this.state.copy(isRefresh = true) }
             } else {

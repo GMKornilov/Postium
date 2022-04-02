@@ -5,6 +5,7 @@ import com.gmkornilov.authorizarion.data.ResetPasswordResult
 import com.gmkornilov.authorization.password_restoration.domain.PasswordRestorationFlowEvents
 import com.gmkornilov.authorization.password_restoration.domain.PasswordRestorationStringsProvider
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -24,7 +25,7 @@ class PasswordRestorationViewModel @Inject constructor(
         }
         val trimmedEmail = email.trim()
         reduce { PasswordRestorationState.EnterEmail(isLoading = true) }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newState = when (authInteractor.resetPassword(trimmedEmail)) {
                     ResetPasswordResult.Success -> PasswordRestorationState.EmailSend

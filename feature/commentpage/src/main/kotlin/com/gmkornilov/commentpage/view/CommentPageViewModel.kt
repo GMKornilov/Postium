@@ -8,6 +8,7 @@ import com.gmkornilov.commentpage.domain.CommentPageStringProvider
 import com.gmkornilov.letIf
 import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -29,7 +30,7 @@ internal class CommentPageViewModel @Inject constructor(
             val newComment = comment.copy(likeStatus = newLikeStatus)
             replaceComment(comment, newComment)
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     commentPageInteractor.setCommentLikeStatus(comment.id, newLikeStatus)
                 } catch (e: Exception) {
@@ -46,7 +47,7 @@ internal class CommentPageViewModel @Inject constructor(
             val newComment = comment.copy(likeStatus = newLikeStatus)
             replaceComment(comment, newComment)
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     commentPageInteractor.setCommentLikeStatus(comment.id, newLikeStatus)
                 } catch (e: Exception) {
@@ -59,7 +60,7 @@ internal class CommentPageViewModel @Inject constructor(
     private fun getCommentUserHandler(comment: String) = UserResultHandler {
         intent {
             reduce { this.state.copy(sendCommentState = SendCommentState.Loading) }
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val newComment = commentPageInteractor.sendComment(navArgument.postId, comment)
                     val newListState =
@@ -83,7 +84,7 @@ internal class CommentPageViewModel @Inject constructor(
     }
 
     fun loadData(isRefresh: Boolean = false) = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (isRefresh) {
                 reduce { this.state.copy(isRefreshing = isRefresh) }
             } else {

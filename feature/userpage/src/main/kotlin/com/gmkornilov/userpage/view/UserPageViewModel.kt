@@ -9,6 +9,7 @@ import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.domain.UserPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -24,7 +25,7 @@ internal class UserPageViewModel @Inject constructor(
     private var currentTab = Tab.POSTS
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             authInteractor.authState.collect {
                 val canCreatePost = it?.getUid() == navArgument.id
                 intent { reduce { this.state.copy(createPostButtonVisible = canCreatePost) } }
@@ -54,7 +55,7 @@ internal class UserPageViewModel @Inject constructor(
         val newPost = postPreview.copy(likeStatus = newLikeStatus)
         replacePost(postPreview, newPost)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 userPageInteractor.setLikeStatus(postPreview, newLikeStatus)
             } catch (e: Exception) {
@@ -68,7 +69,7 @@ internal class UserPageViewModel @Inject constructor(
         val newPost = postPreview.copy(likeStatus = newLikeStatus)
         replacePost(postPreview, newPost)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 userPageInteractor.setLikeStatus(postPreview, newLikeStatus)
             } catch (e: Exception) {
@@ -82,7 +83,7 @@ internal class UserPageViewModel @Inject constructor(
         val newPost = postPreview.copy(bookmarkStatus = newBookmarkStatus)
         replacePost(postPreview, newPost)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 userPageInteractor.setBookmarkStatus(postPreview, newBookmarkStatus)
             } catch (e: Exception) {
@@ -137,7 +138,7 @@ internal class UserPageViewModel @Inject constructor(
     }
 
     override fun loadHeader() = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val user = userPageInteractor.loadHeader(navArgument.id)
                 val newHeader = HeaderState(
@@ -172,7 +173,7 @@ internal class UserPageViewModel @Inject constructor(
             reduce { this.state.changeTabState(Tab.POSTS, TabState.Loading) }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val posts = userPageInteractor.loadPosts(navArgument.id)
                 reduce { this.state.changeTabState(Tab.POSTS, TabState.Success(posts)) }
@@ -190,7 +191,7 @@ internal class UserPageViewModel @Inject constructor(
             reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Loading) }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val posts = userPageInteractor.loadBookmarks(navArgument.id)
                 reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Success(posts)) }

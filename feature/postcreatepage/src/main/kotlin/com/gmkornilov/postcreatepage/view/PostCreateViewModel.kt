@@ -2,6 +2,7 @@ package com.gmkornilov.postcreatepage.view
 
 import com.gmkornilov.postcreatepage.domain.PostCreateInteractor
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -35,7 +36,7 @@ internal class PostCreateViewModel @Inject constructor(
             return@intent
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 reduce { PostCreateState(isLoading = true) }
                 val isSuccessful = postCreateInteractor.createPost(title, content)

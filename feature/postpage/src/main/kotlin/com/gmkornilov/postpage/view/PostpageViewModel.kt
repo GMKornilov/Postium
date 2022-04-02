@@ -8,6 +8,7 @@ import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 import com.gmkornilov.postpage.brick_navigation.toPostPreviewData
 import com.gmkornilov.postpage.domain.PostPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -31,7 +32,7 @@ internal class PostpageViewModel @Inject constructor(
             val newState = this.state.copy(argument = argument.copy(likeStatus = newLikeStatus))
             reduce { newState }
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     postPageInteractor.setLikeStatus(postPageArgument.id, newLikeStatus)
                 } catch (e: Exception) {
@@ -48,7 +49,7 @@ internal class PostpageViewModel @Inject constructor(
             val newState = this.state.copy(argument = argument.copy(likeStatus = newLikeStatus))
             reduce { newState }
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     postPageInteractor.setLikeStatus(postPageArgument.id, newLikeStatus)
                 } catch (e: Exception) {
@@ -66,7 +67,7 @@ internal class PostpageViewModel @Inject constructor(
                 this.state.copy(argument = argument.copy(bookmarkStatus = newBookmarkStatus))
             reduce { newState }
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     postPageInteractor.setBookmarkStatus(postPageArgument.id, newBookmarkStatus)
                 } catch (e: Exception) {
@@ -82,7 +83,7 @@ internal class PostpageViewModel @Inject constructor(
         } else {
             reduce { this.state.copy(contentState = ContentState.Loading) }
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val content = postPageInteractor.loadContent(postPageArgument.id)
                 reduce {

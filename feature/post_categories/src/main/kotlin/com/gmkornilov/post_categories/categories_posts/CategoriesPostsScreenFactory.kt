@@ -18,6 +18,7 @@ import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
+import javax.inject.Scope
 
 private const val CATEGORY_POSTS_KEY = "category_posts"
 
@@ -53,6 +54,9 @@ class CategoriesPostsScreenFactory @Inject constructor(
         return Factory(category).build(prevPath)
     }
 
+    @Scope
+    annotation class CategoriesPostsScope
+
     interface Deps: Dependency {
         val postsRepository: PostRepository
 
@@ -61,6 +65,7 @@ class CategoriesPostsScreenFactory @Inject constructor(
         val categoryPostsListener: CategoryPostsListener
     }
 
+    @CategoriesPostsScope
     @dagger.Component(dependencies = [Deps::class])
     internal interface Component {
         val viewModel: CategoryPostsViewModel

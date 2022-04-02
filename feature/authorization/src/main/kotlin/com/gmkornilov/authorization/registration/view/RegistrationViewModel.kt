@@ -5,6 +5,7 @@ import com.gmkornilov.authorizarion.email.EmailRegisterResult
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.registration.domain.RegistrationStringsProvider
 import com.gmkornilov.view_model.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -35,7 +36,7 @@ internal class RegistrationViewModel @Inject constructor(
         }
 
     private fun registerUnsafe(email: String, password: String) = intent {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             reduce {
                 this.state.copy(loading = true)
             }
