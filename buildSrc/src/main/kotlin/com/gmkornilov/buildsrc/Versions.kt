@@ -75,6 +75,8 @@ object Versions {
             const val placeholder = "0.22.0-rc"
 
             const val swipeRefresh = "0.22.0-rc"
+
+            const val flowLayouts = "0.22.0-rc"
         }
 
         object Images {

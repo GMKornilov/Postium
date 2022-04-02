@@ -14,6 +14,7 @@ private const val DATE_FIELD = "date"
 private const val LIKE_FIELD = "likes"
 private const val USER_FIELD = "user"
 private const val TITLE_FIELD = "title"
+private const val CATEGORIES_FIELD = "categories"
 
 private const val LIMIT = 50L
 
@@ -59,6 +60,15 @@ class FirebasePostSource @Inject constructor(
             .whereEqualTo(USER_FIELD, userReference)
             .orderBy(DATE_FIELD)
             .limit(LIMIT)
+            .get()
+            .await()
+        return mapPosts(snapshot)
+    }
+
+    suspend fun getPostsWithCategory(categoryReference: DocumentReference): List<Post> {
+        val snapshot = firestore
+            .collection(POSTS_COLLECTION)
+            .whereArrayContains(CATEGORIES_FIELD, categoryReference)
             .get()
             .await()
         return mapPosts(snapshot)

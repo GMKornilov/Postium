@@ -61,6 +61,9 @@ object Deps {
 
             const val swipeRefresh =
                 "com.google.accompanist:accompanist-swiperefresh:${Versions.Compose.Accompanist.swipeRefresh}"
+
+            const val flowLayouts =
+                "com.google.accompanist:accompanist-flowlayout:${Versions.Compose.Accompanist.flowLayouts}"
         }
 
         object Images {
@@ -73,8 +76,10 @@ object Deps {
         }
 
         object Richtext {
-            const val commonmark = "com.halilibo.compose-richtext:richtext-commonmark:${Versions.Compose.Richtext.richtext}"
-            const val materialUi = "com.halilibo.compose-richtext:richtext-ui-material:${Versions.Compose.Richtext.richtext}"
+            const val commonmark =
+                "com.halilibo.compose-richtext:richtext-commonmark:${Versions.Compose.Richtext.richtext}"
+            const val materialUi =
+                "com.halilibo.compose-richtext:richtext-ui-material:${Versions.Compose.Richtext.richtext}"
         }
     }
 

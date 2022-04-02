@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="categories_error">Не удалось загрузить категориии, попробуйте позже :(</string>
+    <string name="categories_empty">Не найдено ни одной категории</string>
+
+    <string name="post_categories_error">Не удалось загрузить публикации по заданной категории</string>
+    <string name="post_categories_empty">По данной категории не найдено ни одной публикации. Будьте первыми!</string>
+</resources>
