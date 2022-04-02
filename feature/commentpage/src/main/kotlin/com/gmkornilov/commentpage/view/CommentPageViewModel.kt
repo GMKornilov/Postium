@@ -56,6 +56,32 @@ internal class CommentPageViewModel @Inject constructor(
         }
     }
 
+    private fun getCommentUserHandler(comment: String) = UserResultHandler {
+        intent {
+            reduce { this.state.copy(sendCommentState = SendCommentState.Loading) }
+            viewModelScope.launch {
+                try {
+                    val newComment = commentPageInteractor.sendComment(navArgument.postId, comment)
+                    val newListState =
+                        this@intent.state.letIf(
+                            { it.listState is ListState.Success && newComment != null },
+                            {
+                                require(it.listState is ListState.Success && newComment != null)
+                                ListState.Success(it.listState.comments + listOf(newComment))
+                            },
+                            { it.listState }
+                        )
+                    reduce { this.state.copy(sendCommentState = SendCommentState.None, listState = newListState) }
+                    postSideEffect(CommentPageSideEffect.ClearTextField)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    reduce { this.state.copy(sendCommentState = SendCommentState.None) }
+                    postSideEffect(CommentPageSideEffect.ShowSnackbar(stringProvider.getSendCommentError()))
+                }
+            }
+        }
+    }
+
     fun loadData(isRefresh: Boolean = false) = intent {
         viewModelScope.launch {
             if (isRefresh) {
@@ -110,27 +136,12 @@ internal class CommentPageViewModel @Inject constructor(
     }
 
     override fun sendComment(comment: String) = intent {
-        reduce { this.state.copy(sendCommentState = SendCommentState.Loading) }
-        viewModelScope.launch {
-            try {
-                val newComment = commentPageInteractor.sendComment(navArgument.postId, comment)
-                val newListState =
-                    this@intent.state.letIf(
-                        { it.listState is ListState.Success && newComment != null },
-                        {
-                            require(it.listState is ListState.Success && newComment != null)
-                            ListState.Success(it.listState.comments + listOf(newComment))
-                        },
-                        { it.listState }
-                    )
-                reduce { this.state.copy(sendCommentState = SendCommentState.None, listState = newListState) }
-                postSideEffect(CommentPageSideEffect.ClearTextField)
-            } catch (e: Exception) {
-                Timber.e(e)
-                reduce { this.state.copy(sendCommentState = SendCommentState.None) }
-                postSideEffect(CommentPageSideEffect.ShowSnackbar(stringProvider.getSendCommentError()))
-            }
-        }
+        val currentUser = authInteractor.getPostiumUser()
+        val userResultHandler = getCommentUserHandler(comment)
+
+        currentUser?.let {
+            userResultHandler.handleResult(it)
+        } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
     private fun replaceComment(
