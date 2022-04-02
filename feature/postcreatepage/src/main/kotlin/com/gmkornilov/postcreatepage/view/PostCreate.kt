@@ -176,14 +176,13 @@ private fun PostCreateWithState(
             .background(MaterialTheme.colors.surface)
     ) {
         Column(modifier = modifier.fillMaxSize()) {
-            ScrollableTabRow(
+            TabRow(
                 selectedTabIndex = pagerState.currentPage,
                 indicator = { tabPositions ->
                     TabRowDefaults.Indicator(
                         Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                     )
                 },
-                edgePadding = 0.dp
             ) {
                 pages.forEachIndexed { index, tab ->
                     Tab(
