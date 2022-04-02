@@ -50,7 +50,7 @@ class CategoriesListScreenFactory @Inject constructor(
     }
 
     interface Deps: Dependency {
-        val listener: CategoriesListener
+        val categoriesListener: CategoriesListener
 
         val categoriesRepository: CategoriesRepository
     }

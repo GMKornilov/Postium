@@ -21,6 +21,8 @@ import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
 import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
+import com.gmkornilov.post_categories.categories_posts.CategoriesPostsScreenFactory
+import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
@@ -99,7 +101,8 @@ class RootScreenFactory @Inject constructor(
         UserPageScreenFactory.Deps,
         PostCreatePageScreenFactory.Deps,
         PostCommentPageFactory.Deps,
-        CategoriesListScreenFactory.Deps {
+        CategoriesListScreenFactory.Deps,
+        CategoriesPostsScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -156,6 +159,10 @@ class RootScreenFactory @Inject constructor(
         @RootScope
         @Binds
         fun categoryListener(rootViewModel: RootViewModel): CategoriesListener
+
+        @RootScope
+        @Binds
+        fun categoryPostsListener(rootViewModel: RootViewModel): CategoryPostsListener
     }
 
     @Module
@@ -187,5 +194,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindCategories(component: Component): CategoriesListScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindCategoryPosts(component: Component): CategoriesPostsScreenFactory.Deps
     }
 }

@@ -8,6 +8,7 @@ import com.gmkornilov.authorizarion.email.EmailModule
 import com.gmkornilov.authorizarion.facebook.FacebookModule
 import com.gmkornilov.authorizarion.firebase.FirebaseModule
 import com.gmkornilov.authorizarion.google.GoogleModule
+import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.comment_likes.repository.CommentLikesRepository
 import com.gmkornilov.context.ApplicationContext
 import com.gmkornilov.post.repository.PostRepository
@@ -59,6 +60,7 @@ interface SingletonModule {
             authInteractor: AuthInteractor,
             bookmarkRepository: PostBookmarkRepository,
             userRepository: UserRepository,
+            categoryRepository: CategoriesRepository,
         ): PostRepository {
             return PostRepository(
                 firebasePostSource,
@@ -66,6 +68,7 @@ interface SingletonModule {
                 authInteractor,
                 bookmarkRepository,
                 userRepository,
+                categoryRepository
             )
         }
 

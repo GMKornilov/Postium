@@ -1,6 +1,7 @@
 package com.gmkornilov.post.repository
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
+import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.model.Post
 import com.gmkornilov.post.model.*
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
@@ -17,6 +18,7 @@ class PostRepository @Inject constructor(
     private val authInteractor: AuthInteractor,
     private val bookmarkRepository: PostBookmarkRepository,
     private val userRepository: UserRepository,
+    private val categoryRepository: CategoriesRepository,
 ) {
     suspend fun loadDataWithTimeRange(postTimeRange: SelectionTimeRange): List<PostPreviewData> {
         val postLoader = PostLoader {
@@ -37,6 +39,14 @@ class PostRepository @Inject constructor(
         val postLoader = PostLoader {
             val bookmarkIds = bookmarkRepository.getUserBookmarks(userId)
             firebasePostSource.getPostWithIds(bookmarkIds)
+        }
+        return loadPostsPreview(postLoader)
+    }
+
+    suspend fun loadCategoryPosts(categoryId: String): List<PostPreviewData> {
+        val postLoader = PostLoader {
+            val categoryReference = categoryRepository.getReference(categoryId)
+            firebasePostSource.getPostsWithCategory(categoryReference)
         }
         return loadPostsPreview(postLoader)
     }

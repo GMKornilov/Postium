@@ -17,6 +17,8 @@ import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
 import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
+import com.gmkornilov.post_categories.categories_posts.CategoriesPostsScreenFactory
+import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
@@ -35,6 +37,7 @@ class RootViewModel @Inject constructor(
 
     private val authInteractor: AuthInteractor,
 
+    private val categoryPostsScreenFactory: CategoriesPostsScreenFactory,
     private val categoriesListScreenFactory: CategoriesListScreenFactory,
     private val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory,
     private val postPageScreenFactory: PostPageScreenFactory,
@@ -43,7 +46,7 @@ class RootViewModel @Inject constructor(
     private val mainpageScreenFactory: MainpageScreenFactory,
     private val commentScreenFactory: PostCommentPageFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
-    PostCreateListener, CommentpageListener, CategoriesListener {
+    PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener {
     private val routerIndexFlow = MutableStateFlow(0)
 
     private val currentRouter
@@ -126,13 +129,12 @@ class RootViewModel @Inject constructor(
         currentRouter.back()
     }
 
-    private fun getRouter(index: Int) = bottomNavigationItems[index].router
-
     override fun getBaseState(): RootState {
         return RootState(0, bottomNavigationItems.first().router)
     }
 
     override fun openCategory(category: Category) {
-        TODO("Not yet implemented")
+        val screen = categoryPostsScreenFactory.build(category, currentKey)
+        currentRouter.addScreen(screen)
     }
 }
