@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="playlist_label">
+        <item quantity="zero">%d публикаций</item>
+        <item quantity="one">%d публикация</item>
+        <item quantity="few">%d публикации</item>
+        <item quantity="many" formatted="true">%d публикаций</item>
+    </plurals>
+</resources>

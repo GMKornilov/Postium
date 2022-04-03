@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="playlists_title">Списки для чтения</string>
+
+    <string name="playlists_error">Не получилось загрузить списки для чтения, попробуйте позже</string>
+    <string name="playlists_empty">Не найдено ни одного спсика для чтения</string>
+</resources>
