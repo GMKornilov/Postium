@@ -13,6 +13,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,6 +36,10 @@ internal fun PlaylistList(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.loadData()
+    }
 
     PlaylistListWithState(state = state, playlistListEvents = viewModel, modifier = modifier)
 }

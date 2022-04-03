@@ -8,10 +8,7 @@ import com.alphicc.brick.Screen
 import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
-import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
-import com.gmkornilov.bottom_navigation_items.CategoriesBottomNavigationItem
-import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
-import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
+import com.gmkornilov.bottom_navigation_items.*
 import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
@@ -27,6 +24,8 @@ import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactor
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
 import com.gmkornilov.user.repository.UserAvatarRepository
+import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
+import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -101,7 +100,8 @@ class RootScreenFactory @Inject constructor(
         PostCreatePageScreenFactory.Deps,
         PostCommentPageFactory.Deps,
         CategoriesListScreenFactory.Deps,
-        CategoriesPostsScreenFactory.Deps {
+        CategoriesPostsScreenFactory.Deps,
+        PlaylistListScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -126,11 +126,13 @@ class RootScreenFactory @Inject constructor(
             fun bottomNavigationItems(
                 homeBottomNavigationItem: HomeBottomNavigationItem,
                 categoriesBottomNavigationItem: CategoriesBottomNavigationItem,
-                profileBottomNavigationItem: ProfileBottomNavigationItem
+                profileBottomNavigationItem: ProfileBottomNavigationItem,
+                playlistsBottomNavigationItem: PlaylistsBottomNavigationItem,
             ): List<BottomNavigationItem> {
                 return listOf(
                     homeBottomNavigationItem,
                     categoriesBottomNavigationItem,
+                    playlistsBottomNavigationItem,
                     profileBottomNavigationItem
                 )
             }
@@ -162,6 +164,10 @@ class RootScreenFactory @Inject constructor(
         @RootScope
         @Binds
         fun categoryPostsListener(rootViewModel: RootViewModel): CategoryPostsListener
+
+        @RootScope
+        @Binds
+        fun playlistListPostsListener(rootViewModel: RootViewModel): PlaylistListListener
     }
 
     @Module
@@ -197,5 +203,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindCategoryPosts(component: Component): CategoriesPostsScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindPlaylistList(component: Component): PlaylistListScreenFactory.Deps
     }
 }

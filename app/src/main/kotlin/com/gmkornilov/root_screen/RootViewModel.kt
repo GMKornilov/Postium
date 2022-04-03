@@ -1,13 +1,9 @@
 package com.gmkornilov.root_screen
 
-import android.util.Log
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
-import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
-import com.gmkornilov.bottom_navigation_items.CategoriesBottomNavigationItem
-import com.gmkornilov.bottom_navigation_items.HomeBottomNavigationItem
-import com.gmkornilov.bottom_navigation_items.ProfileBottomNavigationItem
+import com.gmkornilov.bottom_navigation_items.*
 import com.gmkornilov.categories.model.Category
 import com.gmkornilov.commentpage.brick_navigation.PostCommentArgument
 import com.gmkornilov.commentpage.brick_navigation.PostCommentPageFactory
@@ -15,6 +11,7 @@ import com.gmkornilov.commentpage.view.CommentpageListener
 import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.mainpage.brick_navigation.MainpageScreenFactory
 import com.gmkornilov.mainpage.mainpage.MainPageListener
+import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
 import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
@@ -24,16 +21,14 @@ import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactor
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
+import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
+import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
 import com.gmkornilov.view_model.BaseViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import timber.log.Timber
 import javax.inject.Inject
 
 class RootViewModel @Inject constructor(
@@ -49,18 +44,10 @@ class RootViewModel @Inject constructor(
     private val postCreatePageScreenFactory: PostCreatePageScreenFactory,
     private val mainpageScreenFactory: MainpageScreenFactory,
     private val commentScreenFactory: PostCommentPageFactory,
+    private val playlistListScreenFactory: PlaylistListScreenFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
-    PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener {
+    PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener, PlaylistListListener {
     private var currentRouterIndex = 0
-        set(value) {
-            Timber.log(Log.ERROR, "index changed to $value")
-            field = value
-        }
-
-    init {
-        Timber.log(Log.ERROR, "new root view model")
-        Thread.dumpStack()
-    }
 
     private val currentRouter
         get() = bottomNavigationItems[currentRouterIndex].router
@@ -71,6 +58,11 @@ class RootViewModel @Inject constructor(
     private val userProfileResultHandler = UserResultHandler {
         val arg = UserPageArgument.LoadHeader(it.getUid())
         val screen = userPageScreenFactory.build(this, arg, currentKey)
+        currentRouter.addScreen(screen)
+    }
+
+    private val playlistsResultHandler = UserResultHandler {
+        val screen = playlistListScreenFactory.build(this, currentKey)
         currentRouter.addScreen(screen)
     }
 
@@ -98,6 +90,12 @@ class RootViewModel @Inject constructor(
                     item.router.newRootScreen(
                         categoriesListScreenFactory.build(this@RootViewModel, currentKey)
                     )
+                }
+                is PlaylistsBottomNavigationItem -> {
+                    val user = authInteractor.getPostiumUser()
+                    user?.let {
+                        playlistsResultHandler.handleResult(it)
+                    } ?: startAuthorizationFlow(playlistsResultHandler)
                 }
             }
         }
@@ -149,5 +147,9 @@ class RootViewModel @Inject constructor(
     override fun openCategory(category: Category) {
         val screen = categoryPostsScreenFactory.build(this, category, currentKey)
         currentRouter.addScreen(screen)
+    }
+
+    override fun openPlaylist(playlist: Playlist) {
+        TODO("Not yet implemented")
     }
 }

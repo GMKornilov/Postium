@@ -63,9 +63,6 @@ internal fun BottomBar(
             val isSelected = index == selectedIndex
             BottomNavigationItem(
                 icon = { bottomNavigationItem.IconComposable() },
-                label = if (isSelected) {
-                    { bottomNavigationItem.TitleComposable() }
-                } else null,
                 selected = isSelected,
                 onClick = { onIndexSelected(index) },
                 modifier = Modifier.navigationBarsPadding()

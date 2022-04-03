@@ -69,6 +69,7 @@ dependencies {
     implementation(project(":data:categories"))
     implementation(project(":data:post_comments"))
     implementation(project(":data:comment_likes"))
+    implementation(project(":data:playlists"))
 
     implementation(project(":feature:mainpage"))
     implementation(project(":feature:authorization"))
@@ -77,6 +78,7 @@ dependencies {
     implementation(project(":feature:postcreatepage"))
     implementation(project(":feature:commentpage"))
     implementation(project(":feature:post_categories"))
+    implementation(project(":feature:user_playlists"))
 
     implementation(Deps.AndroidX.androidXCoreKtx)
     implementation(Deps.AndroidX.appCompat)
