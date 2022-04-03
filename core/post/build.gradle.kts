@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":data:post_bookmarks"))
     implementation(project(":data:user"))
     implementation(project(":data:categories"))
+    implementation(project(":data:playlists"))
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)

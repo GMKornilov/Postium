@@ -5,6 +5,9 @@
     <string name="playlists_error">Не получилось загрузить списки для чтения, попробуйте позже</string>
     <string name="playlists_empty">Не найдено ни одного спсика для чтения</string>
 
+    <string name="playlists_posts_error">Не получилось загрузить публикации, попробуйте позже</string>
+    <string name="playlists_posts_empty">Не найдено ни одной публикации в данном списке</string>
+
     <string name="create_playlist_title">Создать список для чтения</string>
     <string name="playlist_label">Название списка</string>
     <string name="playlist_create_button_label">Создать</string>

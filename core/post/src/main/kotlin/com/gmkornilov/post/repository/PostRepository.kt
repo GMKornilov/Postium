@@ -3,6 +3,7 @@ package com.gmkornilov.post.repository
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.model.Post
+import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.*
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
@@ -47,6 +48,13 @@ class PostRepository @Inject constructor(
         val postLoader = PostLoader {
             val categoryReference = categoryRepository.getReference(categoryId)
             firebasePostSource.getPostsWithCategory(categoryReference)
+        }
+        return loadPostsPreview(postLoader)
+    }
+
+    suspend fun loadPlaylistPosts(playlist: Playlist): List<PostPreviewData> {
+        val postLoader = PostLoader {
+            firebasePostSource.getPostWithIds(playlist.postIds)
         }
         return loadPostsPreview(postLoader)
     }
