@@ -37,7 +37,7 @@ fun PlaylistPreview(
     ) {
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colors.surface)
+                .background(MaterialTheme.colors.primary)
                 .padding(
                     top = 24.dp,
                     bottom = 24.dp,
@@ -47,7 +47,7 @@ fun PlaylistPreview(
         ) {
             Text(text = name,
                 style = MaterialTheme.typography.h4,
-                color = contentColorFor(MaterialTheme.colors.surface),
+                color = contentColorFor(MaterialTheme.colors.primary),
             )
 
             Spacer(modifier = Modifier.size(8.dp))
@@ -55,7 +55,7 @@ fun PlaylistPreview(
             Text(
                 text = pluralResource(R.plurals.playlist_label, postAmount, postAmount),
                 style = MaterialTheme.typography.body1,
-                color = contentColorFor(MaterialTheme.colors.surface),
+                color = contentColorFor(MaterialTheme.colors.primary),
             )
         }
     }

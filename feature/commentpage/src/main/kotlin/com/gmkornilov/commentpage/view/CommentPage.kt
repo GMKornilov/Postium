@@ -29,6 +29,7 @@ import com.gmkornilov.comments.model.CommentPreviewData
 import com.gmkornilov.design.commons.posts.Comment
 import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
+import com.gmkornilov.design.modifiers.imePaddingWithBottomBar
 import com.gmkornilov.design.theme.PostiumTheme
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -126,20 +127,13 @@ private fun CommentPageWithState(
             }
         }
 
-        val inset = LocalWindowInsets.current.ime
-
-        // FIXME: magical constant of navigation bar height
-        val bottomPadding = with(LocalDensity.current) {
-            max(inset.bottom.toDp() - 56.dp, 0.dp)
-        }
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.surface)
                 .height(IntrinsicSize.Min)
-                .padding(bottom = bottomPadding),
+                .imePaddingWithBottomBar(),
         ) {
             BasicTextField(
                 value = enteredComment,

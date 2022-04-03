@@ -8,7 +8,7 @@ import com.alphicc.brick.TreeRouter
 import com.gmkornilov.postium.R
 import com.gmkornilov.root_screen.ROOT_KEY
 import compose.icons.TablerIcons
-import compose.icons.tablericons.Bookmarks
+import compose.icons.tablericons.Folders
 import javax.inject.Inject
 
 class PlaylistsBottomNavigationItem @Inject constructor(
@@ -16,7 +16,7 @@ class PlaylistsBottomNavigationItem @Inject constructor(
 ): BottomNavigationItem {
     @Composable
     override fun IconComposable() {
-        Icon(TablerIcons.Bookmarks, null)
+        Icon(TablerIcons.Folders, null)
     }
 
     @Composable

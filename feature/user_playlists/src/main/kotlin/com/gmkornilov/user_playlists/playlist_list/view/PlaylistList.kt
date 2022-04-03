@@ -3,15 +3,13 @@ package com.gmkornilov.user_playlists.playlist_list.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +27,8 @@ import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.user_playlists.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import compose.icons.TablerIcons
+import compose.icons.tablericons.FolderPlus
 
 @Composable
 internal fun PlaylistList(
@@ -58,16 +58,41 @@ private fun PlaylistListWithState(
         when (state.listState) {
             is ListState.Error -> ErrorState(contentModifier)
             ListState.Loading -> LoadingState(contentModifier)
-            is ListState.Success -> if (state.listState.contents.isEmpty()) {
-                EmptyState(contentModifier)
-            } else {
-                SuccessState(
-                    state = state.listState.contents,
-                    playlistListEvents = playlistListEvents,
-                    modifier = contentModifier
-                )
-            }
+            is ListState.Success -> SuccessState(
+                contents = state.listState.contents,
+                playlistListEvents = playlistListEvents,
+                modifier = contentModifier
+            )
             ListState.None -> {}
+        }
+    }
+}
+
+@Composable
+private fun SuccessState(
+    contents: List<Playlist>,
+    playlistListEvents: PlaylistListEvents,
+    modifier: Modifier,
+) {
+    Box {
+        if (contents.isEmpty()) {
+            EmptyState(modifier.fillMaxSize())
+        } else {
+            PlaylistColumn(
+                state = contents,
+                playlistListEvents = playlistListEvents,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        FloatingActionButton(
+            onClick = { playlistListEvents.createPlaylist() },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 16.dp, bottom = 16.dp),
+            backgroundColor = MaterialTheme.colors.secondary,
+        ) {
+            Icon(imageVector = TablerIcons.FolderPlus, contentDescription = null)
         }
     }
 }
@@ -98,7 +123,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun SuccessState(
+private fun PlaylistColumn(
     state: List<Playlist>,
     playlistListEvents: PlaylistListEvents,
     modifier: Modifier = Modifier,
@@ -106,7 +131,7 @@ private fun SuccessState(
     Column(
         modifier = modifier
             .background(MaterialTheme.colors.surface)
-            .padding(8.dp),
+            .padding(top = 8.dp),
     ) {
         Text(
             stringResource(R.string.playlists_title),
@@ -117,12 +142,10 @@ private fun SuccessState(
                 .padding(top = 8.dp, bottom = 8.dp),
         )
 
-        Divider()
-
         LazyColumn(
             modifier = Modifier
                 .background(MaterialTheme.colors.background)
-                .padding(top = 12.dp)
+                .weight(1f)
         ) {
             itemsIndexed(state, { _, item: Playlist -> item.id }) { index, item ->
                 val isLast = index == state.lastIndex

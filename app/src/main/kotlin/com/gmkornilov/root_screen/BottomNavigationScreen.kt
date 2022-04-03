@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.alphicc.brick.TreeRouter
 import com.alphicc.brick.navigationContainers.AnimatedScreensContainer
 import com.gmkornilov.bottom_navigation_items.BottomNavigationItem
+import com.gmkornilov.design.modifiers.LocalNavigationBarHeight
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -33,7 +34,7 @@ internal fun BottomMenuScreen(
             modifier = Modifier
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .padding(bottom = 56.dp)
+                .padding(bottom = LocalNavigationBarHeight.current)
                 .background(MaterialTheme.colors.background)
                 .fillMaxSize()
         ) {
@@ -58,7 +59,7 @@ internal fun BottomBar(
     bottomNavigationItems: List<BottomNavigationItem>,
     modifier: Modifier = Modifier
 ) {
-    BottomNavigation(modifier.navigationBarsHeight(additional = 56.dp)) {
+    BottomNavigation(modifier.navigationBarsHeight(additional = LocalNavigationBarHeight.current)) {
         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
             val isSelected = index == selectedIndex
             BottomNavigationItem(

@@ -68,6 +68,7 @@ dependencies {
     implementation(Deps.Compose.Lottie.lottieCompose)
 
     implementation(Deps.Compose.Accompanist.placeholderMaterial)
+    implementation(Deps.Compose.Accompanist.insets)
 
     implementation(Deps.Compose.Images.coil)
 

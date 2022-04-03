@@ -1,5 +1,6 @@
 package com.gmkornilov.root_screen
 
+import com.alphicc.brick.TreeRouter
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
 import com.gmkornilov.authorization.feature_flow.AuthorizationFlowScreenFactory
@@ -21,6 +22,10 @@ import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactor
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
+import com.gmkornilov.user_playlists.playlist_create.PlaylistCreateScreenFactory
+import com.gmkornilov.user_playlists.playlist_create.domain.PlaylistCreateResultHandler
+import com.gmkornilov.user_playlists.playlist_create.domain.merge
+import com.gmkornilov.user_playlists.playlist_create.view.PlaylistCreateListener
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
@@ -35,6 +40,7 @@ class RootViewModel @Inject constructor(
     val bottomNavigationItems: List<@JvmSuppressWildcards BottomNavigationItem>,
 
     private val authInteractor: AuthInteractor,
+    private val parentRouter: TreeRouter,
 
     private val categoryPostsScreenFactory: CategoriesPostsScreenFactory,
     private val categoriesListScreenFactory: CategoriesListScreenFactory,
@@ -45,8 +51,10 @@ class RootViewModel @Inject constructor(
     private val mainpageScreenFactory: MainpageScreenFactory,
     private val commentScreenFactory: PostCommentPageFactory,
     private val playlistListScreenFactory: PlaylistListScreenFactory,
+    private val playlistCreateScreenFactory: PlaylistCreateScreenFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
-    PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener, PlaylistListListener {
+    PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener,
+    PlaylistListListener, PlaylistCreateListener {
     private var currentRouterIndex = 0
 
     private val currentRouter
@@ -64,6 +72,10 @@ class RootViewModel @Inject constructor(
     private val playlistsResultHandler = UserResultHandler {
         val screen = playlistListScreenFactory.build(this, currentKey)
         currentRouter.addScreen(screen)
+    }
+
+    private val playlistCreateHandler = PlaylistCreateResultHandler {
+        parentRouter.back()
     }
 
     fun onMenuItemClicked(index: Int) = intent {
@@ -140,6 +152,10 @@ class RootViewModel @Inject constructor(
         currentRouter.back()
     }
 
+    override fun exitRootScreen() {
+        parentRouter.back()
+    }
+
     override fun getBaseState(): RootState {
         return RootState(0, bottomNavigationItems.first().router)
     }
@@ -151,5 +167,14 @@ class RootViewModel @Inject constructor(
 
     override fun openPlaylist(playlist: Playlist) {
         TODO("Not yet implemented")
+    }
+
+    override fun createPlaylist(playlistCreateResultHandler: PlaylistCreateResultHandler) {
+        val screen = playlistCreateScreenFactory.build(
+            this,
+            playlistCreateHandler.merge(playlistCreateResultHandler),
+            currentKey
+        )
+        parentRouter.addChild(screen)
     }
 }

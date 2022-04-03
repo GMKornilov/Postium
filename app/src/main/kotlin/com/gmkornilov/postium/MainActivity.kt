@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
         }
 
         if (savedInstanceState == null) {
-            router.addScreen(bottomNavigationScreenFactory.build())
+            router.newRootScreen(bottomNavigationScreenFactory.build())
         }
     }
 

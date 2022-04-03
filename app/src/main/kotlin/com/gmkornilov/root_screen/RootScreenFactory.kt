@@ -24,6 +24,7 @@ import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactor
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
 import com.gmkornilov.user.repository.UserAvatarRepository
+import com.gmkornilov.user_playlists.playlist_create.PlaylistCreateScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
@@ -101,7 +102,8 @@ class RootScreenFactory @Inject constructor(
         PostCommentPageFactory.Deps,
         CategoriesListScreenFactory.Deps,
         CategoriesPostsScreenFactory.Deps,
-        PlaylistListScreenFactory.Deps {
+        PlaylistListScreenFactory.Deps,
+        PlaylistCreateScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -207,5 +209,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindPlaylistList(component: Component): PlaylistListScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindPlaylistCreate(component: Component): PlaylistCreateScreenFactory.Deps
     }
 }

@@ -11,10 +11,24 @@ private const val USER_PLAYLISTS_COLLECTION = "user_playlists"
 private const val PLAYLISTS_SUBCOLLECTION = "playlists"
 
 private const val POSTS_FIELD = "posts"
+private const val NAME_FIELD = "name"
 
 class PlaylistRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) {
+    suspend fun createPlaylist(userId: String, playlistName: String): Playlist {
+        val createMap = mapOf(
+            NAME_FIELD to playlistName
+        )
+        val ref = firestore
+            .collection(USER_PLAYLISTS_COLLECTION)
+            .document(userId)
+            .collection(PLAYLISTS_SUBCOLLECTION)
+            .add(createMap)
+            .await()
+        return ref.get().await().toObject(Playlist::class.java)!!.copy(id = ref.id)
+    }
+
     suspend fun getUserPlaylists(userId: String): List<Playlist> {
         val snapshot = firestore
             .collection(USER_PLAYLISTS_COLLECTION)
