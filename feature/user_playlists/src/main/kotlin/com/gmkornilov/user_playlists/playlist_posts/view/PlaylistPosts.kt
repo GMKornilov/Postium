@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.commons.posts.PostPreview
@@ -60,6 +61,8 @@ private fun PlaylistPostsWithState(
                 text = state.playlistName,
                 style = MaterialTheme.typography.h6,
                 color = MaterialTheme.colors.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .padding(start = 16.dp, end = 8.dp)
                     .align(Alignment.CenterVertically),

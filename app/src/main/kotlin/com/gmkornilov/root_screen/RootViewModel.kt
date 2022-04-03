@@ -28,6 +28,8 @@ import com.gmkornilov.user_playlists.playlist_create.domain.merge
 import com.gmkornilov.user_playlists.playlist_create.view.PlaylistCreateListener
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
+import com.gmkornilov.user_playlists.playlist_posts.PlaylistPostsScreenFactory
+import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsListener
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
@@ -52,9 +54,10 @@ class RootViewModel @Inject constructor(
     private val commentScreenFactory: PostCommentPageFactory,
     private val playlistListScreenFactory: PlaylistListScreenFactory,
     private val playlistCreateScreenFactory: PlaylistCreateScreenFactory,
+    private val playlistPostsScreenFactory: PlaylistPostsScreenFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
     PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener,
-    PlaylistListListener, PlaylistCreateListener {
+    PlaylistListListener, PlaylistCreateListener, PlaylistPostsListener {
     private var currentRouterIndex = 0
 
     private val currentRouter
@@ -166,7 +169,8 @@ class RootViewModel @Inject constructor(
     }
 
     override fun openPlaylist(playlist: Playlist) {
-        TODO("Not yet implemented")
+        val screen = playlistPostsScreenFactory.build(this, playlist, currentKey)
+        currentRouter.addScreen(screen)
     }
 
     override fun createPlaylist(playlistCreateResultHandler: PlaylistCreateResultHandler) {

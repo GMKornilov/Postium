@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.alphicc.brick.DataContainer
+import com.alphicc.brick.Screen
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
@@ -49,7 +50,10 @@ class PlaylistPostsScreenFactory @Inject constructor(
             val viewModel = arg.get<PlaylistPostsViewModel>()
             PlaylistPostsList(viewModel = viewModel, modifier = Modifier.fillMaxSize())
         }
+    }
 
+    fun build(listener: PlaylistPostsListener, playlist: Playlist, prevPath: String): Screen<*> {
+        return Factory(listener, playlist).build(prevPath)
     }
 
     interface Deps : Dependency {

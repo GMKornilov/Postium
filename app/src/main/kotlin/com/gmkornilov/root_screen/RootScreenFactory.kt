@@ -27,6 +27,8 @@ import com.gmkornilov.user.repository.UserAvatarRepository
 import com.gmkornilov.user_playlists.playlist_create.PlaylistCreateScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
+import com.gmkornilov.user_playlists.playlist_posts.PlaylistPostsScreenFactory
+import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsListener
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -103,7 +105,8 @@ class RootScreenFactory @Inject constructor(
         CategoriesListScreenFactory.Deps,
         CategoriesPostsScreenFactory.Deps,
         PlaylistListScreenFactory.Deps,
-        PlaylistCreateScreenFactory.Deps {
+        PlaylistCreateScreenFactory.Deps,
+        PlaylistPostsScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -170,6 +173,10 @@ class RootScreenFactory @Inject constructor(
         @RootScope
         @Binds
         fun playlistListPostsListener(rootViewModel: RootViewModel): PlaylistListListener
+
+        @RootScope
+        @Binds
+        fun playlistPostsListener(rootViewModel: RootViewModel): PlaylistPostsListener
     }
 
     @Module
@@ -213,5 +220,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindPlaylistCreate(component: Component): PlaylistCreateScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindPlaylistPosts(component: Component): PlaylistPostsScreenFactory.Deps
     }
 }
