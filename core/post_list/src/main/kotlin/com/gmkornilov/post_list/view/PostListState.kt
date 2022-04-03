@@ -1,10 +1,9 @@
-package com.gmkornilov.user_playlists.playlist_posts.view
+package com.gmkornilov.post_list.view
 
 import com.gmkornilov.lazy_column.ListState
 import com.gmkornilov.post.model.PostPreviewData
 
-internal data class PlaylistPostsState(
-    val playlistName: String,
+data class PostListState(
     val isRefreshing: Boolean = false,
     val listState: ListState<PostPreviewData> = ListState.None,
 )

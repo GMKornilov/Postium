@@ -1,8 +1,8 @@
-package com.gmkornilov.post_categories.categories_posts.view
+package com.gmkornilov.post_list.view
 
 import com.gmkornilov.post.model.PostPreviewData
 
-interface CategoryPostsEvents {
+interface PostListEvents {
     fun refreshData()
 
     fun openPost(post: PostPreviewData)
@@ -15,7 +15,7 @@ interface CategoryPostsEvents {
 
     fun bookmarkPost(post: PostPreviewData)
 
-    companion object : CategoryPostsEvents {
+    companion object: PostListEvents {
         override fun refreshData() = Unit
         override fun openPost(post: PostPreviewData) = Unit
         override fun openProfile(post: PostPreviewData) = Unit

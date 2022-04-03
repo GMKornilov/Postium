@@ -45,10 +45,11 @@ dependencies {
     implementation(project(":core:design"))
     implementation(project(":core:authorization"))
     implementation(project(":core:post"))
-    implementation(project(":core:post_list"))
 
     implementation(project(":data:post"))
-    implementation(project(":data:categories"))
+    implementation(project(":data:post_likes"))
+    implementation(project(":data:post_bookmarks"))
+    implementation(project(":data:user"))
 
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)
@@ -67,7 +68,6 @@ dependencies {
     implementation(Deps.Compose.IconsExtended)
 
     implementation(Deps.Compose.Accompanist.swipeRefresh)
-    implementation(Deps.Compose.Accompanist.flowLayouts)
 
     implementation(Deps.Compose.Icons.simple)
 

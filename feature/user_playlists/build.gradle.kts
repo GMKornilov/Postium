@@ -45,7 +45,9 @@ dependencies {
     implementation(project(":core:design"))
     implementation(project(":core:authorization"))
     implementation(project(":core:post"))
+    implementation(project(":core:post_list"))
 
+    implementation(project(":data:post"))
     implementation(project(":data:playlists"))
 
     implementation(platform(Deps.Firebase.bom))

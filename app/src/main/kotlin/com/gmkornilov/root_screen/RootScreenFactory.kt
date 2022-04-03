@@ -19,7 +19,7 @@ import com.gmkornilov.mainpage.mainpage.MainPageListener
 import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
 import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
 import com.gmkornilov.post_categories.categories_posts.CategoriesPostsScreenFactory
-import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsListener
+import com.gmkornilov.post_list.view.PostsListListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
@@ -28,7 +28,6 @@ import com.gmkornilov.user_playlists.playlist_create.PlaylistCreateScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.user_playlists.playlist_posts.PlaylistPostsScreenFactory
-import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsListener
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -168,15 +167,11 @@ class RootScreenFactory @Inject constructor(
 
         @RootScope
         @Binds
-        fun categoryPostsListener(rootViewModel: RootViewModel): CategoryPostsListener
-
-        @RootScope
-        @Binds
         fun playlistListPostsListener(rootViewModel: RootViewModel): PlaylistListListener
 
         @RootScope
         @Binds
-        fun playlistPostsListener(rootViewModel: RootViewModel): PlaylistPostsListener
+        fun postListListener(rootViewModel: RootViewModel): PostsListListener
     }
 
     @Module

@@ -11,10 +11,13 @@ import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.repository.PostRepository
+import com.gmkornilov.post_list.view.PostsListListener
+import com.gmkornilov.source.FirebasePostSource
+import com.gmkornilov.user_playlists.playlist_posts.domain.PlaylistPostLoader
 import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsList
-import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsListener
 import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsViewModel
 import com.gmkornilov.view_model.BaseViewModel
+import dagger.Binds
 import dagger.BindsInstance
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
@@ -26,7 +29,7 @@ class PlaylistPostsScreenFactory @Inject constructor(
     override val dependency: Deps,
 ) : DependencyProvider<PlaylistPostsScreenFactory.Deps> {
     private inner class Factory(
-        private val listener: PlaylistPostsListener,
+        private val listener: PostsListListener,
         private val playlist: Playlist,
     ) : ScreenFactory() {
         override fun buildKey(): String {
@@ -52,19 +55,21 @@ class PlaylistPostsScreenFactory @Inject constructor(
         }
     }
 
-    fun build(listener: PlaylistPostsListener, playlist: Playlist, prevPath: String): Screen<*> {
+    fun build(listener: PostsListListener, playlist: Playlist, prevPath: String): Screen<*> {
         return Factory(listener, playlist).build(prevPath)
     }
 
     interface Deps : Dependency {
         val postsRepository: PostRepository
         val authInteractor: AuthInteractor
+
+        val firebasePostSource: FirebasePostSource
     }
 
     @Scope
     internal annotation class PlaylistPostsScope
 
-    @dagger.Component(dependencies = [Deps::class])
+    @dagger.Component(dependencies = [Deps::class], modules = [Module::class])
     @PlaylistPostsScope
     internal interface Component {
         val viewModel: PlaylistPostsViewModel
@@ -75,11 +80,18 @@ class PlaylistPostsScreenFactory @Inject constructor(
             fun playlist(playlist: Playlist): Builder
 
             @BindsInstance
-            fun listener(listener: PlaylistPostsListener): Builder
+            fun listener(listener: PostsListListener): Builder
 
             fun deps(dependency: Deps): Builder
 
             fun build(): Component
         }
+    }
+
+    @dagger.Module
+    internal interface Module {
+        @Binds
+        @PlaylistPostsScope
+        fun bindPostLoader(playlistPostLoader: PlaylistPostLoader): PostRepository.PostLoader
     }
 }

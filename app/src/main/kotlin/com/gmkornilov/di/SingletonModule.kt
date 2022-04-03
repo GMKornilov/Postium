@@ -67,8 +67,7 @@ interface SingletonModule {
                 likeRepository,
                 authInteractor,
                 bookmarkRepository,
-                userRepository,
-                categoryRepository
+                userRepository
             )
         }
 

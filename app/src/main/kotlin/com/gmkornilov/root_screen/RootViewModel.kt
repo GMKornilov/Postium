@@ -17,7 +17,7 @@ import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post_categories.categories_list.CategoriesListScreenFactory
 import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
 import com.gmkornilov.post_categories.categories_posts.CategoriesPostsScreenFactory
-import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsListener
+import com.gmkornilov.post_list.view.PostsListListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
@@ -29,7 +29,6 @@ import com.gmkornilov.user_playlists.playlist_create.view.PlaylistCreateListener
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.user_playlists.playlist_posts.PlaylistPostsScreenFactory
-import com.gmkornilov.user_playlists.playlist_posts.view.PlaylistPostsListener
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.brick_navigation.UserPageScreenFactory
 import com.gmkornilov.userpage.view.UserPageListener
@@ -56,8 +55,8 @@ class RootViewModel @Inject constructor(
     private val playlistCreateScreenFactory: PlaylistCreateScreenFactory,
     private val playlistPostsScreenFactory: PlaylistPostsScreenFactory,
 ) : BaseViewModel<RootState, Nothing>(), UserPageListener, MainPageListener, PostpageListener,
-    PostCreateListener, CommentpageListener, CategoriesListener, CategoryPostsListener,
-    PlaylistListListener, PlaylistCreateListener, PlaylistPostsListener {
+    PostCreateListener, CommentpageListener, CategoriesListener,
+    PlaylistListListener, PlaylistCreateListener, PostsListListener {
     private var currentRouterIndex = 0
 
     private val currentRouter

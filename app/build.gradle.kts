@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":core:activity-utils"))
     implementation(project(":core:post"))
     implementation(project(":core:post_comments"))
+    implementation(project(":core:post_list"))
 
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))

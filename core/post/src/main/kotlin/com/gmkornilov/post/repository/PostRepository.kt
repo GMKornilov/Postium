@@ -1,16 +1,12 @@
 package com.gmkornilov.post.repository
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.model.Post
-import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.*
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
 import com.gmkornilov.post_likes.PostLikeRepository
 import com.gmkornilov.source.FirebasePostSource
-import com.gmkornilov.user.model.User
 import com.gmkornilov.user.repository.UserRepository
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class PostRepository @Inject constructor(
@@ -19,7 +15,6 @@ class PostRepository @Inject constructor(
     private val authInteractor: AuthInteractor,
     private val bookmarkRepository: PostBookmarkRepository,
     private val userRepository: UserRepository,
-    private val categoryRepository: CategoriesRepository,
 ) {
     suspend fun loadDataWithTimeRange(postTimeRange: SelectionTimeRange): List<PostPreviewData> {
         val postLoader = PostLoader {
@@ -44,22 +39,7 @@ class PostRepository @Inject constructor(
         return loadPostsPreview(postLoader)
     }
 
-    suspend fun loadCategoryPosts(categoryId: String): List<PostPreviewData> {
-        val postLoader = PostLoader {
-            val categoryReference = categoryRepository.getReference(categoryId)
-            firebasePostSource.getPostsWithCategory(categoryReference)
-        }
-        return loadPostsPreview(postLoader)
-    }
-
-    suspend fun loadPlaylistPosts(playlist: Playlist): List<PostPreviewData> {
-        val postLoader = PostLoader {
-            firebasePostSource.getPostWithIds(playlist.postIds)
-        }
-        return loadPostsPreview(postLoader)
-    }
-
-    private suspend fun loadPostsPreview(postLoader: PostLoader): List<PostPreviewData> {
+    suspend fun loadPostsPreview(postLoader: PostLoader): List<PostPreviewData> {
         val currentUser = authInteractor.getPostiumUser()
 
         val posts = postLoader.loadPosts()
@@ -120,7 +100,7 @@ class PostRepository @Inject constructor(
         }
     }
 
-    private fun interface PostLoader {
+    fun interface PostLoader {
         suspend fun loadPosts(): List<Post>
     }
 }

@@ -10,11 +10,15 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.categories.model.Category
+import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.post.repository.PostRepository
+import com.gmkornilov.post_categories.categories_posts.domain.CategoryPostLoader
 import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsList
-import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsListener
 import com.gmkornilov.post_categories.categories_posts.view.CategoryPostsViewModel
+import com.gmkornilov.post_list.view.PostsListListener
+import com.gmkornilov.source.FirebasePostSource
 import com.gmkornilov.view_model.BaseViewModel
+import dagger.Binds
 import dagger.BindsInstance
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
@@ -23,11 +27,11 @@ import javax.inject.Scope
 private const val CATEGORY_POSTS_KEY = "category_posts"
 
 class CategoriesPostsScreenFactory @Inject constructor(
-    override val dependency: Deps
+    override val dependency: Deps,
 ) : DependencyProvider<CategoriesPostsScreenFactory.Deps> {
     private inner class Factory(
-        private val listener: CategoryPostsListener,
-        private val category: Category
+        private val listener: PostsListListener,
+        private val category: Category,
     ) : ScreenFactory() {
         override fun buildKey(): String {
             return "${CATEGORY_POSTS_KEY}_${category.id}_${category.name}"
@@ -35,7 +39,7 @@ class CategoriesPostsScreenFactory @Inject constructor(
 
         override fun onCreate(
             flow: SharedFlow<DataContainer>,
-            arg: DataContainer
+            arg: DataContainer,
         ): BaseViewModel<*, *> {
             val component = DaggerCategoriesPostsScreenFactory_Component.builder()
                 .deps(dependency)
@@ -54,7 +58,7 @@ class CategoriesPostsScreenFactory @Inject constructor(
 
     }
 
-    fun build(listener: CategoryPostsListener, category: Category, prevPath: String): Screen<*> {
+    fun build(listener: PostsListListener, category: Category, prevPath: String): Screen<*> {
         return Factory(listener, category).build(prevPath)
     }
 
@@ -65,10 +69,12 @@ class CategoriesPostsScreenFactory @Inject constructor(
         val postsRepository: PostRepository
 
         val authInteractor: AuthInteractor
+        val firebasePostSource: FirebasePostSource
+        val categoryRepository: CategoriesRepository
     }
 
     @CategoriesPostsScope
-    @dagger.Component(dependencies = [Deps::class])
+    @dagger.Component(dependencies = [Deps::class], modules = [Module::class])
     internal interface Component {
         val viewModel: CategoryPostsViewModel
 
@@ -80,9 +86,16 @@ class CategoriesPostsScreenFactory @Inject constructor(
             fun category(category: Category): Builder
 
             @BindsInstance
-            fun listener(listener: CategoryPostsListener): Builder
+            fun listener(listener: PostsListListener): Builder
 
             fun build(): Component
         }
+    }
+
+    @dagger.Module
+    internal interface Module {
+        @Binds
+        @CategoriesPostsScope
+        fun bindPostLoader(categoryPostLoader: CategoryPostLoader): PostRepository.PostLoader
     }
 }

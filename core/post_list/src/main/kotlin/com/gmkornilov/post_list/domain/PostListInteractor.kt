@@ -1,15 +1,18 @@
-package com.gmkornilov.user_playlists.playlist_posts.domain
+package com.gmkornilov.post_list.domain
 
-import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostBookmarkStatus
 import com.gmkornilov.post.model.PostLikeStatus
+import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.repository.PostRepository
 import javax.inject.Inject
 
-internal class PlaylistPostsInteractor @Inject constructor(
+class PostListInteractor @Inject constructor(
+    private val postLoader: PostRepository.PostLoader,
     private val postRepository: PostRepository,
 ) {
-    suspend fun loadPosts(playlist: Playlist) = postRepository.loadPlaylistPosts(playlist)
+    suspend fun loadPosts(): List<PostPreviewData> {
+        return postRepository.loadPostsPreview(postLoader)
+    }
 
     suspend fun setLikeStatus(postId: String, likeStatus: PostLikeStatus) {
         postRepository.setLikeStatus(postId, likeStatus)
