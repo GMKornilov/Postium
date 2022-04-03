@@ -27,6 +27,14 @@ internal class MainPageViewModel @Inject constructor(
             PostTimeRange.WEEK -> lastWeekViewModel
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        allTimeViewModel.onDestroy()
+        lastDayViewModel.onDestroy()
+        lastWeekViewModel.onDestroy()
+    }
 }
 
 interface MainPageListener {
