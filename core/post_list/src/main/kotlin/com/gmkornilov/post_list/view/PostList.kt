@@ -37,7 +37,7 @@ fun PostList(
         viewModel.loadAllPosts()
     }
 
-    CategoryPostsWithState(state = state, categoryPostsEvents = viewModel, modifier = modifier)
+    CategoryPostsWithState(state = state, postsListEvents = viewModel, modifier = modifier)
 }
 
 @ExperimentalFoundationApi
@@ -45,13 +45,13 @@ fun PostList(
 @Composable
 private fun CategoryPostsWithState(
     state: PostListState,
-    categoryPostsEvents: PostListEvents,
+    postsListEvents: PostListEvents,
     modifier: Modifier = Modifier,
 ) {
     val isRefreshing = state.isRefreshing
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
-        onRefresh = { categoryPostsEvents.refreshData() },
+        onRefresh = { postsListEvents.refreshData() },
     ) {
         when (state.listState) {
             is ListState.Loading -> LoadingState(
@@ -68,7 +68,7 @@ private fun CategoryPostsWithState(
             )
             is ListState.Success -> if (state.listState.contents.isNotEmpty()) {
                 SuccessState(
-                    categoryPostsEvents = categoryPostsEvents,
+                    postsListEvents = postsListEvents,
                     posts = state.listState.contents,
                     modifier = modifier
                 )
@@ -108,7 +108,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 @ExperimentalFoundationApi
 @Composable
 private fun SuccessState(
-    categoryPostsEvents: PostListEvents,
+    postsListEvents: PostListEvents,
     posts: List<PostPreviewData>,
     modifier: Modifier = Modifier,
 ) {
@@ -146,11 +146,12 @@ private fun SuccessState(
                 isBookmarkChecked = item.bookmarkStatus.isBookmarked,
                 cornerType = cornerType,
                 modifier = Modifier.padding(bottom = bottomPadding),
-                onCardClick = { categoryPostsEvents.openPost(item) },
-                upClicked = { categoryPostsEvents.likePost(item) },
-                downClicked = { categoryPostsEvents.dislikePost(item) },
-                boolmarkClicked = { categoryPostsEvents.bookmarkPost(item) },
-                userProfileClicked = { categoryPostsEvents.openProfile(item) },
+                onCardClick = { postsListEvents.openPost(item) },
+                upClicked = { postsListEvents.likePost(item) },
+                downClicked = { postsListEvents.dislikePost(item) },
+                boolmarkClicked = { postsListEvents.bookmarkPost(item) },
+                userProfileClicked = { postsListEvents.openProfile(item) },
+                playlistClicked = { postsListEvents.addToPlaylists(item) }
             )
         }
     }

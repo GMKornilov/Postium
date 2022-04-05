@@ -15,6 +15,8 @@ interface PostListEvents {
 
     fun bookmarkPost(post: PostPreviewData)
 
+    fun addToPlaylists(post: PostPreviewData)
+
     companion object: PostListEvents {
         override fun refreshData() = Unit
         override fun openPost(post: PostPreviewData) = Unit
@@ -22,5 +24,6 @@ interface PostListEvents {
         override fun likePost(post: PostPreviewData) = Unit
         override fun dislikePost(post: PostPreviewData) = Unit
         override fun bookmarkPost(post: PostPreviewData) = Unit
+        override fun addToPlaylists(post: PostPreviewData) = Unit
     }
 }

@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.theme.DarkBurgundy
 import com.gmkornilov.design.theme.Green
 import com.gmkornilov.design.theme.PostiumTheme
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Bookmarks
 
 @Composable
 fun LikeButton(
@@ -80,6 +82,18 @@ fun BookmarkButton(
     }
 }
 
+@Composable
+fun PlaylistButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(onClick = onClick, modifier = modifier) {
+        Icon(imageVector = TablerIcons.Bookmarks,
+            contentDescription = null,
+            tint = MaterialTheme.colors.onSurface)
+    }
+}
+
 @Preview(
     name = "Buttons light",
     uiMode = Configuration.UI_MODE_NIGHT_NO,
@@ -109,12 +123,14 @@ private fun ButtonPreview() {
                 LikeButton(isChecked = true, onCheckedChange = {}, modifier = modifier)
                 DislikeButton(isChecked = true, onCheckedChange = {}, modifier = modifier)
                 BookmarkButton(isChecked = true, onCheckedChange = {}, modifier = modifier)
+                PlaylistButton(onClick = { }, modifier = modifier)
             }
             Row {
                 val modifier = Modifier.padding(4.dp)
                 LikeButton(isChecked = false, onCheckedChange = {}, modifier = modifier)
                 DislikeButton(isChecked = false, onCheckedChange = {}, modifier = modifier)
                 BookmarkButton(isChecked = false, onCheckedChange = {}, modifier = modifier)
+                PlaylistButton(onClick = { }, modifier = modifier)
             }
         }
     }

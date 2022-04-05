@@ -72,6 +72,10 @@ class PostListViewModel @Inject constructor(
         }
     }
 
+    private fun getAddToPlaylistsUserHandler(post: PostPreviewData) = UserResultHandler {
+        listener.addToPlaylist(post)
+    }
+
     fun loadAllPosts(isRefresh: Boolean = false) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             if (isRefresh) {
@@ -125,6 +129,14 @@ class PostListViewModel @Inject constructor(
         } ?: listener.startAuthorizationFlow(bookmarkUserHandler)
     }
 
+    override fun addToPlaylists(post: PostPreviewData) {
+        val addToPLaylistsUserHandler = getAddToPlaylistsUserHandler(post)
+        val user = authInteractor.getPostiumUser()
+        user?.let {
+            addToPLaylistsUserHandler.handleResult(user)
+        } ?: listener.startAuthorizationFlow(addToPLaylistsUserHandler)
+    }
+
     private fun replacePost(oldPost: PostPreviewData, newPost: PostPreviewData) = intent {
         reduce {
             val currentState = this.state.listState
@@ -153,4 +165,6 @@ interface PostsListListener {
     fun startAuthorizationFlow(userResultHandler: UserResultHandler)
 
     fun openUserProfile(postPreviewData: PostPreviewData)
+
+    fun addToPlaylist(post: PostPreviewData)
 }

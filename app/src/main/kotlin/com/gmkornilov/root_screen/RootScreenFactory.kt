@@ -24,6 +24,8 @@ import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactor
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
 import com.gmkornilov.user.repository.UserAvatarRepository
+import com.gmkornilov.user_playlists.playlist_add.PlaylistAddScreenFactory
+import com.gmkornilov.user_playlists.playlist_add.view.PlaylistAddListener
 import com.gmkornilov.user_playlists.playlist_create.PlaylistCreateScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.PlaylistListScreenFactory
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
@@ -105,7 +107,8 @@ class RootScreenFactory @Inject constructor(
         CategoriesPostsScreenFactory.Deps,
         PlaylistListScreenFactory.Deps,
         PlaylistCreateScreenFactory.Deps,
-        PlaylistPostsScreenFactory.Deps {
+        PlaylistPostsScreenFactory.Deps,
+        PlaylistAddScreenFactory.Deps {
         val rootViewModel: RootViewModel
 
         val authorizationFlowScreenFactory: AuthorizationFlowScreenFactory
@@ -172,6 +175,10 @@ class RootScreenFactory @Inject constructor(
         @RootScope
         @Binds
         fun postListListener(rootViewModel: RootViewModel): PostsListListener
+
+        @RootScope
+        @Binds
+        fun playlistAddListener(rootViewModel: RootViewModel): PlaylistAddListener
     }
 
     @Module
@@ -219,5 +226,9 @@ class RootScreenFactory @Inject constructor(
         @Binds
         @RootScope
         fun bindPlaylistPosts(component: Component): PlaylistPostsScreenFactory.Deps
+
+        @Binds
+        @RootScope
+        fun bindPlaylistAddPosts(component: Component): PlaylistAddScreenFactory.Deps
     }
 }

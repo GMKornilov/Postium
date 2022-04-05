@@ -13,6 +13,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.gmkornilov.design.commons.buttons.BookmarkButton
 import com.gmkornilov.design.commons.buttons.DislikeButton
 import com.gmkornilov.design.commons.buttons.LikeButton
+import com.gmkornilov.design.commons.buttons.PlaylistButton
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
@@ -33,6 +34,7 @@ fun PostPreview(
     upClicked: (Boolean) -> Unit = {},
     downClicked: (Boolean) -> Unit = {},
     boolmarkClicked: (Boolean) -> Unit = {},
+    playlistClicked: () -> Unit = {},
 ) {
     val cornerRadius = 32.dp
     Card(
@@ -48,7 +50,7 @@ fun PostPreview(
         onClick = onCardClick
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (titleRef, userNameRef, dividerRef, avatarRef, upRef, downRef, markRef) = createRefs()
+            val (titleRef, userNameRef, dividerRef, avatarRef, upRef, downRef, markRef, playlistRef) = createRefs()
             Text(
                 text = title,
                 style = MaterialTheme.typography.h5,
@@ -118,9 +120,17 @@ fun PostPreview(
                 isChecked = isBookmarkChecked,
                 onCheckedChange = boolmarkClicked,
                 modifier = Modifier.constrainAs(markRef) {
-                    end.linkTo(parent.end, margin = 16.dp)
+                    end.linkTo(playlistRef.start, margin = 4.dp)
                     top.linkTo(upRef.top)
                 },
+            )
+
+            PlaylistButton(
+                onClick = playlistClicked,
+                modifier = Modifier.constrainAs(playlistRef) {
+                    end.linkTo(parent.end, margin = 16.dp)
+                    top.linkTo(upRef.top)
+                }
             )
         }
     }

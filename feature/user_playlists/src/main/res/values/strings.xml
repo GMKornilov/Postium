@@ -11,4 +11,7 @@
     <string name="create_playlist_title">Создать список для чтения</string>
     <string name="playlist_label">Название списка</string>
     <string name="playlist_create_button_label">Создать</string>
+
+    <string name="playlist_add_label">Выберите списки для чтения:</string>
+    <string name="playlist_add">Готово</string>
 </resources>
