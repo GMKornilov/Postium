@@ -1,11 +1,18 @@
 package com.gmkornilov.post_list.view
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,9 +90,12 @@ private fun CategoryPostsWithState(
 @Composable
 private fun LoadingState(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.background(MaterialTheme.colors.surface)
+        modifier = modifier.background(MaterialTheme.colors.background)
     ) {
-        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center),
+            color = MaterialTheme.colors.primary
+        )
     }
 }
 

@@ -5,12 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import com.alphicc.brick.TreeRouter
 import com.alphicc.brick.navigationContainers.ScreensContainer
 import com.gmkornilov.activity_utils.ActivityHelper
+import com.gmkornilov.design.theme.LocalSystemUiController
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.root_screen.RootScreenFactory
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -45,7 +47,11 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            AppContent()
+            CompositionLocalProvider(
+                LocalSystemUiController provides systemUiController
+            ) {
+                AppContent()
+            }
         }
 
         if (savedInstanceState == null) {

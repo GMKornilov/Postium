@@ -34,7 +34,7 @@ fun Chip(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.secondary)
             .clickable { onCLick() }
             .padding(horizontal = 12.dp),
     ) {
@@ -55,10 +55,10 @@ fun SelectableChip(
     modifier: Modifier = Modifier,
 ) {
     val background by animateColorAsState(
-        if (isSelected) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
+        if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
     )
     val textColor by animateColorAsState(
-        if (isSelected) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary
+        if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSecondary
     )
 
 

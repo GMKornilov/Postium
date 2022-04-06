@@ -69,6 +69,7 @@ dependencies {
 
     implementation(Deps.Compose.Accompanist.placeholderMaterial)
     implementation(Deps.Compose.Accompanist.insets)
+    implementation(Deps.Compose.Accompanist.systemUi)
 
     implementation(Deps.Compose.Images.coil)
 

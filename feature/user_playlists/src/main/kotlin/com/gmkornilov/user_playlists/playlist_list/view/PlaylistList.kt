@@ -1,13 +1,11 @@
 package com.gmkornilov.user_playlists.playlist_list.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -16,7 +14,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.commons.playlists.PlaylistPreview
 import com.gmkornilov.design.components.EmptyStateContainer
@@ -129,34 +129,33 @@ private fun PlaylistColumn(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .background(MaterialTheme.colors.surface)
-            .padding(top = 8.dp),
+        modifier = modifier.background(MaterialTheme.colors.background)
     ) {
         Text(
             stringResource(R.string.playlists_title),
-            color = MaterialTheme.colors.onSurface,
+            color = MaterialTheme.colors.onPrimary,
             style = MaterialTheme.typography.h4,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+                .background(MaterialTheme.colors.primary)
                 .padding(top = 8.dp, bottom = 8.dp),
         )
 
         LazyColumn(
-            modifier = Modifier
-                .background(MaterialTheme.colors.background)
-                .weight(1f)
+            modifier = Modifier.weight(1f).padding(bottom = 8.dp)
         ) {
             itemsIndexed(state, { _, item: Playlist -> item.id }) { index, item ->
                 val isLast = index == state.lastIndex
                 val isFirst = index == 0
+                val topPadding = if (isFirst) 8.dp else 0.dp
                 val bottomPadding = if (!isLast) 8.dp else 0.dp
-                val cornerType = if (isFirst) CornerType.BOTTOM else CornerType.ALL
 
                 PlaylistPreview(name = item.name,
                     postAmount = item.postIds.size,
-                    cornerType = cornerType,
-                    modifier = Modifier.padding(bottom = bottomPadding),
+                    cornerType = CornerType.ALL,
+                    modifier = Modifier.padding(top = topPadding, bottom = bottomPadding, start = 4.dp, end = 4.dp),
                     onPlaylistClicked = { playlistListEvents.openPlaylist(item) }
                 )
             }

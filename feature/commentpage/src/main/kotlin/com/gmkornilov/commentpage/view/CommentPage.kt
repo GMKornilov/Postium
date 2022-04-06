@@ -159,7 +159,7 @@ private fun CommentPageWithState(
 
             FloatingActionButton(
                 onClick = { commentPageEvents.sendComment(enteredComment) },
-                backgroundColor = MaterialTheme.colors.primary,
+                backgroundColor = MaterialTheme.colors.secondary,
                 modifier = Modifier.padding(top = 12.dp, bottom = 12.dp, end = 4.dp),
             ) {
                 when (state.sendCommentState) {

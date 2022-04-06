@@ -3,11 +3,9 @@ package com.gmkornilov.post_categories.categories_list.view
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -16,7 +14,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.categories.model.Category
@@ -105,26 +105,25 @@ private fun SuccessState(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
-            .background(MaterialTheme.colors.surface)
-            .padding(8.dp),
+        modifier = modifier.background(MaterialTheme.colors.background),
     ) {
         Text(
             stringResource(R.string.categories_title),
-            color = MaterialTheme.colors.onSurface,
+            color = MaterialTheme.colors.onPrimary,
             style = MaterialTheme.typography.h4,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 8.dp, bottom = 8.dp),
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+                .background(MaterialTheme.colors.primary)
+                .padding(top = 8.dp, bottom = 8.dp)
         )
-
-        Divider()
 
         FlowRow(
             mainAxisSpacing = 8.dp,
             crossAxisSpacing = 12.dp,
             mainAxisAlignment = FlowMainAxisAlignment.Start,
-            modifier = Modifier.padding(top = 12.dp)
+            modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp)
         ) {
             state.forEach { category ->
                 key(category.id) {

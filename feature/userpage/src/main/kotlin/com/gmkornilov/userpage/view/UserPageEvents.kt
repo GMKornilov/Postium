@@ -13,6 +13,8 @@ internal interface UserPageEvents {
 
     fun openPost(postPreviewData: PostPreviewData)
 
+    fun openProfile(postPreviewData: PostPreviewData)
+
     fun loadHeader()
 
     fun createPost()
@@ -25,6 +27,7 @@ internal interface UserPageEvents {
         override fun dislikePost(postPreviewData: PostPreviewData) = Unit
         override fun bookmarkPost(postPreviewData: PostPreviewData) = Unit
         override fun openPost(postPreviewData: PostPreviewData) = Unit
+        override fun openProfile(postPreviewData: PostPreviewData) = Unit
         override fun loadHeader() = Unit
         override fun createPost() = Unit
         override fun refreshData() = Unit

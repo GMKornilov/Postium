@@ -183,6 +183,7 @@ private fun PostCreateWithState(
                         Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                     )
                 },
+                backgroundColor = MaterialTheme.colors.secondary
             ) {
                 pages.forEachIndexed { index, tab ->
                     Tab(
@@ -228,13 +229,13 @@ private fun PostCreateWithState(
 
         FloatingActionButton(
             onClick = { postCreateEvents.createPost(enteredTitle, enteredContent) },
-            backgroundColor = MaterialTheme.colors.primary,
+            backgroundColor = MaterialTheme.colors.secondary,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 16.dp, bottom = 16.dp)
         ) {
             if (state.isLoading) {
-                CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+                CircularProgressIndicator(color = MaterialTheme.colors.onSecondary)
             } else {
                 Icon(TablerIcons.Send, null)
             }

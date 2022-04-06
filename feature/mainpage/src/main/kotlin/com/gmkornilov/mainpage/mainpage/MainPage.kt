@@ -37,14 +37,14 @@ internal fun Mainpage(
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.surface)
+                .background(MaterialTheme.colors.primary)
                 .padding(top = 8.dp, bottom = 8.dp)
                 .height(48.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.main_page_title),
                 style = MaterialTheme.typography.h6,
-                color = MaterialTheme.colors.onSurface,
+                color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier
                     .padding(start = 16.dp, end = 8.dp)
                     .align(Alignment.CenterVertically),
@@ -60,14 +60,14 @@ internal fun Mainpage(
                 Row(modifier = Modifier.clickable { menuExpanded = !menuExpanded }) {
                     Text(
                         stringResource(id = currentRange.titleRes),
-                        color = MaterialTheme.colors.onSurface,
+                        color = MaterialTheme.colors.onPrimary,
                     )
 
                     Icon(
                         Icons.Filled.ArrowDropDown,
                         null,
                         modifier = Modifier.rotate(if (menuExpanded) 180f else 360f),
-                        tint = MaterialTheme.colors.onSurface,
+                        tint = MaterialTheme.colors.onPrimary,
                     )
                 }
                 DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {

@@ -5,7 +5,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -15,10 +17,16 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200,
-    background = Color.Black.copy(alpha = 0.12f),
+    primary = Green500,
+    primaryVariant = LightGreen700,
+    secondary = Indigo600,
+    secondaryVariant = Indigo400,
+    background = Indigo50,
+
+    onPrimary = Color.White,
+    onBackground = Color.Black,
+    onSecondary = Color.White,
+
 
     /* Other default colors to override
     background = Color.White,
@@ -29,6 +37,10 @@ private val LightColorPalette = lightColors(
     onSurface = Color.Black,
     */
 )
+
+val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
+    error("Default value not provided")
+}
 
 @Composable
 fun PostiumTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

@@ -59,7 +59,9 @@ internal fun BottomBar(
     bottomNavigationItems: List<BottomNavigationItem>,
     modifier: Modifier = Modifier
 ) {
-    BottomNavigation(modifier.navigationBarsHeight(additional = LocalNavigationBarHeight.current)) {
+    BottomNavigation(
+        modifier = modifier.navigationBarsHeight(additional = LocalNavigationBarHeight.current),
+    ) {
         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
             val isSelected = index == selectedIndex
             BottomNavigationItem(

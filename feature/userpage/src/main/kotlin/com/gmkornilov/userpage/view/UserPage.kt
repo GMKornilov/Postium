@@ -59,25 +59,23 @@ private fun UserPageWithState(
     userPageEvents: UserPageEvents,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.background(MaterialTheme.colors.surface)) {
+    Box(modifier = modifier.background(MaterialTheme.colors.background)) {
         Column(modifier = modifier.fillMaxSize()) {
             UserHeader(
                 state = state.headerState,
                 userPageEvents = userPageEvents,
-                modifier = Modifier.padding(top = 16.dp)
             )
 
             UserContent(
                 state = state,
                 userPageEvents = userPageEvents,
-                modifier = Modifier.padding(top = 8.dp)
             )
         }
 
         if (state.createPostButtonVisible) {
             FloatingActionButton(
                 onClick = { userPageEvents.createPost() },
-                backgroundColor = MaterialTheme.colors.primary,
+                backgroundColor = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 16.dp, bottom = 16.dp)
@@ -100,7 +98,13 @@ private fun UserHeader(
         }
     }
 
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.primary)
+            .padding(top = 12.dp, bottom = 12.dp)
+    ) {
         state.avatarUrl?.let {
             CompositionLocalProvider(LocalAvatarSize provides 64.dp) {
                 UserAvatar(
@@ -118,7 +122,7 @@ private fun UserHeader(
         val startPadding = if (state.avatarUrl == null) 16.dp else 12.dp
         Text(
             state.username,
-            color = MaterialTheme.colors.onSurface,
+            color = MaterialTheme.colors.onSecondary,
             style = MaterialTheme.typography.h5,
             modifier = Modifier
                 .padding(start = startPadding, bottom = 8.dp)
@@ -155,7 +159,8 @@ private fun UserContent(
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                 )
-            }
+            },
+            backgroundColor = MaterialTheme.colors.secondary,
         ) {
             pages.forEachIndexed { index, tab ->
                 Tab(
@@ -280,7 +285,7 @@ private fun SuccessState(
                 upClicked = { userPageEvents.likePost(item) },
                 downClicked = { userPageEvents.dislikePost(item) },
                 boolmarkClicked = { userPageEvents.bookmarkPost(item) },
-//                userProfileClicked = { userPageEvents.openProfile(item) },
+                userProfileClicked = { userPageEvents.openProfile(item) },
             )
         }
     }

@@ -137,6 +137,10 @@ internal class UserPageViewModel @Inject constructor(
         listener.openPost(postPreviewData)
     }
 
+    override fun openProfile(postPreviewData: PostPreviewData) {
+        listener.openUserProfile(postPreviewData)
+    }
+
     override fun loadHeader() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             try {

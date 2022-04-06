@@ -37,20 +37,20 @@ fun PlaylistPreview(
     ) {
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colors.primary)
+                .background(MaterialTheme.colors.secondary)
                 .padding(
-                    top = 24.dp,
-                    bottom = 24.dp,
+                    top = 16.dp,
+                    bottom = 16.dp,
                     start = 16.dp,
                     end = 16.dp
                 ),
         ) {
             Text(text = name,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h5,
                 color = contentColorFor(MaterialTheme.colors.primary),
             )
 
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(4.dp))
 
             Text(
                 text = pluralResource(R.plurals.playlist_label, postAmount, postAmount),
