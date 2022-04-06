@@ -15,15 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.gmkornilov.authorization.R
-import com.gmkornilov.design.commons.buttons.CircularFacebookButton
 import com.gmkornilov.design.commons.buttons.CircularGoogleButton
-import com.gmkornilov.design.commons.buttons.CircularVkButton
 import com.gmkornilov.design.components.PasswordTextField
 import com.gmkornilov.design.theme.PostiumTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
@@ -48,7 +45,7 @@ internal fun Home(
 
     LaunchedEffect(viewModel) {
         launch {
-            viewModel.container.sideEffectFlow.collect(FlowCollector {
+            viewModel.container.sideEffectFlow.collect {
                 when (it) {
                     is HomeSideEffect.GoogleSignIn -> googleSignInlauncher.launch(it.intent)
                     is HomeSideEffect.LoginError -> showError(
@@ -57,7 +54,7 @@ internal fun Home(
                         snackbarHostState
                     )
                 }
-            })
+            }
         }
     }
 
@@ -67,7 +64,7 @@ internal fun Home(
 private fun showError(
     message: String,
     coroutineScope: CoroutineScope,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
 ) {
     coroutineScope.launch {
         snackbarHostState.showSnackbar(message = message)
@@ -83,11 +80,15 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
     var passwordVisible by remember { mutableStateOf(false) }
 
     ConstraintLayout(
-        modifier = modifier.background(MaterialTheme.colors.surface).padding(horizontal = 16.dp)
+        modifier = modifier
+            .background(MaterialTheme.colors.surface)
+            .padding(horizontal = 16.dp)
     ) {
-        val (title, login, password, errorLabel,
+        val (
+            title, login, password, errorLabel,
             forgotPassword, loginButton, outterLoginLabel,
-            outterLoginRow, notRegistered) = createRefs()
+            outterLoginRow, notRegistered,
+        ) = createRefs()
 
         Text(
             text = stringResource(R.string.app_name),
@@ -179,26 +180,30 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
         Text(
             text = stringResource(R.string.auth_extended_label),
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp).constrainAs(outterLoginLabel) {
-                top.linkTo(loginButton.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .constrainAs(outterLoginLabel) {
+                    top.linkTo(loginButton.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(top = 8.dp).constrainAs(outterLoginRow) {
-                top.linkTo(outterLoginLabel.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .constrainAs(outterLoginRow) {
+                    top.linkTo(outterLoginLabel.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         ) {
-            CircularVkButton(onClick = homeEvents::vkSignIn)
+//            CircularVkButton(onClick = homeEvents::vkSignIn)
 
             CircularGoogleButton(onClick = homeEvents::googleSignIn)
 
-            CircularFacebookButton(onClick = homeEvents::facebookSignIn)
+//            CircularFacebookButton(onClick = homeEvents::facebookSignIn)
         }
 
         TextButton(

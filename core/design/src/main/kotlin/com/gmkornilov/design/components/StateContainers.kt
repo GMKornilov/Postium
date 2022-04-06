@@ -27,7 +27,7 @@ fun ErrorStateContainer(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colors.background)
             .padding(16.dp),
     ) {
         LottieAnimation(
