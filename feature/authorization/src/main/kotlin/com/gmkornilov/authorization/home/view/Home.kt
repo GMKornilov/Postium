@@ -97,7 +97,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
         OutlinedTextField(
             value = enteredLogin,
             onValueChange = { enteredLogin = it },
-            label = { Text(stringResource(R.string.login_hint)) },
+            label = { Text(stringResource(R.string.email_hint)) },
             modifier = Modifier
                 .padding(top = 32.dp)
                 .fillMaxWidth()

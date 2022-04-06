@@ -7,6 +7,10 @@ import javax.inject.Inject
 class RegistrationStringsProvider @Inject constructor(
     private val stringsProvider: StringsProvider,
 ) {
+    fun getUsernameNotEmpty(): String {
+        return stringsProvider.getStringById(R.string.username_empty)
+    }
+
     fun getPasswordDontMatch(): String {
         return stringsProvider.getStringById(R.string.password_dont_match)
     }

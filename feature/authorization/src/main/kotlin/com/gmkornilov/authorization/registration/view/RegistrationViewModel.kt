@@ -2,6 +2,7 @@ package com.gmkornilov.authorization.registration.view
 
 import com.gmkornilov.authorizarion.email.EmailAuthInteractor
 import com.gmkornilov.authorizarion.email.EmailRegisterResult
+import com.gmkornilov.authorizarion.model.PostiumUser
 import com.gmkornilov.authorization.registration.domain.RegistrationFlowEvents
 import com.gmkornilov.authorization.registration.domain.RegistrationStringsProvider
 import com.gmkornilov.view_model.BaseViewModel
@@ -20,8 +21,22 @@ internal class RegistrationViewModel @Inject constructor(
         return RegistrationState.DEFAULT
     }
 
-    override fun registerUser(email: String, password: String, passwordConfirmation: String) =
+    override fun registerUser(
+        username: String,
+        email: String,
+        password: String,
+        passwordConfirmation: String,
+    ) =
         intent {
+            if (username.isBlank()) {
+                reduce {
+                    RegistrationState(
+                        usernameError = true,
+                        errorLabel = registrationStringsProvider.getUsernameNotEmpty(),
+                    )
+                }
+                return@intent
+            }
             if (password != passwordConfirmation) {
                 reduce {
                     RegistrationState(
@@ -32,10 +47,10 @@ internal class RegistrationViewModel @Inject constructor(
                 }
                 return@intent
             }
-            registerUnsafe(email.trim(), password)
+            registerUnsafe(username.trim(), email.trim(), password)
         }
 
-    private fun registerUnsafe(email: String, password: String) = intent {
+    private fun registerUnsafe(username: String, email: String, password: String) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reduce {
                 this.state.copy(loading = true)
@@ -44,8 +59,16 @@ internal class RegistrationViewModel @Inject constructor(
             reduce {
                 when (result) {
                     is EmailRegisterResult.Success -> {
-                        registrationFlowEvents.successfulRegistration(result.postiumUser)
-                        RegistrationState.DEFAULT
+                        val userStub = object : PostiumUser {
+                            override fun getUid() = result.postiumUser.getUid()
+                            override fun getDisplayName() = username
+                            override fun getEmail() = result.postiumUser.getEmail()
+                            override fun getProfilePhotoUrl() = result.postiumUser.getProfilePhotoUrl()
+                        }
+                        viewModelScope.launch(Dispatchers.IO) {
+                            registrationFlowEvents.successfulRegistration(userStub)
+                        }
+                        this.state
                     }
                     EmailRegisterResult.WeakPassword -> RegistrationState(
                         passwordError = true,

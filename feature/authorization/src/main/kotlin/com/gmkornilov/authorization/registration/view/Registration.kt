@@ -33,6 +33,8 @@ private fun RegistrationWithState(
     registrationEvents: RegistrationEvents,
     modifier: Modifier = Modifier,
 ) {
+    var enteredEmail by remember { mutableStateOf("") }
+
     var enteredLogin by remember { mutableStateOf("") }
 
     var enteredPassword by remember { mutableStateOf("") }
@@ -55,11 +57,21 @@ private fun RegistrationWithState(
             .padding(horizontal = 16.dp)
     ) {
         OutlinedTextField(
+            value = enteredEmail,
+            onValueChange = { enteredEmail = it },
+            label = { Text(stringResource(R.string.email_hint)) },
+            modifier = Modifier.fillMaxWidth(),
+            colors = if (state.emailError) {
+                errorColors
+            } else TextFieldDefaults.outlinedTextFieldColors(),
+        )
+
+        OutlinedTextField(
             value = enteredLogin,
             onValueChange = { enteredLogin = it },
             label = { Text(stringResource(R.string.login_hint)) },
             modifier = Modifier.fillMaxWidth(),
-            colors = if (state.emailError) {
+            colors = if (state.usernameError) {
                 errorColors
             } else TextFieldDefaults.outlinedTextFieldColors(),
         )
@@ -104,6 +116,7 @@ private fun RegistrationWithState(
                 if (!state.loading) {
                     registrationEvents.registerUser(
                         enteredLogin,
+                        enteredEmail,
                         enteredPassword,
                         enteredPasswordConfirmation
                     )

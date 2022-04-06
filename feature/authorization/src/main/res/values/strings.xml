@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Postium</string>
-    <string name="login_hint">E-mail</string>
+    <string name="email_hint">E-mail</string>
+    <string name="login_hint">Имя пользователя</string>
     <string name="password_hint">Пароль</string>
     <string name="password_confirmation_hint">Подтвердите пароль</string>
     <string name="not_registered_label">Не зарегистрированы?</string>
@@ -18,6 +19,7 @@
     <!-- Registration screen -->
     <string name="register">Зарегистрироваться</string>
 
+    <string name="username_empty">Имя пользователя должно быть не пустым</string>
     <string name="password_dont_match">Пароли не совпадают</string>
     <string name="weak_password">Введенный пароль слишком слабый</string>
     <string name="malformed_email">Некорректный email</string>
