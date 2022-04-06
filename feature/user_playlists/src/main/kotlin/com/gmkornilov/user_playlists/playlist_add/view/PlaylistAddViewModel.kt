@@ -54,10 +54,12 @@ internal class PlaylistAddViewModel @Inject constructor(
 
     fun submit() = intent {
         try {
+            reduce { this.state.copy(isLoading = true) }
             playlistAddInteractor.submitData(postPreviewData.id)
             listener.exitRootScreen()
         } catch (e: Exception) {
             Timber.e(e)
+            reduce { this.state.copy(isLoading = false) }
         }
     }
 
