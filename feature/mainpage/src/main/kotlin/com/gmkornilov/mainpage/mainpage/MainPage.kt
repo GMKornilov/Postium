@@ -57,7 +57,10 @@ internal fun Mainpage(
                     .align(Alignment.CenterVertically)
                     .padding(end = 8.dp)
             ) {
-                Row(modifier = Modifier.clickable { menuExpanded = !menuExpanded }) {
+                Row(
+                    modifier = Modifier.clickable { menuExpanded = !menuExpanded },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         stringResource(id = currentRange.titleRes),
                         color = MaterialTheme.colors.onPrimary,

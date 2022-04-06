@@ -8,12 +8,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.gmkornilov.authorization.R
 import com.gmkornilov.design.commons.buttons.CircularGoogleButton
 import com.gmkornilov.design.components.PasswordTextField
@@ -79,25 +80,18 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
     var enteredPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    ConstraintLayout(
+    Column(
         modifier = modifier
             .background(MaterialTheme.colors.surface)
             .padding(horizontal = 16.dp)
     ) {
-        val (
-            title, login, password, errorLabel,
-            forgotPassword, loginButton, outterLoginLabel,
-            outterLoginRow, notRegistered,
-        ) = createRefs()
+        Spacer(Modifier.weight(1f))
 
         Text(
             text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.h1,
-            modifier = Modifier.constrainAs(title) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            style = MaterialTheme.typography.h2,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         OutlinedTextField(
@@ -107,9 +101,6 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             modifier = Modifier
                 .padding(top = 32.dp)
                 .fillMaxWidth()
-                .constrainAs(login) {
-                    top.linkTo(title.bottom)
-                }
         )
 
         PasswordTextField(
@@ -118,11 +109,7 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             onPasswordVisibleChange = { passwordVisible = it },
             onValueChange = { enteredPassword = it },
             label = { Text(stringResource(id = R.string.password_hint)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(password) {
-                    top.linkTo(login.bottom)
-                },
+            modifier = Modifier.fillMaxWidth()
         )
 
         val text = when (state) {
@@ -136,27 +123,15 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
                 text = text,
                 style = MaterialTheme.typography.subtitle2,
                 color = MaterialTheme.colors.error,
-                modifier = Modifier
-                    .padding(top = 4.dp)
-                    .constrainAs(errorLabel) {
-                        top.linkTo(password.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
+                modifier = Modifier.padding(top = 4.dp).align(Alignment.CenterHorizontally)
             )
         }
-
-        val bottomBarrier = createBottomBarrier(errorLabel, password)
 
         TextButton(
             onClick = homeEvents::passwordRestoration,
             modifier = Modifier
                 .padding(top = 16.dp, bottom = 8.dp)
-                .constrainAs(forgotPassword) {
-                    top.linkTo(bottomBarrier, goneMargin = 4.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+                .align(Alignment.CenterHorizontally)
         ) {
             Text(text = stringResource(R.string.forgot_password_label))
         }
@@ -166,9 +141,6 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .constrainAs(loginButton) {
-                    top.linkTo(forgotPassword.bottom)
-                }
         ) {
             if (state is HomeState.Loading) {
                 CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
@@ -180,24 +152,17 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
         Text(
             text = stringResource(R.string.auth_extended_label),
             style = MaterialTheme.typography.subtitle1,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(top = 32.dp)
-                .constrainAs(outterLoginLabel) {
-                    top.linkTo(loginButton.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+                .align(Alignment.CenterHorizontally)
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             modifier = Modifier
                 .padding(top = 8.dp)
-                .constrainAs(outterLoginRow) {
-                    top.linkTo(outterLoginLabel.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+                .fillMaxWidth()
         ) {
 //            CircularVkButton(onClick = homeEvents::vkSignIn)
 
@@ -206,13 +171,11 @@ private fun HomeWithState(state: HomeState, homeEvents: HomeEvents, modifier: Mo
 //            CircularFacebookButton(onClick = homeEvents::facebookSignIn)
         }
 
+        Spacer(Modifier.weight(1f))
+
         TextButton(
             onClick = homeEvents::register,
-            modifier = Modifier.constrainAs(notRegistered) {
-                bottom.linkTo(parent.bottom, margin = 8.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(bottom = 8.dp).align(Alignment.CenterHorizontally)
         ) {
             Icon(
                 imageVector = Icons.Outlined.PermIdentity,

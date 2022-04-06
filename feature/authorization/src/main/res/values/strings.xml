@@ -4,7 +4,7 @@
     <string name="login_hint">E-mail</string>
     <string name="password_hint">Пароль</string>
     <string name="password_confirmation_hint">Подтвердите пароль</string>
-    <string name="not_registered_label">Не зарегистрированы? Нажмите здесь.</string>
+    <string name="not_registered_label">Не зарегистрированы?</string>
     <string name="forgot_password_label">Забыли пароль?</string>
     <string name="login_label">Войти</string>
 

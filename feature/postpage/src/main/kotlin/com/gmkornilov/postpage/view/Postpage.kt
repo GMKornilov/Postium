@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
@@ -195,9 +196,10 @@ private fun PostHeader(
             title,
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.h4,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(top = 8.dp)
-                .align(CenterHorizontally)
+                .fillMaxWidth()
         )
     }
 }
