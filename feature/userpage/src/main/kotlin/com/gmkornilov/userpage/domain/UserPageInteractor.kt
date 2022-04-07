@@ -1,5 +1,7 @@
 package com.gmkornilov.userpage.domain
 
+import com.gmkornilov.playlists.model.Playlist
+import com.gmkornilov.playlists.repository.PlaylistRepository
 import com.gmkornilov.post.model.PostBookmarkStatus
 import com.gmkornilov.post.model.PostLikeStatus
 import com.gmkornilov.post.model.PostPreviewData
@@ -11,7 +13,12 @@ import javax.inject.Inject
 internal class UserPageInteractor @Inject constructor(
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
+    private val playlistRepository: PlaylistRepository,
 ) {
+    suspend fun loadPlaylists(userId: String): List<Playlist> {
+        return playlistRepository.getUserPlaylists(userId)
+    }
+
     suspend fun loadPosts(userId: String): List<PostPreviewData> {
         return postRepository.loadDataWithUserId(userId)
     }

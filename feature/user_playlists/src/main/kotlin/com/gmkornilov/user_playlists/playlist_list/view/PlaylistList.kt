@@ -152,7 +152,8 @@ private fun PlaylistColumn(
                 val topPadding = if (isFirst) 8.dp else 0.dp
                 val bottomPadding = if (!isLast) 8.dp else 0.dp
 
-                PlaylistPreview(name = item.name,
+                PlaylistPreview(
+                    name = item.name,
                     postAmount = item.postIds.size,
                     cornerType = CornerType.ALL,
                     modifier = Modifier.padding(top = topPadding, bottom = bottomPadding, start = 4.dp, end = 4.dp),

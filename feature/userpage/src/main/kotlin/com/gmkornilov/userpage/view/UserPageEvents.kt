@@ -1,19 +1,22 @@
 package com.gmkornilov.userpage.view
 
+import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 
 internal interface UserPageEvents {
     fun tabSelected(tab: Tab)
 
-    fun likePost(postPreviewData: PostPreviewData)
+    fun likePost(postPreviewItem: TabListItem.PostPreviewItem)
 
-    fun dislikePost(postPreviewData: PostPreviewData)
+    fun dislikePost(postPreviewItem: TabListItem.PostPreviewItem)
 
-    fun bookmarkPost(postPreviewData: PostPreviewData)
+    fun bookmarkPost(postPreviewItem: TabListItem.PostPreviewItem)
 
-    fun openPost(postPreviewData: PostPreviewData)
+    fun openPost(postPreviewItem: TabListItem.PostPreviewItem)
 
     fun openProfile(postPreviewData: PostPreviewData)
+
+    fun openPlaylist(playlist: Playlist)
 
     fun loadHeader()
 
@@ -23,11 +26,12 @@ internal interface UserPageEvents {
 
     companion object : UserPageEvents {
         override fun tabSelected(tab: Tab) = Unit
-        override fun likePost(postPreviewData: PostPreviewData) = Unit
-        override fun dislikePost(postPreviewData: PostPreviewData) = Unit
-        override fun bookmarkPost(postPreviewData: PostPreviewData) = Unit
-        override fun openPost(postPreviewData: PostPreviewData) = Unit
+        override fun likePost(postPreviewItem: TabListItem.PostPreviewItem) = Unit
+        override fun dislikePost(postPreviewItem: TabListItem.PostPreviewItem) = Unit
+        override fun bookmarkPost(postPreviewItem: TabListItem.PostPreviewItem) = Unit
+        override fun openPost(postPreviewItem: TabListItem.PostPreviewItem) = Unit
         override fun openProfile(postPreviewData: PostPreviewData) = Unit
+        override fun openPlaylist(playlist: Playlist) = Unit
         override fun loadHeader() = Unit
         override fun createPost() = Unit
         override fun refreshData() = Unit

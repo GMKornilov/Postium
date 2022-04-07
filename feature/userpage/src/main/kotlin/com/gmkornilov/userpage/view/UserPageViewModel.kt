@@ -1,9 +1,14 @@
 package com.gmkornilov.userpage.view
 
 import android.util.Log
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
+import com.gmkornilov.design.data.CornerType
+import com.gmkornilov.lazy_column.ListState
 import com.gmkornilov.letIf
+import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
@@ -50,47 +55,55 @@ internal class UserPageViewModel @Inject constructor(
         return UserPageState(headerState = headerState, createPostButtonVisible = canCreatePost)
     }
 
-    private fun getLikeResultHandler(postPreview: PostPreviewData) = UserResultHandler {
-        val newLikeStatus = postPreview.likeStatus.toOppositeLikeStatus()
-        val newPost = postPreview.copy(likeStatus = newLikeStatus)
-        replacePost(postPreview, newPost)
+    private fun getLikeResultHandler(postPreviewItem: TabListItem.PostPreviewItem) =
+        UserResultHandler {
+            val newLikeStatus = postPreviewItem.postPreviewData.likeStatus.toOppositeLikeStatus()
+            val newPost = postPreviewItem.postPreviewData.copy(likeStatus = newLikeStatus)
+            val newPostItem = postPreviewItem.copy(postPreviewData = newPost)
+            replacePost(postPreviewItem, newPostItem)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                userPageInteractor.setLikeStatus(postPreview, newLikeStatus)
-            } catch (e: Exception) {
-                Timber.e(e)
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    userPageInteractor.setLikeStatus(postPreviewItem.postPreviewData, newLikeStatus)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
             }
         }
-    }
 
-    private fun getDislikeResultHandler(postPreview: PostPreviewData) = UserResultHandler {
-        val newLikeStatus = postPreview.likeStatus.toOppositeDislikeStatus()
-        val newPost = postPreview.copy(likeStatus = newLikeStatus)
-        replacePost(postPreview, newPost)
+    private fun getDislikeResultHandler(postPreviewItem: TabListItem.PostPreviewItem) =
+        UserResultHandler {
+            val newLikeStatus = postPreviewItem.postPreviewData.likeStatus.toOppositeDislikeStatus()
+            val newPost = postPreviewItem.postPreviewData.copy(likeStatus = newLikeStatus)
+            val newPostItem = postPreviewItem.copy(postPreviewData = newPost)
+            replacePost(postPreviewItem, newPostItem)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                userPageInteractor.setLikeStatus(postPreview, newLikeStatus)
-            } catch (e: Exception) {
-                Timber.e(e)
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    userPageInteractor.setLikeStatus(postPreviewItem.postPreviewData, newLikeStatus)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
             }
         }
-    }
 
-    private fun getBookmarkResultHandler(postPreview: PostPreviewData) = UserResultHandler {
-        val newBookmarkStatus = postPreview.bookmarkStatus.toOppositeStatus()
-        val newPost = postPreview.copy(bookmarkStatus = newBookmarkStatus)
-        replacePost(postPreview, newPost)
+    private fun getBookmarkResultHandler(postPreviewItem: TabListItem.PostPreviewItem) =
+        UserResultHandler {
+            val newBookmarkStatus =
+                postPreviewItem.postPreviewData.bookmarkStatus.toOppositeStatus()
+            val newPost = postPreviewItem.postPreviewData.copy(bookmarkStatus = newBookmarkStatus)
+            val newPostItem = postPreviewItem.copy(postPreviewData = newPost)
+            replacePost(postPreviewItem, newPostItem)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                userPageInteractor.setBookmarkStatus(postPreview, newBookmarkStatus)
-            } catch (e: Exception) {
-                Timber.e(e)
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    userPageInteractor.setBookmarkStatus(postPreviewItem.postPreviewData,
+                        newBookmarkStatus)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
             }
         }
-    }
 
     override fun tabSelected(tab: Tab) = intent {
         Timber.log(Log.INFO, tab.toString())
@@ -99,46 +112,51 @@ internal class UserPageViewModel @Inject constructor(
 
         val state = this.state.tabStates.getValue(tab)
 
-        if (state != TabState.None) {
+        if (state != ListState.None) {
             return@intent
         }
 
         when (tab) {
             Tab.POSTS -> loadUserPosts()
             Tab.BOOKMARKS -> loadUserBookmarks()
+            Tab.PLAYLISTS -> loadUserPlaylists()
         }
     }
 
-    override fun likePost(postPreviewData: PostPreviewData) {
-        val userResultHandler = getLikeResultHandler(postPreviewData)
+    override fun likePost(postPreviewItem: TabListItem.PostPreviewItem) {
+        val userResultHandler = getLikeResultHandler(postPreviewItem)
         val currentUser = authInteractor.getPostiumUser()
         currentUser?.let {
             userResultHandler.handleResult(currentUser)
         } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
-    override fun dislikePost(postPreviewData: PostPreviewData) {
-        val userResultHandler = getDislikeResultHandler(postPreviewData)
+    override fun dislikePost(postPreviewItem: TabListItem.PostPreviewItem) {
+        val userResultHandler = getDislikeResultHandler(postPreviewItem)
         val currentUser = authInteractor.getPostiumUser()
         currentUser?.let {
             userResultHandler.handleResult(currentUser)
         } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
-    override fun bookmarkPost(postPreviewData: PostPreviewData) {
-        val userResultHandler = getBookmarkResultHandler(postPreviewData)
+    override fun bookmarkPost(postPreviewItem: TabListItem.PostPreviewItem) {
+        val userResultHandler = getBookmarkResultHandler(postPreviewItem)
         val currentUser = authInteractor.getPostiumUser()
         currentUser?.let {
             userResultHandler.handleResult(currentUser)
         } ?: listener.startAuthorizationFlow(userResultHandler)
     }
 
-    override fun openPost(postPreviewData: PostPreviewData) {
-        listener.openPost(postPreviewData)
+    override fun openPost(postPreviewItem: TabListItem.PostPreviewItem) {
+        listener.openPost(postPreviewItem.postPreviewData)
     }
 
     override fun openProfile(postPreviewData: PostPreviewData) {
         listener.openUserProfile(postPreviewData)
+    }
+
+    override fun openPlaylist(playlist: Playlist) {
+        listener.openPlaylist(playlist)
     }
 
     override fun loadHeader() = intent {
@@ -165,6 +183,7 @@ internal class UserPageViewModel @Inject constructor(
         when (currentTab) {
             Tab.POSTS -> loadUserPosts(true)
             Tab.BOOKMARKS -> loadUserBookmarks(true)
+            Tab.PLAYLISTS -> loadUserPlaylists(true)
         }
     }
 
@@ -174,16 +193,17 @@ internal class UserPageViewModel @Inject constructor(
         if (isRefresh) {
             reduce { this.state.copy(isRefresh = true) }
         } else {
-            reduce { this.state.changeTabState(Tab.POSTS, TabState.Loading) }
+            reduce { this.state.changeTabState(Tab.POSTS, ListState.Loading) }
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val posts = userPageInteractor.loadPosts(navArgument.id)
-                reduce { this.state.changeTabState(Tab.POSTS, TabState.Success(posts)) }
+                val postItems = mapPosts(posts)
+                reduce { this.state.changeTabState(Tab.POSTS, ListState.Success(postItems)) }
             } catch (e: Exception) {
                 Timber.e(e)
-                reduce { this.state.changeTabState(Tab.POSTS, TabState.Error(e)) }
+                reduce { this.state.changeTabState(Tab.POSTS, ListState.Error(e)) }
             }
         }
     }
@@ -192,34 +212,100 @@ internal class UserPageViewModel @Inject constructor(
         if (isRefresh) {
             reduce { this.state.copy(isRefresh = true) }
         } else {
-            reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Loading) }
+            reduce { this.state.changeTabState(Tab.BOOKMARKS, ListState.Loading) }
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val posts = userPageInteractor.loadBookmarks(navArgument.id)
-                reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Success(posts)) }
+                val postItems = mapPosts(posts)
+                reduce { this.state.changeTabState(Tab.BOOKMARKS, ListState.Success(postItems)) }
             } catch (e: Exception) {
                 Timber.e(e)
-                reduce { this.state.changeTabState(Tab.BOOKMARKS, TabState.Error(e)) }
+                reduce { this.state.changeTabState(Tab.BOOKMARKS, ListState.Error(e)) }
             }
         }
     }
 
-    private fun replacePost(oldPost: PostPreviewData, newPost: PostPreviewData) = intent {
+    private fun loadUserPlaylists(isRefresh: Boolean = false) = intent {
+        if (isRefresh) {
+            reduce { this.state.copy(isRefresh = true) }
+        } else {
+            reduce { this.state.changeTabState(Tab.PLAYLISTS, ListState.Loading) }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val playlists = userPageInteractor.loadPlaylists(navArgument.id)
+                val playlistItems = mapPlaylists(playlists)
+                reduce {
+                    this.state.changeTabState(Tab.PLAYLISTS, ListState.Success(playlistItems))
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                reduce { this.state.changeTabState(Tab.PLAYLISTS, ListState.Error(e)) }
+            }
+        }
+    }
+
+    private fun mapPosts(posts: List<PostPreviewData>): List<TabListItem.PostPreviewItem> {
+        return posts.mapIndexed { index, post ->
+            val isFirst = index == 0
+            val isLast = index == posts.lastIndex
+
+            val cornerType: CornerType
+            val bottomPadding: Dp
+
+            when {
+                isFirst -> {
+                    cornerType = CornerType.BOTTOM
+                    bottomPadding = 4.dp
+                }
+                isLast -> {
+                    cornerType = CornerType.ALL
+                    bottomPadding = 0.dp
+                }
+                else -> {
+                    cornerType = CornerType.ALL
+                    bottomPadding = 4.dp
+                }
+            }
+
+            TabListItem.PostPreviewItem(
+                post,
+                cornerType,
+                bottomPadding,
+                this@UserPageViewModel
+            )
+        }
+    }
+
+    private fun mapPlaylists(playlists: List<Playlist>): List<TabListItem.PlaylistItem> {
+        return playlists.map {
+            TabListItem.PlaylistItem(
+                it,
+                this@UserPageViewModel,
+            )
+        }
+    }
+
+    private fun replacePost(
+        oldPost: TabListItem.PostPreviewItem,
+        newPost: TabListItem.PostPreviewItem,
+    ) = intent {
         reduce {
             val currentState = getCurrentState()
             val newState = currentState.letIf(
-                currentState is TabState.Success,
+                currentState is ListState.Success,
                 { state ->
-                    val success = state as TabState.Success
-                    val newItems = success.posts.toMutableList().apply {
+                    val success = state as ListState.Success
+                    val newItems = success.contents.toMutableList().apply {
                         val index = this.indexOf(oldPost)
                         if (index != -1) {
                             this[index] = newPost
                         }
                     }
-                    TabState.Success(newItems)
+                    ListState.Success(newItems)
                 },
                 { it }
             )
@@ -229,7 +315,11 @@ internal class UserPageViewModel @Inject constructor(
 
     private fun UserPageState.getCurrentTabState() = this.tabStates.getValue(currentTab)
 
-    private fun UserPageState.changeTabState(tab: Tab, tabState: TabState, isRefresh: Boolean = false): UserPageState {
+    private fun UserPageState.changeTabState(
+        tab: Tab,
+        tabState: ListState<TabListItem>,
+        isRefresh: Boolean = false,
+    ): UserPageState {
         val newTabStates = this.tabStates.toMutableMap().apply {
             this[tab] = tabState
         }
@@ -241,6 +331,8 @@ interface UserPageListener {
     fun openPost(postPreviewData: PostPreviewData)
 
     fun openUserProfile(postPreviewData: PostPreviewData)
+
+    fun openPlaylist(playlist: Playlist)
 
     fun createPost()
 

@@ -4,7 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,16 +16,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.gmkornilov.design.commons.posts.PostPreview
 import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.LocalAvatarSize
 import com.gmkornilov.design.components.UserAvatar
-import com.gmkornilov.design.data.CornerType
 import com.gmkornilov.design.theme.PostiumTheme
-import com.gmkornilov.letIf
+import com.gmkornilov.lazy_column.ListState
 import com.gmkornilov.post.model.PostPreviewData
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -153,7 +150,7 @@ private fun UserContent(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(
+        ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
@@ -161,6 +158,7 @@ private fun UserContent(
                 )
             },
             backgroundColor = MaterialTheme.colors.secondary,
+            edgePadding = 16.dp
         ) {
             pages.forEachIndexed { index, tab ->
                 Tab(
@@ -183,7 +181,7 @@ private fun UserContent(
                 onRefresh = { userPageEvents.refreshData() }
             ) {
                 when (val tabState = state.tabStates.getValue(tab)) {
-                    is TabState.Error -> ErrorState(
+                    is ListState.Error -> ErrorState(
                         tab,
                         modifier = Modifier
                             .fillMaxSize()
@@ -191,17 +189,15 @@ private fun UserContent(
                                 rememberScrollState()
                             )
                     )
-                    TabState.Loading -> LoadingState(
+                    ListState.Loading -> LoadingState(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     )
-                    is TabState.Success -> if (tabState.posts.isNotEmpty()) {
+                    is ListState.Success -> if (tabState.contents.isNotEmpty()) {
                         SuccessState(
-                            posts = tabState.posts,
-                            userPageEvents = userPageEvents,
+                            tabListItem = tabState.contents,
                             modifier = contentModifier,
-                            hideAvatar = tab == Tab.POSTS,
                         )
                     } else {
                         EmptyState(
@@ -211,7 +207,7 @@ private fun UserContent(
                                 .verticalScroll(rememberScrollState())
                         )
                     }
-                    TabState.None -> {}
+                    ListState.None -> {}
                 }
             }
         }
@@ -242,51 +238,14 @@ private fun EmptyState(tab: Tab, modifier: Modifier = Modifier) {
 @ExperimentalFoundationApi
 @Composable
 private fun SuccessState(
-    userPageEvents: UserPageEvents,
-    posts: List<PostPreviewData>,
+    tabListItem: List<TabListItem>,
     modifier: Modifier = Modifier,
-    hideAvatar: Boolean = false,
 ) {
     val state = rememberLazyListState()
 
     LazyColumn(state = state, modifier = modifier.background(MaterialTheme.colors.background)) {
-        itemsIndexed(posts, key = { _, post -> post.id }) { index, item ->
-            val isFirst = index == 0
-            val isLast = index == posts.lastIndex
-
-            val cornerType: CornerType
-            val bottomPadding: Dp
-
-            when {
-                isFirst -> {
-                    cornerType = CornerType.BOTTOM
-                    bottomPadding = 4.dp
-                }
-                isLast -> {
-                    cornerType = CornerType.ALL
-                    bottomPadding = 0.dp
-                }
-                else -> {
-                    cornerType = CornerType.ALL
-                    bottomPadding = 4.dp
-                }
-            }
-
-            PostPreview(
-                title = item.title,
-                userName = item.username.letIf(!hideAvatar) { it } ?: "",
-                avatarUrl = item.avatarUrl.letIf(!item.avatarUrl.isNullOrEmpty() && !hideAvatar) { it },
-                isUpChecked = item.likeStatus.isLiked,
-                isDownChecked = item.likeStatus.isDisliked,
-                isBookmarkChecked = item.bookmarkStatus.isBookmarked,
-                cornerType = cornerType,
-                modifier = Modifier.padding(bottom = bottomPadding),
-                onCardClick = { userPageEvents.openPost(item) },
-                upClicked = { userPageEvents.likePost(item) },
-                downClicked = { userPageEvents.dislikePost(item) },
-                boolmarkClicked = { userPageEvents.bookmarkPost(item) },
-                userProfileClicked = { userPageEvents.openProfile(item) },
-            )
+        items(tabListItem, key = { tabListItem: TabListItem -> tabListItem.id }) { item ->
+            item.Layout(Modifier)
         }
     }
 }

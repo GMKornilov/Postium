@@ -10,6 +10,7 @@ import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.brick_navigation.ScreenFactory
+import com.gmkornilov.playlists.repository.PlaylistRepository
 import com.gmkornilov.post.repository.PostRepository
 import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.userpage.view.UserPage
@@ -64,6 +65,7 @@ class UserPageScreenFactory @Inject constructor(
         val authInteractor: AuthInteractor
         val postRepository: PostRepository
         val userRepository: UserRepository
+        val playlistRepository: PlaylistRepository
     }
 
     @Scope
