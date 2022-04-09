@@ -42,5 +42,5 @@ class PasswordRestorationViewModel @Inject constructor(
         }
     }
 
-    override fun backToLogin() = passwordRestorationFlowEvents.backToHomeScreen()
+    override fun backToLogin() = passwordRestorationFlowEvents.passwordRestorationBBack()
 }

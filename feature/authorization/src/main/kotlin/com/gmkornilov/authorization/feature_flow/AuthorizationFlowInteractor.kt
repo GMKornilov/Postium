@@ -109,7 +109,7 @@ internal class AuthorizationFlowInteractor @Inject constructor(
         userResultHandler.handleResult(user)
     }
 
-    override fun backToHomeScreen() {
+    override fun passwordRestorationBBack() {
         authorizationStep = AuthorizationStep.LOGIN
         router.backToScreen(startScreen.key)
     }
