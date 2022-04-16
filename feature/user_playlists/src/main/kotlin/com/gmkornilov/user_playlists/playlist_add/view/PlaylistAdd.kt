@@ -23,7 +23,8 @@ internal fun PlaylistAdd(
     viewModel: PlaylistAddViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded) {
+    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded)
+    {
         if (it == ModalBottomSheetValue.HalfExpanded) {
             return@rememberModalBottomSheetState false
         }
@@ -32,12 +33,6 @@ internal fun PlaylistAdd(
         }
 
         return@rememberModalBottomSheetState true
-    }
-
-    DisposableEffect(viewModel) {
-        onDispose {
-            viewModel.onCloseBottomSheet()
-        }
     }
 
     LaunchedEffect(viewModel) {
@@ -68,7 +63,8 @@ private fun SheetContent(viewModel: PlaylistAddViewModel, modifier: Modifier = M
 
             Spacer(modifier = Modifier.weight(1f))
 
-            TextButton(onClick = { viewModel.submit() },
+            TextButton(
+                onClick = { viewModel.submit() },
                 enabled = !state.isLoading,
                 modifier = Modifier.padding(end = 8.dp),
                 colors = ButtonDefaults.textButtonColors(
@@ -85,11 +81,11 @@ private fun SheetContent(viewModel: PlaylistAddViewModel, modifier: Modifier = M
         when (val listState = state.listState) {
             is ListState.Error -> ErrorState()
             ListState.Loading -> LoadingState()
-            is ListState.Success -> if (listState.contents.isNotEmpty()) {
-                SuccessState(listState.contents, !state.isLoading, viewModel = viewModel)
-            } else {
-                EmptyState()
-            }
+            is ListState.Success -> SuccessState(
+                playlistStates = listState.contents,
+                isLoading = state.isLoading,
+                viewModel = viewModel
+            )
             ListState.None -> {}
         }
     }
@@ -123,6 +119,32 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 @Composable
 private fun SuccessState(
     playlistStates: List<PlaylistItemState>,
+    isLoading: Boolean,
+    viewModel: PlaylistAddViewModel,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        TextButton(
+            onClick = { viewModel.createPlaylist() },
+            enabled = !isLoading,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        ) {
+            Text(stringResource(R.string.create_playlist_title))
+        }
+
+        Divider()
+
+        if (playlistStates.isNotEmpty()) {
+            PlaylistsState(playlistStates, !isLoading, viewModel = viewModel)
+        } else {
+            EmptyState()
+        }
+    }
+}
+
+@Composable
+private fun PlaylistsState(
+    playlistStates: List<PlaylistItemState>,
     isEnabled: Boolean,
     viewModel: PlaylistAddViewModel,
     modifier: Modifier = Modifier,
@@ -130,9 +152,11 @@ private fun SuccessState(
     LazyColumn(modifier) {
         itemsIndexed(playlistStates,
             { _, state: PlaylistItemState -> state.playlist.id }) { index, state ->
-            Row(Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 8.dp)) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 8.dp)
+            ) {
                 Checkbox(
                     checked = state.isSelected,
                     onCheckedChange = { viewModel.selectPlaylist(state, it) },
@@ -149,7 +173,9 @@ private fun SuccessState(
                         color = MaterialTheme.colors.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.align(Alignment.CenterVertically).padding(end= 8.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(end = 8.dp)
                     )
                 }
             }

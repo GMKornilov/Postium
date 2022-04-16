@@ -1,6 +1,8 @@
 package com.gmkornilov.user_playlists.playlist_add.view
 
 import com.gmkornilov.lazy_column.ListState
+import com.gmkornilov.letIf
+import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.user_playlists.playlist_add.domain.PlaylistAddInteractor
 import com.gmkornilov.user_playlists.playlist_create.domain.PlaylistCreateResultHandler
@@ -31,6 +33,31 @@ internal class PlaylistAddViewModel @Inject constructor(
                 Timber.e(e)
                 reduce { this.state.copy(listState = ListState.Error(e)) }
             }
+        }
+    }
+
+    fun createPlaylist() {
+        listener.createPlaylist {
+            playlistAddInteractor.selectPlaylist(it, false)
+            addPlaylist(it)
+        }
+    }
+
+    private fun addPlaylist(playlist: Playlist) = intent {
+        reduce {
+            this.state.letIf(
+                this.state.listState is ListState.Success,
+                {
+                    val state = this.state.listState as ListState.Success
+                    val newList = state.contents.toMutableList().apply {
+                        add(0, PlaylistItemState(playlist, false))
+                    }
+                    this.state.copy(listState = ListState.Success(newList))
+                },
+                {
+                    it
+                }
+            )
         }
     }
 

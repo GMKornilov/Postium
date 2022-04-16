@@ -29,12 +29,6 @@ internal fun PlaylistCreate(
         return@rememberModalBottomSheetState true
     }
 
-    DisposableEffect(viewModel) {
-        onDispose {
-            viewModel.onCloseBottomSheet()
-        }
-    }
-
     ModalBottomSheetLayout(
         sheetState = state,
         sheetContent = { SheetContent(viewModel) },
