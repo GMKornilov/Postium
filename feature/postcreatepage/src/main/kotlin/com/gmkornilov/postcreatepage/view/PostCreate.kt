@@ -305,7 +305,7 @@ private fun PreviewPost(
         val titleModifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth()
-            .height(48.dp)
+            .heightIn(min = 48.dp)
             .bottomBorder(1.dp, 16.dp)
         if (title.isNotBlank()) {
             Text(

@@ -45,7 +45,8 @@ fun PlaylistPreview(
                     end = 16.dp
                 ),
         ) {
-            Text(text = name,
+            Text(
+                text = name,
                 style = MaterialTheme.typography.h5,
                 color = contentColorFor(MaterialTheme.colors.primary),
             )

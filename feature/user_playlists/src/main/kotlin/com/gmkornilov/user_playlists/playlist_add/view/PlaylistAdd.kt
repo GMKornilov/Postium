@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
@@ -146,7 +147,9 @@ private fun SuccessState(
                         state.playlist.name,
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.align(Alignment.CenterVertically).padding(end= 8.dp)
                     )
                 }
             }

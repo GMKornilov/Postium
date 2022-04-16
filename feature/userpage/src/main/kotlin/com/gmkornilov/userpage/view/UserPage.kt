@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -121,8 +122,10 @@ private fun UserHeader(
             state.username,
             color = MaterialTheme.colors.onSecondary,
             style = MaterialTheme.typography.h5,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .padding(start = startPadding, bottom = 8.dp)
+                .padding(start = startPadding, end = 16.dp, bottom = 8.dp)
                 .placeholder(
                     visible = state.needLoading,
                     highlight = PlaceholderHighlight.shimmer(),
@@ -254,7 +257,7 @@ private fun SuccessState(
 @Preview
 @Composable
 private fun PreviewSuccess() {
-    val headerState = HeaderState(username = "test", avatarUrl = "")
+    val headerState = HeaderState(username = "очень очень очень очень очень", avatarUrl = "")
 
     val state = UserPageState(headerState, createPostButtonVisible = true)
 

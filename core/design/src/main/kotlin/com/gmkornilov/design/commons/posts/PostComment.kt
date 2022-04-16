@@ -12,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,8 @@ fun Comment(
         ) {
             Text(
                 usernameTitle,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.ExtraBold),
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier.clickable { onOpenProfileClicked.invoke() },
@@ -110,7 +113,7 @@ private fun CommentsColumn() {
 
             Comment(
                 comment = loremIpsum,
-                usernameTitle = "Georgium",
+                usernameTitle = "очень очень очень очень очекнь очень ",
                 avatarUrl = "",
                 isUpChecked = false,
                 isDownChecked = true,
