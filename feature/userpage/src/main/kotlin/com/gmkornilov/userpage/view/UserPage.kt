@@ -164,8 +164,9 @@ private fun UserContent(
             edgePadding = 16.dp
         ) {
             pages.forEachIndexed { index, tab ->
-                Tab(
+                LeadingIconTab(
                     text = { Text(stringResource(tab.headerRes).toUpperCase(Locale.current)) },
+                    icon = { Icon(tab.iconVector, null) },
                     selected = pagerState.currentPage == index,
                     onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                 )

@@ -176,18 +176,20 @@ private fun PostCreateWithState(
             .background(MaterialTheme.colors.surface)
     ) {
         Column(modifier = modifier.fillMaxSize()) {
-            TabRow(
+            ScrollableTabRow(
                 selectedTabIndex = pagerState.currentPage,
                 indicator = { tabPositions ->
                     TabRowDefaults.Indicator(
                         Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                     )
                 },
-                backgroundColor = MaterialTheme.colors.secondary
+                backgroundColor = MaterialTheme.colors.secondary,
+                edgePadding = 16.dp,
             ) {
                 pages.forEachIndexed { index, tab ->
-                    Tab(
+                    LeadingIconTab(
                         text = { Text(stringResource(tab.headerRes).toUpperCase(Locale.current)) },
+                        icon = { Icon(tab.iconVector, null) },
                         selected = pagerState.currentPage == index,
                         onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                     )

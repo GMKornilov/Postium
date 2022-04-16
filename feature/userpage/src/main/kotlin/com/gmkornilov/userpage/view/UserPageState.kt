@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gmkornilov.design.commons.playlists.PlaylistPreview
@@ -14,10 +15,15 @@ import com.gmkornilov.letIf
 import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.userpage.R
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Bookmark
+import compose.icons.tablericons.Folders
+import compose.icons.tablericons.Pencil
 
 internal data class UserPageState(
     val headerState: HeaderState = HeaderState(),
-    val tabStates: Map<Tab, ListState<TabListItem>> = Tab.values().map { it to ListState.None }.toMap(),
+    val tabStates: Map<Tab, ListState<TabListItem>> = Tab.values().map { it to ListState.None }
+        .toMap(),
     val createPostButtonVisible: Boolean = false,
     val isRefresh: Boolean = false,
 )
@@ -39,7 +45,7 @@ internal sealed class TabListItem {
         private val cornerType: CornerType,
         private val bottomPadding: Dp,
         private val userPageEvents: UserPageEvents,
-    ): TabListItem() {
+    ) : TabListItem() {
         @Composable
         override fun Layout(modifier: Modifier) {
             PostPreview(
@@ -66,7 +72,7 @@ internal sealed class TabListItem {
     data class PlaylistItem(
         private val playlist: Playlist,
         private val userPageEvents: UserPageEvents,
-    ): TabListItem() {
+    ) : TabListItem() {
         @Composable
         override fun Layout(modifier: Modifier) {
             PlaylistPreview(
@@ -86,8 +92,24 @@ internal enum class Tab(
     @StringRes val headerRes: Int,
     @StringRes val errorRes: Int,
     @StringRes val emptyRes: Int,
+    val iconVector: ImageVector,
 ) {
-    POSTS(R.string.posts, R.string.posts_error, R.string.posts_empty),
-    BOOKMARKS(R.string.bookmarks, R.string.bookmarks_error, R.string.bookmarks_empty),
-    PLAYLISTS(R.string.playlists, R.string.playlists_error, R.string.playlists_empty),
+    POSTS(
+        R.string.posts,
+        R.string.posts_error,
+        R.string.posts_empty,
+        TablerIcons.Pencil,
+    ),
+    BOOKMARKS(
+        R.string.bookmarks,
+        R.string.bookmarks_error,
+        R.string.bookmarks_empty,
+        TablerIcons.Bookmark,
+    ),
+    PLAYLISTS(
+        R.string.playlists,
+        R.string.playlists_error,
+        R.string.playlists_empty,
+        TablerIcons.Folders,
+    ),
 }
