@@ -14,6 +14,7 @@ data class PostPageArgument(
     val bookmarkStatus: PostBookmarkStatus,
     val likes: Int,
     val dislikes: Int,
+    val comments: Int,
 )
 
 internal fun PostPageArgument.toPostPreviewData() = PostPreviewData(
@@ -26,4 +27,5 @@ internal fun PostPageArgument.toPostPreviewData() = PostPreviewData(
     bookmarkStatus = bookmarkStatus,
     likes = likes,
     dislikes = dislikes,
+    commentAmount = comments
 )

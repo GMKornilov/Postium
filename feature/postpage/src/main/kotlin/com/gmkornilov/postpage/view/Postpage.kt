@@ -25,6 +25,7 @@ import com.gmkornilov.design.commons.buttons.BookmarkButton
 import com.gmkornilov.design.commons.buttons.DislikeButton
 import com.gmkornilov.design.commons.buttons.LikeButton
 import com.gmkornilov.design.components.ErrorStateContainer
+import com.gmkornilov.design.components.IconWithTip
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.modifiers.bottomBorder
 import com.gmkornilov.design.modifiers.topBorder
@@ -119,6 +120,7 @@ private fun PostpageWithState(
             isBookmarkChecked = state.argument.bookmarkStatus.isBookmarked,
             likes = state.argument.likes,
             dislikes = state.argument.dislikes,
+            comments = state.argument.comments,
             onUpClicked = { postpageEvents.likePost() },
             onDownClicked = { postpageEvents.dislikePost() },
             onBookmarkClicked = { postpageEvents.bookmarkPost() },
@@ -213,6 +215,7 @@ private fun PostFooter(
     isBookmarkChecked: Boolean,
     likes: Int,
     dislikes: Int,
+    comments: Int,
     onUpClicked: (Boolean) -> Unit,
     onDownClicked: (Boolean) -> Unit,
     onBookmarkClicked: (Boolean) -> Unit,
@@ -221,8 +224,9 @@ private fun PostFooter(
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onOpenCommentsClicked) {
-            Icon(
+            IconWithTip(
                 imageVector = Icons.Outlined.Chat,
+                text = comments.toString(),
                 contentDescription = null,
                 tint = MaterialTheme.colors.onSurface,
             )
@@ -293,6 +297,7 @@ private fun ShortPreview() {
         bookmarkStatus = PostBookmarkStatus.BOOKMARKED,
         likes = 1,
         dislikes = 1,
+        comments = 1000
     )
     val content = "Short content"
 
@@ -313,6 +318,7 @@ private fun SuccessPreview() {
         bookmarkStatus = PostBookmarkStatus.BOOKMARKED,
         likes = 1,
         dislikes = 1,
+        comments = 1,
     )
     val content = LoremIpsum().values.joinToString()
 
@@ -333,6 +339,7 @@ private fun LoadingPreview() {
         bookmarkStatus = PostBookmarkStatus.NOT_BOOKMARKED,
         likes = 1,
         dislikes = 1,
+        comments = 0,
     )
 
     val state = PostpageState(argument, ContentState.Loading)

@@ -11,4 +11,5 @@ data class PostPreviewData(
     val bookmarkStatus: PostBookmarkStatus,
     val likes: Int,
     val dislikes: Int,
+    val commentAmount: Int,
 )

@@ -32,6 +32,18 @@ class PostCommentRepository @Inject constructor(
         return mapPosts(snapshot)
     }
 
+    suspend fun getPostsCommentsAmount(postId: String) : Int {
+        val snapshot = firestore
+            .collection(POST_COMMENTS_COLLECTION)
+            .document(postId)
+            .collection(COMMENTS_SUBCOLLECTION)
+            .orderBy(DATE_FIELD)
+            .get()
+            .await()
+
+        return snapshot.size()
+    }
+
     suspend fun addComment(
         postId: String,
         userReference: DocumentReference,

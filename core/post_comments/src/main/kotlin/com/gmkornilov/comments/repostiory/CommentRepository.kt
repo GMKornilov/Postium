@@ -15,6 +15,10 @@ class CommentRepository @Inject constructor(
     private val userRepository: UserRepository,
     private val authInteractor: AuthInteractor,
 ) {
+    suspend fun getPostCommentsAmount(postId: String): Int {
+        return postCommentRepository.getPostsCommentsAmount(postId)
+    }
+
     suspend fun loadPostComments(postId: String): List<CommentPreviewData> {
         val currentUser = authInteractor.getPostiumUser()
 

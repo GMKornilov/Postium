@@ -16,6 +16,7 @@ fun PostPreviewData.toPostPageArgument() = PostPageArgument(
     bookmarkStatus = bookmarkStatus,
     likes = likes,
     dislikes = dislikes,
+    comments = commentAmount
 )
 
 fun PostPreviewData.toUserPageArgument() = UserPageArgument.ReadyHeader(

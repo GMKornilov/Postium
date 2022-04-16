@@ -61,13 +61,15 @@ interface SingletonModule {
             bookmarkRepository: PostBookmarkRepository,
             userRepository: UserRepository,
             categoryRepository: CategoriesRepository,
+            commentRepository: CommentRepository,
         ): PostRepository {
             return PostRepository(
                 firebasePostSource,
                 likeRepository,
                 authInteractor,
                 bookmarkRepository,
-                userRepository
+                userRepository,
+                commentRepository,
             )
         }
 

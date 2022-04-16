@@ -1,6 +1,7 @@
 package com.gmkornilov.post.repository
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
+import com.gmkornilov.comments.repostiory.CommentRepository
 import com.gmkornilov.model.Post
 import com.gmkornilov.post.model.*
 import com.gmkornilov.post_bookmarks.PostBookmarkRepository
@@ -15,6 +16,7 @@ class PostRepository @Inject constructor(
     private val authInteractor: AuthInteractor,
     private val bookmarkRepository: PostBookmarkRepository,
     private val userRepository: UserRepository,
+    private val commentRepository: CommentRepository,
 ) {
     suspend fun loadDataWithUserId(userId: String): List<PostPreviewData> {
         val postLoader = PostLoader {
@@ -41,6 +43,10 @@ class PostRepository @Inject constructor(
             userRepository.getByReference(it.userReference!!)
         }
 
+        val commentsAmounts = posts.map {
+            commentRepository.getPostCommentsAmount(it.id)
+        }
+
         val postLikeStatuses = currentUser?.let {
             likeRepository.getLikesStatuses(it.getUid(), posts.map { post -> post.id })
         } ?: emptyMap()
@@ -51,6 +57,7 @@ class PostRepository @Inject constructor(
 
         return posts.mapIndexed { index, post ->
             val user = users[index]
+            val commentsAmount = commentsAmounts[index]
 
             PostPreviewData(
                 id = post.id,
@@ -62,6 +69,7 @@ class PostRepository @Inject constructor(
                 bookmarkStatus = postBookmarkStatuses[post.id].toPostBookmarkStatus(),
                 likes = post.likes,
                 dislikes = post.dislikes,
+                commentAmount = commentsAmount
             )
         }
     }

@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:authorization"))
+    implementation(project(":core:post_comments"))
 
     implementation(project(":data:post"))
     implementation(project(":data:post_likes"))
