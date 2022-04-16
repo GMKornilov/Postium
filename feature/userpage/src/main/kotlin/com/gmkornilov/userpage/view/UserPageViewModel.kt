@@ -155,6 +155,10 @@ internal class UserPageViewModel @Inject constructor(
         listener.openUserProfile(postPreviewData)
     }
 
+    override fun addToPlaylists(post: PostPreviewData) {
+        listener.addToPlaylist(post)
+    }
+
     override fun openPlaylist(playlist: Playlist) {
         listener.openPlaylist(playlist)
     }
@@ -333,6 +337,8 @@ interface UserPageListener {
     fun openUserProfile(postPreviewData: PostPreviewData)
 
     fun openPlaylist(playlist: Playlist)
+
+    fun addToPlaylist(postPreviewData: PostPreviewData)
 
     fun createPost()
 

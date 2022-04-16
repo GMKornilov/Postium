@@ -56,6 +56,7 @@ internal sealed class TabListItem {
                 downClicked = { userPageEvents.dislikePost(this) },
                 boolmarkClicked = { userPageEvents.bookmarkPost(this) },
                 userProfileClicked = { userPageEvents.openProfile(postPreviewData) },
+                playlistClicked = { userPageEvents.addToPlaylists(postPreviewData) }
             )
         }
 

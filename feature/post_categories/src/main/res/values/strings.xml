@@ -2,7 +2,7 @@
 <resources>
     <string name="categories_title">Категории</string>
 
-    <string name="categories_error">Не удалось загрузить категориии, попробуйте позже :(</string>
+    <string name="categories_error">Не удалось загрузить категории, попробуйте позже :(</string>
     <string name="categories_empty">Не найдено ни одной категории</string>
 
     <string name="post_categories_error">Не удалось загрузить публикации по заданной категории</string>

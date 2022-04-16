@@ -16,6 +16,8 @@ internal interface UserPageEvents {
 
     fun openProfile(postPreviewData: PostPreviewData)
 
+    fun addToPlaylists(post: PostPreviewData)
+
     fun openPlaylist(playlist: Playlist)
 
     fun loadHeader()
@@ -31,6 +33,7 @@ internal interface UserPageEvents {
         override fun bookmarkPost(postPreviewItem: TabListItem.PostPreviewItem) = Unit
         override fun openPost(postPreviewItem: TabListItem.PostPreviewItem) = Unit
         override fun openProfile(postPreviewData: PostPreviewData) = Unit
+        override fun addToPlaylists(post: PostPreviewData) = Unit
         override fun openPlaylist(playlist: Playlist) = Unit
         override fun loadHeader() = Unit
         override fun createPost() = Unit

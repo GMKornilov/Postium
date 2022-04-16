@@ -6,7 +6,7 @@
 
     <string name="posts_error">Не удалось загрузить публикации пользователя</string>
     <string name="bookmarks_error">Не удалось загрузить закладки пользователя</string>
-    <string name="playlists_error">Не удалось загрузить списки чтения пользователя</string>
+    <string name="playlists_error">Не удалось загрузить списки для чтения пользователя</string>
 
     <string name="posts_empty">Пользователь не выложил ни одной публикации</string>
     <string name="bookmarks_empty">Пользователь не добавил в закладки ни одной публикации</string>

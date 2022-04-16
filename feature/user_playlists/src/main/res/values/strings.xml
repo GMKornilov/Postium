@@ -3,7 +3,7 @@
     <string name="playlists_title">Списки для чтения</string>
 
     <string name="playlists_error">Не получилось загрузить списки для чтения, попробуйте позже</string>
-    <string name="playlists_empty">Не найдено ни одного спсика для чтения</string>
+    <string name="playlists_empty">Не найдено ни одного списка для чтения</string>
 
     <string name="playlists_posts_error">Не получилось загрузить публикации, попробуйте позже</string>
     <string name="playlists_posts_empty">Не найдено ни одной публикации в данном списке</string>

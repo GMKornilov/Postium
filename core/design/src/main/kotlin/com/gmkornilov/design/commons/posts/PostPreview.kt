@@ -7,9 +7,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.gmkornilov.design.commons.buttons.BookmarkButton
 import com.gmkornilov.design.commons.buttons.DislikeButton
 import com.gmkornilov.design.commons.buttons.LikeButton
@@ -40,7 +42,7 @@ fun PostPreview(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max),
+            .height(IntrinsicSize.Min),
         shape = RoundedCornerShape(
             topStart = cornerType.toTopStart(cornerRadius),
             topEnd = cornerType.toTopEnd(cornerRadius),
@@ -54,9 +56,13 @@ fun PostPreview(
             Text(
                 text = title,
                 style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
                 modifier = Modifier.constrainAs(titleRef) {
                     top.linkTo(parent.top, margin = 8.dp)
                     start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
                 }
             )
 
@@ -86,12 +92,21 @@ fun PostPreview(
             Text(
                 text = userName,
                 style = MaterialTheme.typography.subtitle1,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
                 modifier = Modifier
                     .padding(start = userNamePadding)
                     .constrainAs(userNameRef) {
-                        start.linkTo(avatarRef.end, margin = 8.dp)
+                        if (avatarUrl != null) {
+                            start.linkTo(avatarRef.end, margin = 8.dp)
+                        } else {
+                            start.linkTo(parent.start)
+                        }
                         top.linkTo(dividerRef.bottom)
                         bottom.linkTo(parent.bottom)
+                        end.linkTo(upRef.start)
+//                        pivotX = 0.0f
+                        width = Dimension.fillToConstraints
                     }
                     .clickable {
                         userProfileClicked()
@@ -153,7 +168,7 @@ private fun PostsColumn(isLight: Boolean = true) {
     PostiumTheme(darkTheme = !isLight) {
         Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
             PostPreview(
-                title = "Title",
+                title = "Очень очень очень очень длинное название",
                 userName = "Georgium",
                 avatarUrl = null,
                 isUpChecked = true,
@@ -164,8 +179,8 @@ private fun PostsColumn(isLight: Boolean = true) {
             )
 
             PostPreview(
-                title = "Title",
-                userName = "Georgium",
+                title = "Очень очень очень очень длинное название",
+                userName = "Корнилов Георгий",
                 avatarUrl = "",
                 isUpChecked = false,
                 isDownChecked = true,
