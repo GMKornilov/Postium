@@ -16,9 +16,7 @@ import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.userpage.R
 import compose.icons.TablerIcons
-import compose.icons.tablericons.Bookmark
-import compose.icons.tablericons.Folders
-import compose.icons.tablericons.Pencil
+import compose.icons.tablericons.*
 
 internal data class UserPageState(
     val headerState: HeaderState = HeaderState(),
@@ -93,12 +91,14 @@ internal enum class Tab(
     @StringRes val errorRes: Int,
     @StringRes val emptyRes: Int,
     val iconVector: ImageVector,
+    val buttonVector: ImageVector? = null,
 ) {
     POSTS(
         R.string.posts,
         R.string.posts_error,
         R.string.posts_empty,
         TablerIcons.Pencil,
+        TablerIcons.Plus,
     ),
     BOOKMARKS(
         R.string.bookmarks,
@@ -111,5 +111,6 @@ internal enum class Tab(
         R.string.playlists_error,
         R.string.playlists_empty,
         TablerIcons.Folders,
+        TablerIcons.FolderPlus,
     ),
 }

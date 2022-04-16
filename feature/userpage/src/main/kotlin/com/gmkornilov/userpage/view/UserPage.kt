@@ -24,18 +24,12 @@ import com.gmkornilov.design.components.LocalAvatarSize
 import com.gmkornilov.design.components.UserAvatar
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.lazy_column.ListState
-import com.gmkornilov.post.model.PostPreviewData
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.*
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import compose.icons.TablerIcons
-import compose.icons.tablericons.Plus
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
@@ -57,6 +51,10 @@ private fun UserPageWithState(
     userPageEvents: UserPageEvents,
     modifier: Modifier = Modifier,
 ) {
+    val pagerState = rememberPagerState()
+    val tabs = Tab.values()
+    val currentTab = tabs[pagerState.currentPage]
+
     Box(modifier = modifier.background(MaterialTheme.colors.background)) {
         Column(modifier = modifier.fillMaxSize()) {
             UserHeader(
@@ -67,18 +65,19 @@ private fun UserPageWithState(
             UserContent(
                 state = state,
                 userPageEvents = userPageEvents,
+                pagerState = pagerState,
             )
         }
 
-        if (state.createPostButtonVisible) {
+        if (state.createPostButtonVisible && currentTab.buttonVector != null) {
             FloatingActionButton(
-                onClick = { userPageEvents.createPost() },
-                backgroundColor = MaterialTheme.colors.secondary,
+                onClick = { userPageEvents.mainButtonClicked() },
+                backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 16.dp, bottom = 16.dp)
             ) {
-                Icon(TablerIcons.Plus, null)
+                Icon(currentTab.buttonVector, null)
             }
         }
     }
@@ -140,9 +139,9 @@ private fun UserHeader(
 private fun UserContent(
     state: UserPageState,
     userPageEvents: UserPageEvents,
+    pagerState: PagerState,
     modifier: Modifier = Modifier,
 ) {
-    val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
 
     val pages = Tab.values()

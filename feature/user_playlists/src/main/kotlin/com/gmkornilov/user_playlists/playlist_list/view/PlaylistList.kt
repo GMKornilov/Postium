@@ -90,7 +90,7 @@ private fun SuccessState(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 16.dp, bottom = 16.dp),
-            backgroundColor = MaterialTheme.colors.secondary,
+            backgroundColor = MaterialTheme.colors.primary,
         ) {
             Icon(imageVector = TablerIcons.FolderPlus, contentDescription = null)
         }

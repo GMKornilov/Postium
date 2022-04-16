@@ -46,6 +46,8 @@ dependencies {
     implementation(project(":core:authorization"))
     implementation(project(":core:post"))
 
+    implementation(project(":feature:user_playlists"))
+
     implementation(project(":data:post"))
     implementation(project(":data:user"))
     implementation(project(":data:playlists"))

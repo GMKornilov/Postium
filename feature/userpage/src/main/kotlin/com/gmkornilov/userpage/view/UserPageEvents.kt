@@ -22,7 +22,7 @@ internal interface UserPageEvents {
 
     fun loadHeader()
 
-    fun createPost()
+    fun mainButtonClicked()
 
     fun refreshData()
 
@@ -36,7 +36,7 @@ internal interface UserPageEvents {
         override fun addToPlaylists(post: PostPreviewData) = Unit
         override fun openPlaylist(playlist: Playlist) = Unit
         override fun loadHeader() = Unit
-        override fun createPost() = Unit
+        override fun mainButtonClicked() = Unit
         override fun refreshData() = Unit
     }
 }

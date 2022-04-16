@@ -11,6 +11,7 @@ import com.gmkornilov.letIf
 import com.gmkornilov.playlists.model.Playlist
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
+import com.gmkornilov.user_playlists.playlist_create.domain.PlaylistCreateResultHandler
 import com.gmkornilov.userpage.brick_navigation.UserPageArgument
 import com.gmkornilov.userpage.domain.UserPageInteractor
 import com.gmkornilov.view_model.BaseViewModel
@@ -179,8 +180,20 @@ internal class UserPageViewModel @Inject constructor(
         }
     }
 
-    override fun createPost() {
-        listener.createPost()
+    override fun mainButtonClicked() {
+        when (currentTab) {
+            Tab.POSTS -> {
+                listener.createPost()
+            }
+            Tab.PLAYLISTS -> listener.createPlaylist {
+                val newItem = TabListItem.PlaylistItem(
+                    it,
+                    this
+                )
+                addItem(newItem)
+            }
+            Tab.BOOKMARKS -> {}
+        }
     }
 
     override fun refreshData() {
@@ -317,6 +330,24 @@ internal class UserPageViewModel @Inject constructor(
         }
     }
 
+    private fun addItem(newItem: TabListItem) = intent {
+        reduce {
+            val currentState = getCurrentState()
+            val newState = currentState.letIf(
+                currentState is ListState.Success,
+                { state ->
+                    val success = state as ListState.Success
+                    val newItems = success.contents.toMutableList().apply {
+                        add(newItem)
+                    }
+                    ListState.Success(newItems)
+                },
+                { it }
+            )
+            this.state.changeTabState(currentTab, newState)
+        }
+    }
+
     private fun UserPageState.getCurrentTabState() = this.tabStates.getValue(currentTab)
 
     private fun UserPageState.changeTabState(
@@ -343,4 +374,6 @@ interface UserPageListener {
     fun createPost()
 
     fun startAuthorizationFlow(userResultHandler: UserResultHandler)
+
+    fun createPlaylist(playlistCreateResultHandler: PlaylistCreateResultHandler)
 }
