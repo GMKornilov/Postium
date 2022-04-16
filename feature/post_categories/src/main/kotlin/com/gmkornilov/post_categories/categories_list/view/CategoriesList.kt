@@ -60,7 +60,7 @@ private fun CategoriesWithState(
             is ListState.Error -> ErrorState(contentModifier)
             ListState.Loading -> LoadingState(contentModifier)
             is ListState.Success -> if (state.listState.contents.isEmpty()) {
-                EmptyState(contentModifier)
+                EmptyState(contentModifier.fillMaxSize())
             } else {
                 SuccessState(
                     state = state.listState.contents,

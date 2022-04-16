@@ -366,14 +366,6 @@ private fun ErrorState(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun EmptyState(modifier: Modifier = Modifier) {
-    EmptyStateContainer(
-        emptyStateMessage = stringResource(id = R.string.category_empty),
-        modifier = modifier
-    )
-}
-
-@Composable
 private fun SuccessState(
     state: List<PostCreateCategory>,
     postCreateEvents: PostCreateEvents,

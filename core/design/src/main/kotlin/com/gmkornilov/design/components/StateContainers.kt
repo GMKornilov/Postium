@@ -66,7 +66,6 @@ fun EmptyStateContainer(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .fillMaxSize()
             .background(MaterialTheme.colors.surface)
             .padding(16.dp),
     ) {

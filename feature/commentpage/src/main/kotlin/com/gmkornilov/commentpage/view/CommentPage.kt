@@ -112,7 +112,7 @@ private fun CommentPageWithState(
             when (state.listState) {
                 ListState.Loading -> LoadingState(contentModifier.verticalScroll(rememberScrollState()))
                 is ListState.Success -> if (state.listState.comments.isEmpty()) {
-                    EmptyState(contentModifier.verticalScroll(rememberScrollState()))
+                    EmptyState(contentModifier.verticalScroll(rememberScrollState()).fillMaxSize())
                 } else {
                     ContentState(
                         comments = state.listState.comments,

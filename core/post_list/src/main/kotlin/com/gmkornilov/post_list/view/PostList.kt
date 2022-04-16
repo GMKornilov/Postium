@@ -80,7 +80,7 @@ private fun CategoryPostsWithState(
                     modifier = modifier
                 )
             } else {
-                EmptyState(modifier.verticalScroll(rememberScrollState()))
+                EmptyState(modifier.verticalScroll(rememberScrollState()).fillMaxSize())
             }
             else -> {}
         }
