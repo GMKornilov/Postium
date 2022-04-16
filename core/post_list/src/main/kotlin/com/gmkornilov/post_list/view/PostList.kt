@@ -154,6 +154,8 @@ private fun SuccessState(
                 isUpChecked = item.likeStatus.isLiked,
                 isDownChecked = item.likeStatus.isDisliked,
                 isBookmarkChecked = item.bookmarkStatus.isBookmarked,
+                likesAmount = item.likes,
+                dislikesAmount = item.dislikes,
                 cornerType = cornerType,
                 modifier = Modifier.padding(bottom = bottomPadding),
                 onCardClick = { postsListEvents.openPost(item) },

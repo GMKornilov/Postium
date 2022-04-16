@@ -59,7 +59,21 @@ internal class UserPageViewModel @Inject constructor(
     private fun getLikeResultHandler(postPreviewItem: TabListItem.PostPreviewItem) =
         UserResultHandler {
             val newLikeStatus = postPreviewItem.postPreviewData.likeStatus.toOppositeLikeStatus()
-            val newPost = postPreviewItem.postPreviewData.copy(likeStatus = newLikeStatus)
+            val newLikes = if (newLikeStatus.isLiked) {
+                postPreviewItem.postPreviewData.likes + 1
+            } else {
+                postPreviewItem.postPreviewData.likes - 1
+            }
+            val newDislikes = if (postPreviewItem.postPreviewData.likeStatus.isDisliked) {
+                postPreviewItem.postPreviewData.dislikes - 1
+            } else {
+                postPreviewItem.postPreviewData.dislikes
+            }
+            val newPost = postPreviewItem.postPreviewData.copy(
+                likeStatus = newLikeStatus,
+                likes = newLikes,
+                dislikes = newDislikes
+            )
             val newPostItem = postPreviewItem.copy(postPreviewData = newPost)
             replacePost(postPreviewItem, newPostItem)
 
@@ -75,7 +89,21 @@ internal class UserPageViewModel @Inject constructor(
     private fun getDislikeResultHandler(postPreviewItem: TabListItem.PostPreviewItem) =
         UserResultHandler {
             val newLikeStatus = postPreviewItem.postPreviewData.likeStatus.toOppositeDislikeStatus()
-            val newPost = postPreviewItem.postPreviewData.copy(likeStatus = newLikeStatus)
+            val newLikes = if (postPreviewItem.postPreviewData.likeStatus.isLiked) {
+                postPreviewItem.postPreviewData.likes - 1
+            } else {
+                postPreviewItem.postPreviewData.likes
+            }
+            val newDislikes = if (newLikeStatus.isDisliked) {
+                postPreviewItem.postPreviewData.dislikes + 1
+            } else {
+                postPreviewItem.postPreviewData.dislikes - 1
+            }
+            val newPost = postPreviewItem.postPreviewData.copy(
+                likeStatus = newLikeStatus,
+                likes = newLikes,
+                dislikes = newDislikes
+            )
             val newPostItem = postPreviewItem.copy(postPreviewData = newPost)
             replacePost(postPreviewItem, newPostItem)
 
@@ -98,8 +126,10 @@ internal class UserPageViewModel @Inject constructor(
 
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    userPageInteractor.setBookmarkStatus(postPreviewItem.postPreviewData,
-                        newBookmarkStatus)
+                    userPageInteractor.setBookmarkStatus(
+                        postPreviewItem.postPreviewData,
+                        newBookmarkStatus
+                    )
                 } catch (e: Exception) {
                     Timber.e(e)
                 }

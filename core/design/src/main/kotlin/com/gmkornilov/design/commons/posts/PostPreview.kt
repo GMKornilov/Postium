@@ -29,6 +29,8 @@ fun PostPreview(
     isUpChecked: Boolean,
     isDownChecked: Boolean,
     isBookmarkChecked: Boolean,
+    likesAmount: Int,
+    dislikesAmount: Int,
     modifier: Modifier = Modifier,
     cornerType: CornerType = CornerType.ALL,
     onCardClick: () -> Unit = {},
@@ -105,7 +107,6 @@ fun PostPreview(
                         top.linkTo(dividerRef.bottom)
                         bottom.linkTo(parent.bottom)
                         end.linkTo(upRef.start)
-//                        pivotX = 0.0f
                         width = Dimension.fillToConstraints
                     }
                     .clickable {
@@ -116,6 +117,7 @@ fun PostPreview(
             LikeButton(
                 isChecked = isUpChecked,
                 onCheckedChange = upClicked,
+                likesAmount = likesAmount,
                 modifier = Modifier.constrainAs(upRef) {
                     end.linkTo(downRef.start, margin = 4.dp)
                     top.linkTo(dividerRef.bottom, margin = 8.dp)
@@ -125,6 +127,7 @@ fun PostPreview(
             DislikeButton(
                 isChecked = isDownChecked,
                 onCheckedChange = downClicked,
+                dislikesAmount = dislikesAmount,
                 modifier = Modifier.constrainAs(downRef) {
                     end.linkTo(markRef.start, margin = 4.dp)
                     top.linkTo(upRef.top)
@@ -171,6 +174,8 @@ private fun PostsColumn(isLight: Boolean = true) {
                 title = "Очень очень очень очень длинное название",
                 userName = "Georgium",
                 avatarUrl = null,
+                likesAmount = 1,
+                dislikesAmount = 1,
                 isUpChecked = true,
                 isDownChecked = false,
                 isBookmarkChecked = false,
@@ -182,6 +187,8 @@ private fun PostsColumn(isLight: Boolean = true) {
                 title = "Очень очень очень очень длинное название",
                 userName = "Корнилов Георгий",
                 avatarUrl = "",
+                likesAmount = 1,
+                dislikesAmount = 1,
                 isUpChecked = false,
                 isDownChecked = true,
                 cornerType = CornerType.ALL,
@@ -193,6 +200,8 @@ private fun PostsColumn(isLight: Boolean = true) {
                 title = "Title",
                 userName = "Georgium",
                 avatarUrl = "",
+                likesAmount = 1,
+                dislikesAmount = 1,
                 isUpChecked = false,
                 isDownChecked = false,
                 isBookmarkChecked = true,

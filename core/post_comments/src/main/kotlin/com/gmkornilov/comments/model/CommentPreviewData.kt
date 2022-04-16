@@ -7,4 +7,6 @@ data class CommentPreviewData(
     val username: String,
     val avatarUrl: String?,
     val likeStatus: CommentLikeStatus,
+    val likes: Int,
+    val dislikes: Int,
 )

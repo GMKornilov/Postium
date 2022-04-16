@@ -14,6 +14,8 @@ private const val COMMENTS_SUBCOLLECTION = "comments"
 private const val DATE_FIELD = "date"
 private const val TEXT_FIELD = "text"
 private const val USER_FIELD = "user"
+private const val LIKES_FIELD = "likes"
+private const val DISLIKES_FIELD = "dislikes"
 
 class PostCommentRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -49,6 +51,62 @@ class PostCommentRepository @Inject constructor(
             .await()
         return createdReference.get().await().toObject(Comment::class.java)!!
             .copy(id = createdReference.id)
+    }
+
+    suspend fun incrementLikes(postId: String, commentId: String) {
+        val updateMap = mapOf(
+            LIKES_FIELD to FieldValue.increment(1)
+        )
+
+        firestore
+            .collection(POST_COMMENTS_COLLECTION)
+            .document(postId)
+            .collection(COMMENTS_SUBCOLLECTION)
+            .document(commentId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun decrementLikes(postId: String, commentId: String) {
+        val updateMap = mapOf(
+            LIKES_FIELD to FieldValue.increment(-1)
+        )
+
+        firestore
+            .collection(POST_COMMENTS_COLLECTION)
+            .document(postId)
+            .collection(COMMENTS_SUBCOLLECTION)
+            .document(commentId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun incrementDislikes(postId: String, commentId: String) {
+        val updateMap = mapOf(
+            DISLIKES_FIELD to FieldValue.increment(1)
+        )
+
+        firestore
+            .collection(POST_COMMENTS_COLLECTION)
+            .document(postId)
+            .collection(COMMENTS_SUBCOLLECTION)
+            .document(commentId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun decrementDislikes(postId: String, commentId: String) {
+        val updateMap = mapOf(
+            DISLIKES_FIELD to FieldValue.increment(-1)
+        )
+
+        firestore
+            .collection(POST_COMMENTS_COLLECTION)
+            .document(postId)
+            .collection(COMMENTS_SUBCOLLECTION)
+            .document(commentId)
+            .update(updateMap)
+            .await()
     }
 
     private fun mapPosts(snapshot: QuerySnapshot): List<Comment> {

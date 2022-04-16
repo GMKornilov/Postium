@@ -29,7 +29,17 @@ internal class PostpageViewModel @Inject constructor(
         intent {
             val argument = this.state.argument
             val newLikeStatus = argument.likeStatus.toOppositeLikeStatus()
-            val newState = this.state.copy(argument = argument.copy(likeStatus = newLikeStatus))
+            val newLikes =
+                if (newLikeStatus.isLiked) argument.likes + 1 else argument.likes - 1
+            val newDislikes =
+                if (argument.likeStatus.isDisliked) argument.dislikes - 1 else argument.dislikes
+            val newState = this.state.copy(
+                argument = argument.copy(
+                    likeStatus = newLikeStatus,
+                    likes = newLikes,
+                    dislikes = newDislikes,
+                )
+            )
             reduce { newState }
 
             viewModelScope.launch(Dispatchers.IO) {
@@ -46,7 +56,16 @@ internal class PostpageViewModel @Inject constructor(
         intent {
             val argument = this.state.argument
             val newLikeStatus = argument.likeStatus.toOppositeDislikeStatus()
-            val newState = this.state.copy(argument = argument.copy(likeStatus = newLikeStatus))
+            val newLikes = if (argument.likeStatus.isLiked) argument.likes - 1 else argument.likes
+            val newDislikes =
+                if (newLikeStatus.isDisliked) argument.dislikes + 1 else argument.dislikes - 1
+            val newState = this.state.copy(
+                argument = argument.copy(
+                    likeStatus = newLikeStatus,
+                    likes = newLikes,
+                    dislikes = newDislikes
+                )
+            )
             reduce { newState }
 
             viewModelScope.launch(Dispatchers.IO) {

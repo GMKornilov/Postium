@@ -117,11 +117,13 @@ private fun PostpageWithState(
             isUpChecked = state.argument.likeStatus.isLiked,
             isDownChecked = state.argument.likeStatus.isDisliked,
             isBookmarkChecked = state.argument.bookmarkStatus.isBookmarked,
+            likes = state.argument.likes,
+            dislikes = state.argument.dislikes,
             onUpClicked = { postpageEvents.likePost() },
             onDownClicked = { postpageEvents.dislikePost() },
             onBookmarkClicked = { postpageEvents.bookmarkPost() },
             onOpenCommentsClicked = postpageEvents::openComments,
-            modifier = Modifier.height(48.dp)
+            modifier = Modifier.height(48.dp),
         )
     }
 }
@@ -209,6 +211,8 @@ private fun PostFooter(
     isUpChecked: Boolean,
     isDownChecked: Boolean,
     isBookmarkChecked: Boolean,
+    likes: Int,
+    dislikes: Int,
     onUpClicked: (Boolean) -> Unit,
     onDownClicked: (Boolean) -> Unit,
     onBookmarkClicked: (Boolean) -> Unit,
@@ -226,9 +230,9 @@ private fun PostFooter(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        LikeButton(isChecked = isUpChecked, onCheckedChange = onUpClicked)
+        LikeButton(isChecked = isUpChecked, likesAmount = likes, onCheckedChange = onUpClicked)
 
-        DislikeButton(isChecked = isDownChecked, onCheckedChange = onDownClicked)
+        DislikeButton(isChecked = isDownChecked, dislikesAmount = dislikes, onCheckedChange = onDownClicked)
 
         BookmarkButton(isChecked = isBookmarkChecked, onCheckedChange = onBookmarkClicked)
     }
@@ -286,7 +290,9 @@ private fun ShortPreview() {
         id = "",
         userId = "",
         likeStatus = PostLikeStatus.LIKED,
-        bookmarkStatus = PostBookmarkStatus.BOOKMARKED
+        bookmarkStatus = PostBookmarkStatus.BOOKMARKED,
+        likes = 1,
+        dislikes = 1,
     )
     val content = "Short content"
 
@@ -304,7 +310,9 @@ private fun SuccessPreview() {
         id = "",
         userId = "",
         likeStatus = PostLikeStatus.LIKED,
-        bookmarkStatus = PostBookmarkStatus.BOOKMARKED
+        bookmarkStatus = PostBookmarkStatus.BOOKMARKED,
+        likes = 1,
+        dislikes = 1,
     )
     val content = LoremIpsum().values.joinToString()
 
@@ -322,7 +330,9 @@ private fun LoadingPreview() {
         userId = "",
         id = "",
         likeStatus = PostLikeStatus.DISLIKED,
-        bookmarkStatus = PostBookmarkStatus.NOT_BOOKMARKED
+        bookmarkStatus = PostBookmarkStatus.NOT_BOOKMARKED,
+        likes = 1,
+        dislikes = 1,
     )
 
     val state = PostpageState(argument, ContentState.Loading)

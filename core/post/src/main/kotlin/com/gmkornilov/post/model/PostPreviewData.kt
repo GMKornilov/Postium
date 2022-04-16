@@ -9,4 +9,6 @@ data class PostPreviewData(
     val avatarUrl: String?,
     val likeStatus: PostLikeStatus,
     val bookmarkStatus: PostBookmarkStatus,
+    val likes: Int,
+    val dislikes: Int,
 )

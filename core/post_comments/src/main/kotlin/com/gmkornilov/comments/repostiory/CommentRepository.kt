@@ -36,6 +36,8 @@ class CommentRepository @Inject constructor(
                 id = comment.id,
                 userId = comment.user!!.id,
                 comment = comment.text,
+                likes = comment.likes,
+                dislikes = comment.dislikes,
                 username = user.name,
                 avatarUrl = user.avatarUrl?.ifBlank { null },
                 likeStatus = commentLikeStatuses[comment.id].toCommentLikeStatus(),
@@ -43,10 +45,16 @@ class CommentRepository @Inject constructor(
         }
     }
 
-    suspend fun setCommentLikeStatus(userId: String, commentId: String, commentLikeStatus: CommentLikeStatus) {
+    suspend fun setCommentLikeStatus(
+        postId: String,
+        userId: String,
+        commentId: String,
+        commentLikeStatus: CommentLikeStatus
+    ) {
         if (commentId.isBlank()) {
             return
         }
+        val currentLikeStatus = commentLikesRepository.getLikeStatus(userId, commentId)
         when (commentLikeStatus) {
             CommentLikeStatus.LIKED -> commentLikesRepository.likeComment(
                 userId,
@@ -61,9 +69,35 @@ class CommentRepository @Inject constructor(
                 commentId
             )
         }
+
+        when {
+            currentLikeStatus.isLiked && !commentLikeStatus.isLiked -> postCommentRepository.decrementLikes(
+                postId,
+                commentId
+            )
+            !currentLikeStatus.isLiked && commentLikeStatus.isLiked -> postCommentRepository.incrementLikes(
+                postId,
+                commentId
+            )
+        }
+
+        when {
+            currentLikeStatus.isDisliked && !commentLikeStatus.isDisliked -> postCommentRepository.decrementDislikes(
+                postId,
+                commentId
+            )
+            !currentLikeStatus.isDisliked && commentLikeStatus.isDisliked -> postCommentRepository.incrementDislikes(
+                postId,
+                commentId
+            )
+        }
     }
 
-    suspend fun sendComment(postId: String, userId: String, commentContent: String): CommentPreviewData {
+    suspend fun sendComment(
+        postId: String,
+        userId: String,
+        commentContent: String
+    ): CommentPreviewData {
         val userReference = userRepository.getUserReference(userId)
 
         val comment = postCommentRepository.addComment(postId, userReference, commentContent)
@@ -75,7 +109,9 @@ class CommentRepository @Inject constructor(
             comment = commentContent,
             username = user.name,
             avatarUrl = user.avatarUrl?.ifBlank { null },
-            likeStatus = CommentLikeStatus.NONE
+            likeStatus = CommentLikeStatus.NONE,
+            likes = 0,
+            dislikes = 0,
         )
     }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.gmkornilov.design.components.IconWithTip
 import com.gmkornilov.design.theme.DarkBurgundy
 import com.gmkornilov.design.theme.Green
 import com.gmkornilov.design.theme.PostiumTheme
@@ -28,6 +29,7 @@ import compose.icons.tablericons.Bookmarks
 @Composable
 fun LikeButton(
     isChecked: Boolean,
+    likesAmount: Int,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -36,8 +38,9 @@ fun LikeButton(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
     ) {
-        Icon(
+        IconWithTip(
             imageVector = if (isChecked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+            text = likesAmount.toString(),
             contentDescription = null,
             tint = if (isChecked) Green else MaterialTheme.colors.onSurface,
         )
@@ -47,6 +50,7 @@ fun LikeButton(
 @Composable
 fun DislikeButton(
     isChecked: Boolean,
+    dislikesAmount: Int,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,8 +59,9 @@ fun DislikeButton(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
     ) {
-        Icon(
+        IconWithTip(
             imageVector = if (isChecked) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown,
+            text = dislikesAmount.toString(),
             contentDescription = null,
             tint = if (isChecked) Color.Red else MaterialTheme.colors.onSurface,
         )
@@ -120,15 +125,15 @@ private fun ButtonPreview() {
         Column(modifier = Modifier.background(MaterialTheme.colors.surface)) {
             Row {
                 val modifier = Modifier.padding(4.dp)
-                LikeButton(isChecked = true, onCheckedChange = {}, modifier = modifier)
-                DislikeButton(isChecked = true, onCheckedChange = {}, modifier = modifier)
+                LikeButton(isChecked = true, likesAmount = 1, onCheckedChange = {}, modifier = modifier)
+                DislikeButton(isChecked = true, dislikesAmount = 100, onCheckedChange = {}, modifier = modifier)
                 BookmarkButton(isChecked = true, onCheckedChange = {}, modifier = modifier)
                 PlaylistButton(onClick = { }, modifier = modifier)
             }
             Row {
                 val modifier = Modifier.padding(4.dp)
-                LikeButton(isChecked = false, onCheckedChange = {}, modifier = modifier)
-                DislikeButton(isChecked = false, onCheckedChange = {}, modifier = modifier)
+                LikeButton(isChecked = false, likesAmount = 1000, onCheckedChange = {}, modifier = modifier)
+                DislikeButton(isChecked = false, dislikesAmount = 10, onCheckedChange = {}, modifier = modifier)
                 BookmarkButton(isChecked = false, onCheckedChange = {}, modifier = modifier)
                 PlaylistButton(onClick = { }, modifier = modifier)
             }

@@ -19,7 +19,7 @@ class PostListViewModel @Inject constructor(
     private val postListInteractor: PostListInteractor,
     private val listener: PostsListListener,
     private val authInteractor: AuthInteractor,
-): BaseViewModel<PostListState, Unit>(), PostListEvents {
+) : BaseViewModel<PostListState, Unit>(), PostListEvents {
     override fun getBaseState(): PostListState {
         return PostListState()
     }
@@ -27,8 +27,10 @@ class PostListViewModel @Inject constructor(
     private fun getLikeUserHandler(post: PostPreviewData) = UserResultHandler {
         intent {
             val newLikeStatus = post.likeStatus.toOppositeLikeStatus()
-
-            val newPost = post.copy(likeStatus = newLikeStatus)
+            val newLikes = if (newLikeStatus.isLiked) post.likes + 1 else post.likes - 1
+            val newDislikes = if (post.likeStatus.isDisliked) post.dislikes - 1 else post.dislikes
+            val newPost =
+                post.copy(likeStatus = newLikeStatus, likes = newLikes, dislikes = newDislikes)
             replacePost(post, newPost)
 
             viewModelScope.launch(Dispatchers.IO) {
@@ -44,8 +46,10 @@ class PostListViewModel @Inject constructor(
     private fun getDislikeUserHandler(post: PostPreviewData) = UserResultHandler {
         intent {
             val newLikeStatus = post.likeStatus.toOppositeDislikeStatus()
-
-            val newPost = post.copy(likeStatus = newLikeStatus)
+            val newLikes = if (post.likeStatus.isLiked) post.likes - 1 else post.likes
+            val newDislikes = if (newLikeStatus.isDisliked) post.dislikes + 1 else post.dislikes - 1
+            val newPost =
+                post.copy(likeStatus = newLikeStatus, likes = newLikes, dislikes = newDislikes)
             replacePost(post, newPost)
 
             viewModelScope.launch(Dispatchers.IO) {
@@ -85,7 +89,12 @@ class PostListViewModel @Inject constructor(
             }
             try {
                 val posts = postListInteractor.loadPosts()
-                reduce { this.state.copy(listState = ListState.Success(posts), isRefreshing = false) }
+                reduce {
+                    this.state.copy(
+                        listState = ListState.Success(posts),
+                        isRefreshing = false
+                    )
+                }
             } catch (e: Exception) {
                 Timber.e(e)
                 reduce { this.state.copy(listState = ListState.Error(e), isRefreshing = false) }

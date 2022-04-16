@@ -10,9 +10,9 @@ internal class CommentPageInteractor @Inject constructor(
     private val commentRepository: CommentRepository,
     private val authInteractor: AuthInteractor,
 ) {
-    suspend fun setCommentLikeStatus(commentId: String, likeStatus: CommentLikeStatus) {
+    suspend fun setCommentLikeStatus(postId: String, commentId: String, likeStatus: CommentLikeStatus) {
         val currentUser = authInteractor.getPostiumUser() ?: return
-        commentRepository.setCommentLikeStatus(currentUser.getUid(), commentId, likeStatus)
+        commentRepository.setCommentLikeStatus(postId, currentUser.getUid(), commentId, likeStatus)
     }
 
     suspend fun loadComments(postId: String): List<CommentPreviewData> {

@@ -53,6 +53,8 @@ internal sealed class TabListItem {
                 isUpChecked = postPreviewData.likeStatus.isLiked,
                 isDownChecked = postPreviewData.likeStatus.isDisliked,
                 isBookmarkChecked = postPreviewData.bookmarkStatus.isBookmarked,
+                likesAmount = postPreviewData.likes,
+                dislikesAmount = postPreviewData.dislikes,
                 cornerType = cornerType,
                 modifier = modifier.padding(bottom = bottomPadding),
                 onCardClick = { userPageEvents.openPost(this) },

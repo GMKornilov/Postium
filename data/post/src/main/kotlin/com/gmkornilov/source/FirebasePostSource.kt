@@ -10,7 +10,8 @@ import javax.inject.Inject
 private const val POSTS_COLLECTION = "posts"
 
 private const val DATE_FIELD = "date"
-private const val LIKE_FIELD = "likes"
+private const val LIKES_FIELD = "likes"
+private const val DISLIKES_FIELD = "dislikes"
 private const val USER_FIELD = "user"
 private const val TITLE_FIELD = "title"
 private const val CATEGORIES_FIELD = "categories"
@@ -88,6 +89,54 @@ class FirebasePostSource @Inject constructor(
             .get()
             .await()
         return mapPosts(snapshot)
+    }
+
+    suspend fun incrementLikes(postId: String) {
+        val updateMap = mapOf(
+            LIKES_FIELD to FieldValue.increment(1)
+        )
+
+        firestore
+            .collection(POSTS_COLLECTION)
+            .document(postId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun decrementLikes(postId: String) {
+        val updateMap = mapOf(
+            LIKES_FIELD to FieldValue.increment(-1)
+        )
+
+        firestore
+            .collection(POSTS_COLLECTION)
+            .document(postId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun incrementDislikes(postId: String) {
+        val updateMap = mapOf(
+            DISLIKES_FIELD to FieldValue.increment(1)
+        )
+
+        firestore
+            .collection(POSTS_COLLECTION)
+            .document(postId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun decrementDislikes(postId: String) {
+        val updateMap = mapOf(
+            DISLIKES_FIELD to FieldValue.increment(-1)
+        )
+
+        firestore
+            .collection(POSTS_COLLECTION)
+            .document(postId)
+            .update(updateMap)
+            .await()
     }
 
     private fun mapPosts(snapshot: QuerySnapshot): List<Post> {

@@ -219,6 +219,8 @@ private fun ContentState(
                 comment = item.comment,
                 isUpChecked = item.likeStatus.isLiked,
                 isDownChecked = item.likeStatus.isDisliked,
+                likesAmount = item.likes,
+                dislikesAmount = item.dislikes,
                 onOpenProfileClicked = { commentPageEvents.openProfile(item) },
                 onUpClicked = { commentPageEvents.likeComment(item) },
                 onDownClicked = { commentPageEvents.dislikeComment(item) },
@@ -257,6 +259,8 @@ private fun PreviewComments() {
             username = "Georgium",
             avatarUrl = null,
             likeStatus = CommentLikeStatus.LIKED,
+            likes = 1,
+            dislikes = 1,
         ),
         CommentPreviewData(
             id = "2",
@@ -265,6 +269,8 @@ private fun PreviewComments() {
             username = "Georgium",
             avatarUrl = null,
             likeStatus = CommentLikeStatus.DISLIKED,
+            likes = 1,
+            dislikes = 1,
         ),
     )
     val state = CommentPageState(listState = ListState.Success(comments))

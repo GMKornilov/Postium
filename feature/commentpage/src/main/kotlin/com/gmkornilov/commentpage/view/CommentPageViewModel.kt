@@ -26,13 +26,20 @@ internal class CommentPageViewModel @Inject constructor(
     private fun getLikeUserHandler(comment: CommentPreviewData) = UserResultHandler {
         intent {
             val newLikeStatus = comment.likeStatus.toOppositeLikeStatus()
-
-            val newComment = comment.copy(likeStatus = newLikeStatus)
+            val newLikes = if (newLikeStatus.isLiked) comment.likes + 1 else comment.likes - 1
+            val newDislikes =
+                if (comment.likeStatus.isDisliked) comment.dislikes - 1 else comment.dislikes
+            val newComment =
+                comment.copy(likeStatus = newLikeStatus, likes = newLikes, dislikes = newDislikes)
             replaceComment(comment, newComment)
 
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    commentPageInteractor.setCommentLikeStatus(comment.id, newLikeStatus)
+                    commentPageInteractor.setCommentLikeStatus(
+                        navArgument.postId,
+                        comment.id,
+                        newLikeStatus
+                    )
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -43,13 +50,20 @@ internal class CommentPageViewModel @Inject constructor(
     private fun getDislikeUserHandler(comment: CommentPreviewData) = UserResultHandler {
         intent {
             val newLikeStatus = comment.likeStatus.toOppositeDislikeStatus()
-
-            val newComment = comment.copy(likeStatus = newLikeStatus)
+            val newLikes = if (comment.likeStatus.isLiked) comment.likes - 1 else comment.likes
+            val newDislikes =
+                if (newLikeStatus.isDisliked) comment.dislikes + 1 else comment.dislikes - 1
+            val newComment =
+                comment.copy(likeStatus = newLikeStatus, likes = newLikes, dislikes = newDislikes)
             replaceComment(comment, newComment)
 
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    commentPageInteractor.setCommentLikeStatus(comment.id, newLikeStatus)
+                    commentPageInteractor.setCommentLikeStatus(
+                        navArgument.postId,
+                        comment.id,
+                        newLikeStatus
+                    )
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -72,7 +86,12 @@ internal class CommentPageViewModel @Inject constructor(
                             },
                             { it.listState }
                         )
-                    reduce { this.state.copy(sendCommentState = SendCommentState.None, listState = newListState) }
+                    reduce {
+                        this.state.copy(
+                            sendCommentState = SendCommentState.None,
+                            listState = newListState
+                        )
+                    }
                     postSideEffect(CommentPageSideEffect.ClearTextField)
                 } catch (e: Exception) {
                     Timber.e(e)

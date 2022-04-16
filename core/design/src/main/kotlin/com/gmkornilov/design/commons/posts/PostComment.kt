@@ -27,6 +27,8 @@ fun Comment(
     avatarUrl: String?,
     usernameTitle: String,
     comment: String,
+    likesAmount: Int,
+    dislikesAmount: Int,
     isUpChecked: Boolean,
     isDownChecked: Boolean,
     modifier: Modifier = Modifier,
@@ -78,9 +80,9 @@ fun Comment(
 
         Spacer(Modifier.size(8.dp))
 
-        LikeButton(isChecked = isUpChecked, onCheckedChange = onUpClicked)
+        LikeButton(isChecked = isUpChecked, likesAmount = likesAmount, onCheckedChange = onUpClicked)
 
-        DislikeButton(isChecked = isDownChecked, onCheckedChange = onDownClicked)
+        DislikeButton(isChecked = isDownChecked, dislikesAmount = dislikesAmount, onCheckedChange = onDownClicked)
     }
 }
 
@@ -105,6 +107,8 @@ private fun CommentsColumn() {
             Comment(
                 comment = "Title",
                 usernameTitle = "Georgium",
+                likesAmount = 1,
+                dislikesAmount = 1,
                 avatarUrl = null,
                 isUpChecked = true,
                 isDownChecked = false,
@@ -114,6 +118,8 @@ private fun CommentsColumn() {
             Comment(
                 comment = loremIpsum,
                 usernameTitle = "очень очень очень очень очекнь очень ",
+                likesAmount = 1,
+                dislikesAmount = 1,
                 avatarUrl = "",
                 isUpChecked = false,
                 isDownChecked = true,
@@ -124,6 +130,8 @@ private fun CommentsColumn() {
                 avatarUrl = "",
                 usernameTitle = "Test",
                 comment = "test comment",
+                likesAmount = 1,
+                dislikesAmount = 1,
                 isUpChecked = false,
                 isDownChecked = false,
             )

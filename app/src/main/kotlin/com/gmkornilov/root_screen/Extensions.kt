@@ -14,6 +14,8 @@ fun PostPreviewData.toPostPageArgument() = PostPageArgument(
     avatarUrl = avatarUrl,
     likeStatus = likeStatus,
     bookmarkStatus = bookmarkStatus,
+    likes = likes,
+    dislikes = dislikes,
 )
 
 fun PostPreviewData.toUserPageArgument() = UserPageArgument.ReadyHeader(

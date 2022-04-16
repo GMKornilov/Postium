@@ -16,13 +16,6 @@ class PostRepository @Inject constructor(
     private val bookmarkRepository: PostBookmarkRepository,
     private val userRepository: UserRepository,
 ) {
-    suspend fun loadDataWithTimeRange(postTimeRange: SelectionTimeRange): List<PostPreviewData> {
-        val postLoader = PostLoader {
-            firebasePostSource.getPostsFromTimeRange(postTimeRange.toTimeRange())
-        }
-        return loadPostsPreview(postLoader)
-    }
-
     suspend fun loadDataWithUserId(userId: String): List<PostPreviewData> {
         val postLoader = PostLoader {
             val reference = userRepository.getUserReference(userId)
@@ -67,6 +60,8 @@ class PostRepository @Inject constructor(
                 avatarUrl = user.avatarUrl?.ifBlank { null },
                 likeStatus = postLikeStatuses[post.id].toPostLikeStatus(),
                 bookmarkStatus = postBookmarkStatuses[post.id].toPostBookmarkStatus(),
+                likes = post.likes,
+                dislikes = post.dislikes,
             )
         }
     }
@@ -76,10 +71,29 @@ class PostRepository @Inject constructor(
             return
         }
         val currentUser = authInteractor.getPostiumUser() ?: return
+        val currentLikeStatus = likeRepository.getLikeStatus(currentUser.getUid(), postId)
         when (likeStatus) {
             PostLikeStatus.LIKED -> likeRepository.likePost(currentUser.getUid(), postId)
             PostLikeStatus.DISLIKED -> likeRepository.dislikePost(currentUser.getUid(), postId)
             PostLikeStatus.NONE -> likeRepository.removeStatus(currentUser.getUid(), postId)
+        }
+
+        when {
+            currentLikeStatus.isLiked && !likeStatus.isLiked -> firebasePostSource.decrementLikes(
+                postId
+            )
+            !currentLikeStatus.isLiked && likeStatus.isLiked -> firebasePostSource.incrementLikes(
+                postId
+            )
+        }
+
+        when {
+            currentLikeStatus.isDisliked && !likeStatus.isDisliked -> firebasePostSource.decrementDislikes(
+                postId
+            )
+            !currentLikeStatus.isDisliked && likeStatus.isDisliked -> firebasePostSource.incrementDislikes(
+                postId
+            )
         }
     }
 
