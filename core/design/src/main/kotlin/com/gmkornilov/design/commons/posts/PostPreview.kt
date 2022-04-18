@@ -168,7 +168,7 @@ private fun PostsColumnDark() {
 
 @Composable
 private fun PostsColumn(isLight: Boolean = true) {
-    PostiumTheme(darkTheme = !isLight) {
+    PostiumTheme {
         Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
             PostPreview(
                 title = "Очень очень очень очень длинное название",

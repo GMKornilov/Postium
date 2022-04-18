@@ -16,7 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.gmkornilov.design.components.EmptyStateContainer
 import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.ScrollableColumn
 import com.gmkornilov.design.components.SelectableChip
