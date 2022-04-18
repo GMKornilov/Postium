@@ -60,6 +60,8 @@ dependencies {
     implementation(Deps.AndroidX.activityCompose)
     implementation(Deps.AndroidX.lifecycleRuntime)
 
+    implementation(Deps.Jetpack.dataStorePreferences)
+
     implementation(Deps.materialDesign)
 
     implementation(Deps.Compose.Ui)

@@ -1,5 +1,6 @@
 package com.gmkornilov.root_screen
 
+import android.content.Context
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -85,6 +86,8 @@ class RootScreenFactory @Inject constructor(
         override val authInteractor: AuthInteractor
 
         val router: TreeRouter
+
+        val context: Context
     }
 
     interface OuterDeps {

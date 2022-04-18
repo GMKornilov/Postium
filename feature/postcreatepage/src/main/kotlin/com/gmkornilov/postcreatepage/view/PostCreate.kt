@@ -68,6 +68,8 @@ internal fun PostCreate(
     }
 
     LaunchedEffect(viewModel) {
+        viewModel.loadDraft()
+
         viewModel.container.sideEffectFlow.collect {
             when (it) {
                 PostCreateSideEffect.ShowExitDialog -> {
@@ -88,6 +90,10 @@ internal fun PostCreate(
                     scope,
                     snackbarHostState
                 )
+                is PostCreateSideEffect.RestoreDraft -> {
+                    enteredTitle = it.title
+                    enteredContent = it.contents
+                }
             }
         }
     }
@@ -98,6 +104,12 @@ internal fun PostCreate(
             && state.categoryState is ListState.None
         ) {
             viewModel.loadCategories()
+        }
+    }
+
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.saveDraft(enteredTitle, enteredContent)
         }
     }
 

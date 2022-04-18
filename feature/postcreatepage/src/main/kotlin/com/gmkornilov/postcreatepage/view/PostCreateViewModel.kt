@@ -1,12 +1,10 @@
 package com.gmkornilov.postcreatepage.view
 
-import com.gmkornilov.categories.model.Category
 import com.gmkornilov.lazy_column.ListState
 import com.gmkornilov.postcreatepage.domain.PostCreateCategory
 import com.gmkornilov.postcreatepage.domain.PostCreateInteractor
 import com.gmkornilov.view_model.BaseViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -87,6 +85,25 @@ internal class PostCreateViewModel @Inject constructor(
                 }
             }
             reduce { this.state.copy(categoryState = ListState.Success(categories)) }
+        }
+    }
+
+    fun loadDraft() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val draft = postCreateInteractor.getDraft()
+                postSideEffect(PostCreateSideEffect.RestoreDraft(draft.title, draft.contents))
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+    }
+
+    fun saveDraft(title: String, contents: String) = runBlocking {
+        coroutineScope {
+            withContext(Dispatchers.IO) {
+                postCreateInteractor.saveDraft(title, contents)
+            }
         }
     }
 }

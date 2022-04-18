@@ -24,6 +24,10 @@ object Deps {
             "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.Kotlin.Coroutines.viewModel}"
     }
 
+    object Jetpack {
+        const val dataStorePreferences = "androidx.datastore:datastore-preferences:${Versions.Jetpack.dataStore}"
+    }
+
     /**
      * Compose libraries
      */

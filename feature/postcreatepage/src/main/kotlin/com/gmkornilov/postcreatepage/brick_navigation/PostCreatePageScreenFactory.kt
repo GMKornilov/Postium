@@ -1,17 +1,21 @@
 package com.gmkornilov.postcreatepage.brick_navigation
 
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.alphicc.brick.DataContainer
 import com.alphicc.brick.Screen
 import com.gmkornilov.authorizarion.data.AuthInteractor
-import com.gmkornilov.brick_navigation.BaseScreen
 import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.post_contents.repository.PostContentsRepository
+import com.gmkornilov.postcreatepage.data.DB_NAME
 import com.gmkornilov.postcreatepage.view.PostCreate
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postcreatepage.view.PostCreateViewModel
@@ -19,6 +23,7 @@ import com.gmkornilov.source.FirebasePostSource
 import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
+import dagger.Provides
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 import javax.inject.Scope
@@ -64,13 +69,16 @@ class PostCreatePageScreenFactory @Inject constructor(
         val userRepository: UserRepository
         val authInteractor: AuthInteractor
         val categoriesRepository: CategoriesRepository
+
+        val context: Context
     }
 
     @Scope
     annotation class PostCreateScope
 
     @dagger.Component(
-        dependencies = [Deps::class]
+        dependencies = [Deps::class],
+        modules = [Module::class],
     )
     @PostCreateScope
     internal interface Component {
@@ -84,6 +92,19 @@ class PostCreatePageScreenFactory @Inject constructor(
             fun deps(dependency: Deps): Builder
 
             fun build(): Component
+        }
+    }
+
+    @dagger.Module
+    interface Module {
+        companion object {
+            private val Context.draftsStore by preferencesDataStore(DB_NAME)
+
+            @PostCreateScope
+            @Provides
+            fun dataStore(context: Context): DataStore<Preferences> {
+                return context.draftsStore
+            }
         }
     }
 }

@@ -29,6 +29,10 @@ object Versions {
         const val activity_compose = "1.4.0"
     }
 
+    object Jetpack {
+        const val dataStore = "1.0.0"
+    }
+
     /**
      * Testing and tooling libraries
      */
