@@ -20,6 +20,7 @@ import com.gmkornilov.design.components.ErrorStateContainer
 import com.gmkornilov.design.components.ScrollableColumn
 import com.gmkornilov.design.components.SelectableChip
 import com.gmkornilov.design.modifiers.bottomBorder
+import com.gmkornilov.design.modifiers.imePaddingWithBottomBar
 import com.gmkornilov.design.modifiers.topBorder
 import com.gmkornilov.design.theme.PostiumTheme
 import com.gmkornilov.lazy_column.ListState
@@ -196,6 +197,7 @@ private fun PostCreateWithState(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
+            .imePaddingWithBottomBar()
     ) {
         Column(modifier = modifier.fillMaxSize()) {
             ScrollableTabRow(

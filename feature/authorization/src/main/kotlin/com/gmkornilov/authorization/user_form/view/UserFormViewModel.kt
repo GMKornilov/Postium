@@ -21,7 +21,7 @@ internal class UserFormViewModel @Inject constructor(
     override fun getBaseState(): UserFormState {
         return UserFormState(
             username = postiumUser.getDisplayName().orEmpty(),
-            avatartUrl = postiumUser.getProfilePhotoUrl(),
+            avatarUrl = postiumUser.getProfilePhotoUrl(),
         )
     }
 
@@ -30,7 +30,7 @@ internal class UserFormViewModel @Inject constructor(
     }
 
     override fun photoUploaded(uri: Uri?) = intent {
-        reduce { this.state.copy(avatartUrl = uri?.toString()) }
+        reduce { this.state.copy(avatarUrl = uri?.toString()) }
 
         viewModelScope.launch(Dispatchers.IO) {
             uri?.let {

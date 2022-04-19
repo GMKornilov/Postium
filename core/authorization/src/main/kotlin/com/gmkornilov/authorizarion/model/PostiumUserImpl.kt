@@ -11,7 +11,7 @@ internal class PostiumUserImpl(
 
     override fun getEmail() = firebaseUser.email
 
-    override fun getProfilePhotoUrl() = firebaseUser.photoUrl.toString()
+    override fun getProfilePhotoUrl() = firebaseUser.photoUrl?.toString()
 }
 
 internal fun FirebaseUser.toPostiumUser(): PostiumUser = PostiumUserImpl(this)

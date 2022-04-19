@@ -4,7 +4,9 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NavigateNext
@@ -12,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +30,6 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.CameraOff
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, InternalCoroutinesApi::class)
@@ -56,12 +58,12 @@ internal fun UserForm(
         }
 
     LaunchedEffect(viewModel) {
-        viewModel.container.sideEffectFlow.collect( FlowCollector {
+        viewModel.container.sideEffectFlow.collect {
             when (it) {
                 UserFormSideEffect.UploadPhoto -> selectImageLauncher.launch("image/*")
                 UserFormSideEffect.ScrollToEnd -> pagerState.animateScrollToPage(UserFormStep.values().lastIndex)
             }
-        })
+        }
     }
 
     UserFormWithState(
@@ -158,12 +160,22 @@ private fun PhotoUploadPage(
         CompositionLocalProvider(
             LocalAvatarSize provides 128.dp
         ) {
-            UserAvatar(avatarUrl = state.avatartUrl) {
-                Icon(
-                    imageVector = TablerIcons.CameraOff,
-                    contentDescription = null,
-                    modifier = Modifier.size(LocalAvatarSize.current * 2 / 3)
-                )
+            if (state.avatarUrl != null) {
+                UserAvatar(avatarUrl = state.avatarUrl)
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(LocalAvatarSize.current)
+                        .clip(CircleShape)
+                        .border(1.dp, MaterialTheme.colors.onSurface, CircleShape),
+                ) {
+                    Icon(
+                        imageVector = TablerIcons.CameraOff,
+                        contentDescription = null,
+                        modifier = Modifier.size(LocalAvatarSize.current * 2 / 3)
+                    )
+                }
             }
         }
 

@@ -92,7 +92,9 @@ internal fun Mainpage(
             LocalErrorStateMessage provides stringResource(R.string.load_posts_error),
             LocalEmptyStateMessage provides stringResource(R.string.posts_not_found)
         ) {
-            PostList(viewModel = currentViewModel, modifier = Modifier.fillMaxSize())
+            key(state.currentRange) {
+                PostList(viewModel = currentViewModel, modifier = Modifier.fillMaxSize())
+            }
         }
     }
 }

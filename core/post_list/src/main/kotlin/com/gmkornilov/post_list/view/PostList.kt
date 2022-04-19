@@ -41,7 +41,9 @@ fun PostList(
     val state by viewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(viewModel) {
-        viewModel.loadAllPosts()
+        if (state.listState is ListState.None) {
+            viewModel.loadAllPosts()
+        }
     }
 
     CategoryPostsWithState(state = state, postsListEvents = viewModel, modifier = modifier)
