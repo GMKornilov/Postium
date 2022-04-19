@@ -21,4 +21,8 @@ internal class PostPageInteractor @Inject constructor(
     suspend fun setBookmarkStatus(postId: String, bookmarkStatus: PostBookmarkStatus) {
         postRepository.setBookmarkStatus(postId, bookmarkStatus)
     }
+
+    suspend fun deletePost(postId: String) {
+        postRepository.deletePost(postId)
+    }
 }

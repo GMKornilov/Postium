@@ -6,6 +6,7 @@ internal data class PostpageState(
     val argument: PostPageArgument,
     val contentState: ContentState,
     val isRefresh: Boolean = false,
+    val showEditContent: Boolean = false,
 )
 
 internal sealed class ContentState {

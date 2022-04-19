@@ -16,6 +16,8 @@ private const val USER_FIELD = "user"
 private const val TITLE_FIELD = "title"
 private const val CATEGORIES_FIELD = "categories"
 
+private const val IS_DELETED = "is_deleted"
+
 private const val LIMIT = 50L
 
 class FirebasePostSource @Inject constructor(
@@ -50,6 +52,7 @@ class FirebasePostSource @Inject constructor(
 
         val snapshot = firestore
             .collection(POSTS_COLLECTION)
+            .whereEqualTo(IS_DELETED, false)
             .whereGreaterThan(DATE_FIELD, timestamp)
             .orderBy(DATE_FIELD)
             .limit(LIMIT)
@@ -62,6 +65,7 @@ class FirebasePostSource @Inject constructor(
     suspend fun getPostsWithUserReference(userReference: DocumentReference): List<Post> {
         val snapshot = firestore
             .collection(POSTS_COLLECTION)
+            .whereEqualTo(IS_DELETED, false)
             .whereEqualTo(USER_FIELD, userReference)
             .orderBy(DATE_FIELD)
             .limit(LIMIT)
@@ -73,6 +77,7 @@ class FirebasePostSource @Inject constructor(
     suspend fun getPostsWithCategory(categoryReference: DocumentReference): List<Post> {
         val snapshot = firestore
             .collection(POSTS_COLLECTION)
+            .whereEqualTo(IS_DELETED, false)
             .whereArrayContains(CATEGORIES_FIELD, categoryReference)
             .get()
             .await()
@@ -85,6 +90,7 @@ class FirebasePostSource @Inject constructor(
         }
         val snapshot = firestore
             .collection(POSTS_COLLECTION)
+            .whereEqualTo(IS_DELETED, false)
             .whereIn(FieldPath.documentId(), ids)
             .get()
             .await()
@@ -130,6 +136,18 @@ class FirebasePostSource @Inject constructor(
     suspend fun decrementDislikes(postId: String) {
         val updateMap = mapOf(
             DISLIKES_FIELD to FieldValue.increment(-1)
+        )
+
+        firestore
+            .collection(POSTS_COLLECTION)
+            .document(postId)
+            .update(updateMap)
+            .await()
+    }
+
+    suspend fun deletePost(postId: String) {
+        val updateMap = mapOf(
+            IS_DELETED to true
         )
 
         firestore

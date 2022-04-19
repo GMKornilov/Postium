@@ -7,10 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Chat
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -37,6 +34,9 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material.MaterialRichText
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Pencil
+import compose.icons.tablericons.Trash
 
 @Composable
 internal fun Postpage(
@@ -45,15 +45,61 @@ internal fun Postpage(
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
 
+    var deleteDialogOpened by remember { mutableStateOf(false) }
+    val deleteDialogConfirmed = {
+        deleteDialogOpened = false
+        viewModel.deletePostConfirm()
+    }
+    val onDismissDialog = { deleteDialogOpened = false }
+
     LaunchedEffect(viewModel) {
         if (state.contentState is ContentState.None) {
             viewModel.loadContent()
         }
+
+        viewModel.container.sideEffectFlow.collect {
+            when (it) {
+                PostpageSideEffect.ShowDeleteConfirmDialog -> {
+                    deleteDialogOpened = true
+                }
+            }
+        }
     }
 
+
     PostpageWithState(state = state, postpageEvents = viewModel, modifier = modifier)
+
+    if (deleteDialogOpened) {
+        DeleteDialog(onConfirm = deleteDialogConfirmed, onDismiss = onDismissDialog)
+    }
 }
 
+
+@Composable
+private fun DeleteDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(stringResource(R.string.dialog_title))
+        },
+        text = {
+            Text(stringResource(R.string.dialog_text))
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.dialog_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.dialog_dismiss))
+            }
+        }
+    )
+}
 
 @Composable
 private fun PostpageWithState(
@@ -73,6 +119,7 @@ private fun PostpageWithState(
                         title = state.argument.title,
                         username = state.argument.username,
                         avatarUrl = state.argument.avatarUrl,
+                        canEdit = state.showEditContent,
                         postpageEvents = postpageEvents,
                         modifier = Modifier.bottomBorder(1.dp, 16.dp)
                     )
@@ -167,6 +214,7 @@ private fun PostHeader(
     title: String,
     username: String,
     avatarUrl: String?,
+    canEdit: Boolean,
     postpageEvents: PostpageEvents,
     modifier: Modifier = Modifier,
 ) {
@@ -191,8 +239,26 @@ private fun PostHeader(
             Text(
                 stringResource(R.string.by_title, username),
                 color = MaterialTheme.colors.onSurface,
-                modifier = Modifier.padding(start = startPadding)
+                modifier = Modifier.padding(start = startPadding),
             )
+
+            if (canEdit) {
+                Spacer(Modifier.weight(1f))
+
+                IconButton(
+                    onClick = { postpageEvents.editPost() },
+                    modifier = Modifier.padding(end = 4.dp)
+                ) {
+                    Icon(TablerIcons.Pencil, null)
+                }
+
+                IconButton(
+                    onClick = { postpageEvents.deletePost() },
+                    modifier = Modifier.padding(end = 4.dp)
+                ) {
+                    Icon(TablerIcons.Trash, null)
+                }
+            }
         }
 
         Text(
@@ -341,7 +407,7 @@ private fun LoadingPreview() {
         comments = 0,
     )
 
-    val state = PostpageState(argument, ContentState.Loading)
+    val state = PostpageState(argument, ContentState.Loading, showEditContent = true)
 
     PreviewWithState(state = state)
 }

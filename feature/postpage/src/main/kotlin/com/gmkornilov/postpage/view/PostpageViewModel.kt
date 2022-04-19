@@ -11,6 +11,7 @@ import com.gmkornilov.view_model.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,9 +21,10 @@ internal class PostpageViewModel @Inject constructor(
     private val postPageInteractor: PostPageInteractor,
     private val authInteractor: AuthInteractor,
     private val listener: PostpageListener,
-) : BaseViewModel<PostpageState, Unit>(), PostpageEvents {
+) : BaseViewModel<PostpageState, PostpageSideEffect>(), PostpageEvents {
     override fun getBaseState(): PostpageState {
-        return PostpageState(postPageArgument, ContentState.None)
+        val isEditable = authInteractor.getPostiumUser()?.getUid() == postPageArgument.userId
+        return PostpageState(postPageArgument, ContentState.None, showEditContent = isEditable)
     }
 
     private val likeUserHandler = UserResultHandler {
@@ -153,6 +155,25 @@ internal class PostpageViewModel @Inject constructor(
     override fun refreshData() {
         loadContent(true)
     }
+
+    override fun editPost() {
+        TODO("Not yet implemented")
+    }
+
+    override fun deletePost() = intent {
+        postSideEffect(PostpageSideEffect.ShowDeleteConfirmDialog)
+    }
+
+    override fun deletePostConfirm() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postPageInteractor.deletePost(postPageArgument.id)
+                listener.exitScreen()
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+    }
 }
 
 interface PostpageListener {
@@ -161,4 +182,6 @@ interface PostpageListener {
     fun openUserProfile(postPreviewData: PostPreviewData)
 
     fun openComments(postId: String)
+
+    fun exitScreen()
 }

@@ -65,6 +65,7 @@ dependencies {
     implementation(Deps.Compose.IconsExtended)
 
     implementation(Deps.Compose.Icons.simple)
+    implementation(Deps.Compose.Icons.tabler)
 
     implementation(Deps.Compose.Accompanist.swipeRefresh)
 

@@ -122,6 +122,10 @@ class PostRepository @Inject constructor(
         }
     }
 
+    suspend fun deletePost(postId: String) {
+        firebasePostSource.deletePost(postId)
+    }
+
     fun interface PostLoader {
         suspend fun loadPosts(): List<Post>
     }
