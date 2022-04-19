@@ -2,8 +2,10 @@ package com.gmkornilov.postpage.view
 
 import com.gmkornilov.authorizarion.data.AuthInteractor
 import com.gmkornilov.authorizarion.domain.UserResultHandler
+import com.gmkornilov.letIf
 import com.gmkornilov.post.model.PostPreviewData
 import com.gmkornilov.post.model.toOppositeStatus
+import com.gmkornilov.postcreatepage.domain.PostEditResultHandler
 import com.gmkornilov.postpage.brick_navigation.PostPageArgument
 import com.gmkornilov.postpage.brick_navigation.toPostPreviewData
 import com.gmkornilov.postpage.domain.PostPageInteractor
@@ -50,6 +52,18 @@ internal class PostpageViewModel @Inject constructor(
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
+            }
+        }
+    }
+
+    private val editResultHandler = PostEditResultHandler {
+        intent {
+            val argument = this.state.argument
+            reduce {
+                this.state.copy(
+                    argument = argument.copy(title = it.title),
+                    contentState = ContentState.Success(it.contents)
+                )
             }
         }
     }
@@ -157,7 +171,20 @@ internal class PostpageViewModel @Inject constructor(
     }
 
     override fun editPost() {
-        TODO("Not yet implemented")
+        listener.editPost(
+            postPageArgument.toPostPreviewData(),
+            postPageArgument.title,
+            getPostContent(),
+            editResultHandler
+        )
+    }
+
+    private fun getPostContent(): String {
+        val contentState = this.container.stateFlow.value.contentState
+        return contentState.letIf(contentState is ContentState.Success) {
+            val state = contentState as ContentState.Success
+            state.content
+        } ?: ""
     }
 
     override fun deletePost() = intent {
@@ -182,6 +209,8 @@ interface PostpageListener {
     fun openUserProfile(postPreviewData: PostPreviewData)
 
     fun openComments(postId: String)
+
+    fun editPost(postPreviewData: PostPreviewData, title: String, content: String, postEditResultHandler: PostEditResultHandler)
 
     fun exitScreen()
 }

@@ -56,6 +56,8 @@ internal fun PostCreate(
     val onTitleChanged = { value: String -> enteredTitle = value }
     val onContentChanged = { value: String -> enteredContent = value }
 
+    var exitDialogTitle by remember { mutableStateOf("") }
+    var exitDialogMessage by remember { mutableStateOf("") }
     var exitDialogOpened by remember { mutableStateOf(false) }
     val exitDialogConfirmed = {
         exitDialogOpened = false
@@ -68,11 +70,13 @@ internal fun PostCreate(
     }
 
     LaunchedEffect(viewModel) {
-        viewModel.loadDraft()
+        viewModel.restoreData()
 
         viewModel.container.sideEffectFlow.collect {
             when (it) {
-                PostCreateSideEffect.ShowExitDialog -> {
+                is PostCreateSideEffect.ShowExitDialog -> {
+                    exitDialogTitle = it.title
+                    exitDialogMessage = it.message
                     exitDialogOpened = true
                 }
                 PostCreateSideEffect.EmptyContent -> showError(
@@ -126,14 +130,19 @@ internal fun PostCreate(
     )
 
     if (exitDialogOpened) {
-        ExitDialog(onConfirm = exitDialogConfirmed, onDismiss = onDismissDialog)
+        ExitDialog(
+            title = exitDialogTitle,
+            message = exitDialogMessage,
+            onConfirm = exitDialogConfirmed,
+            onDismiss = onDismissDialog
+        )
     }
 }
 
 private fun showError(
     message: String,
     coroutineScope: CoroutineScope,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
 ) {
     coroutineScope.launch {
         snackbarHostState.showSnackbar(message = message)
@@ -142,16 +151,18 @@ private fun showError(
 
 @Composable
 private fun ExitDialog(
+    title: String,
+    message: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(R.string.dialog_title))
+            Text(title)
         },
         text = {
-            Text(stringResource(R.string.dialog_text))
+            Text(message)
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
@@ -241,7 +252,7 @@ private fun PostCreateWithState(
         }
 
         FloatingActionButton(
-            onClick = { postCreateEvents.createPost(enteredTitle, enteredContent) },
+            onClick = { postCreateEvents.submitPost(enteredTitle, enteredContent) },
             backgroundColor = MaterialTheme.colors.secondary,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -380,7 +391,7 @@ private fun ErrorState(modifier: Modifier = Modifier) {
 private fun SuccessState(
     state: List<PostCreateCategory>,
     postCreateEvents: PostCreateEvents,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier

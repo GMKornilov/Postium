@@ -13,7 +13,7 @@ data class Post(
     @set:PropertyName("user")
     var userReference: DocumentReference? = null,
 
-    @get:PropertyName("category")
-    @set:PropertyName("category")
-    var categoryReference: DocumentReference? = null,
+    @get:PropertyName("categories")
+    @set:PropertyName("categories")
+    var categoryReference: List<DocumentReference> = emptyList(),
 )

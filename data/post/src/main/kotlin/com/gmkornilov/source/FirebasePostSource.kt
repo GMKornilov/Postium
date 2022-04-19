@@ -44,6 +44,28 @@ class FirebasePostSource @Inject constructor(
         return snapshot.toObject(Post::class.java)!!.copy(id = snapshot.id)
     }
 
+    suspend fun updatePost(
+        postId: String,
+        title: String,
+        categoryReferences: List<DocumentReference>?,
+    ) {
+        val newPost = mutableMapOf<String, Any>(TITLE_FIELD to title)
+        if (categoryReferences != null) {
+            newPost[CATEGORIES_FIELD] = categoryReferences
+        }
+
+        firestore
+            .collection(POSTS_COLLECTION)
+            .document(postId)
+            .set(newPost, SetOptions.merge())
+            .await()
+
+    }
+
+    suspend fun getPostById(id: String): Post {
+        return getPostWithIds(listOf(id)).first()
+    }
+
     suspend fun getPostsFromTimeRange(timeRange: TimeRange): List<Post> {
         val currentDate = Timestamp.now().toDate()
         val dateAfter = timeRange.getStartDate(currentDate)

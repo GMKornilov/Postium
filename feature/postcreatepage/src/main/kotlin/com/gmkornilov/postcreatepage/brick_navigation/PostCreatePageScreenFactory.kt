@@ -16,10 +16,12 @@ import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.categories.repository.CategoriesRepository
 import com.gmkornilov.post_contents.repository.PostContentsRepository
 import com.gmkornilov.postcreatepage.data.DB_NAME
+import com.gmkornilov.postcreatepage.domain.PostEditResultHandler
 import com.gmkornilov.postcreatepage.view.PostCreate
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postcreatepage.view.PostCreateViewModel
 import com.gmkornilov.source.FirebasePostSource
+import com.gmkornilov.strings.StringsProvider
 import com.gmkornilov.user.repository.UserRepository
 import com.gmkornilov.view_model.BaseViewModel
 import dagger.BindsInstance
@@ -32,20 +34,24 @@ private const val POST_CREATE_PAGE_KEY = "create_post"
 
 class PostCreatePageScreenFactory @Inject constructor(
     override val dependency: Deps,
-): DependencyProvider<PostCreatePageScreenFactory.Deps> {
+) : DependencyProvider<PostCreatePageScreenFactory.Deps> {
     private inner class Factory(
         val listener: PostCreateListener,
-    ): ScreenFactory() {
+        val postEnterPageArgument: PostEnterPageArgument,
+        val postEditResultHandler: PostEditResultHandler?,
+    ) : ScreenFactory() {
         override fun buildKey(): String {
             return POST_CREATE_PAGE_KEY
         }
 
         override fun onCreate(
             flow: SharedFlow<DataContainer>,
-            arg: DataContainer
+            arg: DataContainer,
         ): BaseViewModel<*, *> {
             val component = DaggerPostCreatePageScreenFactory_Component.builder()
                 .listener(listener)
+                .argument(postEnterPageArgument)
+                .optionalEditResultHandler(postEditResultHandler)
                 .deps(dependency)
                 .build()
             return component.postCreateViewModel
@@ -59,16 +65,22 @@ class PostCreatePageScreenFactory @Inject constructor(
 
     }
 
-    fun build(listener: PostCreateListener, prevPath: String): Screen<*> {
-        return Factory(listener).build(prevPath)
+    fun build(
+        postEnterPageArgument: PostEnterPageArgument,
+        listener: PostCreateListener,
+        prevPath: String,
+        postEditResultHandler: PostEditResultHandler? = null,
+    ): Screen<*> {
+        return Factory(listener, postEnterPageArgument, postEditResultHandler).build(prevPath)
     }
 
-    interface Deps: Dependency {
+    interface Deps : Dependency {
         val firebasePostSource: FirebasePostSource
         val postContentsRepository: PostContentsRepository
         val userRepository: UserRepository
         val authInteractor: AuthInteractor
         val categoriesRepository: CategoriesRepository
+        val stringsProvider: StringsProvider
 
         val context: Context
     }
@@ -88,6 +100,12 @@ class PostCreatePageScreenFactory @Inject constructor(
         interface Builder {
             @BindsInstance
             fun listener(listener: PostCreateListener): Builder
+
+            @BindsInstance
+            fun argument(postEnterPageArgument: PostEnterPageArgument): Builder
+
+            @BindsInstance
+            fun optionalEditResultHandler(editResultHandler: PostEditResultHandler?): Builder
 
             fun deps(dependency: Deps): Builder
 

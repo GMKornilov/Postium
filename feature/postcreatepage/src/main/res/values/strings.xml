@@ -12,8 +12,10 @@
 
     <string name="dialog_confirm">Выйти</string>
     <string name="dialog_dismiss">Отмена</string>
-    <string name="dialog_title">Вы точно хотите выйти из создания публикации?</string>
-    <string name="dialog_text">Введенные данные сохраняются, вы всегда можете вернуться позже</string>
+    <string name="dialog_create_title">Вы точно хотите выйти из создания публикации?</string>
+    <string name="dialog_edit_title">Вы точно хотите выйти из редактирования публикации?</string>
+    <string name="dialog_create_text">Введенные данные сохраняются, вы всегда можете вернуться позже</string>
+    <string name="dialog_edit_text">Введенные данные не сохраняются</string>
 
     <string name="title_cant_be_empty">Заголовок не может быть пустым</string>
     <string name="content_cant_be_empty">Содержимое не может быть пустым</string>

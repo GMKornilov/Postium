@@ -83,19 +83,19 @@ private fun DeleteDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(R.string.dialog_title))
+            Text(stringResource(R.string.delete_dialog_title))
         },
         text = {
-            Text(stringResource(R.string.dialog_text))
+            Text(stringResource(R.string.delete_dialog_text))
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(stringResource(R.string.dialog_confirm))
+                Text(stringResource(R.string.delete_dialog_confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.dialog_dismiss))
+                Text(stringResource(R.string.delete_dialog_dismiss))
             }
         }
     )

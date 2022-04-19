@@ -19,6 +19,8 @@ import com.gmkornilov.post_categories.categories_list.view.CategoriesListener
 import com.gmkornilov.post_categories.categories_posts.CategoriesPostsScreenFactory
 import com.gmkornilov.post_list.view.PostsListListener
 import com.gmkornilov.postcreatepage.brick_navigation.PostCreatePageScreenFactory
+import com.gmkornilov.postcreatepage.brick_navigation.PostEnterPageArgument
+import com.gmkornilov.postcreatepage.domain.PostEditResultHandler
 import com.gmkornilov.postcreatepage.view.PostCreateListener
 import com.gmkornilov.postpage.brick_navigation.PostPageScreenFactory
 import com.gmkornilov.postpage.view.PostpageListener
@@ -154,7 +156,24 @@ class RootViewModel @Inject constructor(
     }
 
     override fun createPost() {
-        val screen = postCreatePageScreenFactory.build(this, currentKey)
+        val screen =
+            postCreatePageScreenFactory.build(PostEnterPageArgument.CreatePost, this, currentKey)
+        currentRouter.addScreen(screen)
+    }
+
+    override fun editPost(
+        postPreviewData: PostPreviewData,
+        title: String,
+        content: String,
+        postEditResultHandler: PostEditResultHandler
+    ) {
+        val argument = PostEnterPageArgument.EditPost(postPreviewData.id, title, content)
+        val screen = postCreatePageScreenFactory.build(
+            argument,
+            this,
+            currentKey,
+            postEditResultHandler
+        )
         currentRouter.addScreen(screen)
     }
 

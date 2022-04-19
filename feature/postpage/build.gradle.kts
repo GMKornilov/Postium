@@ -48,6 +48,8 @@ dependencies {
 
     implementation(project(":data:post_contents"))
 
+    implementation(project(":feature:postcreatepage"))
+
     implementation(platform(Deps.Firebase.bom))
     implementation(Deps.Firebase.firestore)
     implementation(Deps.Firebase.coroutinesPlayServices)

@@ -3,9 +3,9 @@
     <string name="by_title">От %1$s</string>
     <string name="post_content_error">Не удалось загрузить содержимое публикации :(</string>
 
-    <string name="dialog_title">Вы точно хотите удалить публикацию?</string>
-    <string name="dialog_text">Это действие нельзя отменить</string>
+    <string name="delete_dialog_title">Вы точно хотите удалить публикацию?</string>
+    <string name="delete_dialog_text">Это действие нельзя отменить</string>
 
-    <string name="dialog_confirm">Удалить</string>
-    <string name="dialog_dismiss">Отменить</string>
+    <string name="delete_dialog_confirm">Удалить</string>
+    <string name="delete_dialog_dismiss">Отменить</string>
 </resources>
