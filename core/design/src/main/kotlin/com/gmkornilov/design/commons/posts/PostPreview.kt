@@ -1,5 +1,6 @@
 package com.gmkornilov.design.commons.posts
 
+import android.icu.text.CaseMap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,34 +56,16 @@ fun PostPreview(
         onClick = onCardClick
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (titleRef, userNameRef, dividerRef, avatarRef, upRef, downRef, markRef, playlistRef) = createRefs()
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h5,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                modifier = Modifier.constrainAs(titleRef) {
-                    top.linkTo(parent.top, margin = 8.dp)
-                    start.linkTo(parent.start, margin = 16.dp)
-                    end.linkTo(parent.end, margin = 16.dp)
-                    width = Dimension.fillToConstraints
-                }
-            )
-
-            Divider(modifier = Modifier.constrainAs(dividerRef) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(titleRef.bottom, margin = 8.dp)
-            })
+            val (titleRef, userNameRef, dividerRef, secondDividerRef, avatarRef, upRef, downRef, markRef, playlistRef) = createRefs()
 
             avatarUrl?.let {
                 UserAvatar(
                     avatarUrl = it,
                     modifier = Modifier
                         .constrainAs(avatarRef) {
-                            top.linkTo(dividerRef.bottom, margin = 8.dp)
+                            top.linkTo(parent.top, margin = 8.dp)
                             start.linkTo(parent.start, margin = 8.dp)
-                            bottom.linkTo(parent.bottom, margin = 8.dp)
+                            bottom.linkTo(dividerRef.bottom, margin = 8.dp)
                         }
                         .clickable {
                             userProfileClicked()
@@ -104,9 +88,8 @@ fun PostPreview(
                         } else {
                             start.linkTo(parent.start)
                         }
-                        top.linkTo(dividerRef.bottom)
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(upRef.start)
+                        top.linkTo(parent.top, margin = 8.dp)
+                        bottom.linkTo(dividerRef.top, margin = 8.dp)
                         width = Dimension.fillToConstraints
                     }
                     .clickable {
@@ -114,13 +97,41 @@ fun PostPreview(
                     }
             )
 
+            val bottomBarrier = createBottomBarrier(avatarRef, userNameRef)
+
+
+            Divider(modifier = Modifier.constrainAs(dividerRef) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(bottomBarrier, margin = 8.dp)
+            })
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.constrainAs(titleRef) {
+                    top.linkTo(dividerRef.bottom, margin = 8.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                }
+            )
+
+            Divider(modifier = Modifier.constrainAs(secondDividerRef) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(titleRef.bottom, margin = 8.dp)
+            })
+
             LikeButton(
                 isChecked = isUpChecked,
                 onCheckedChange = upClicked,
                 likesAmount = likesAmount,
                 modifier = Modifier.constrainAs(upRef) {
                     end.linkTo(downRef.start, margin = 4.dp)
-                    top.linkTo(dividerRef.bottom, margin = 8.dp)
+                    top.linkTo(secondDividerRef.bottom, margin = 8.dp)
                 },
             )
 
