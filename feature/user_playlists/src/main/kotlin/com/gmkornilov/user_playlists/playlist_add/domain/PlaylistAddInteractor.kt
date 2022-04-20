@@ -17,9 +17,9 @@ internal class PlaylistAddInteractor @Inject constructor(
         val user = authInteractor.getPostiumUser() ?: return emptyList()
         val playlists = playlistRepository.getUserPlaylists(user.getUid())
 
-        val playlistMaps = playlists.map {
-            it to it.postIds.contains(postId)
-        }.toMap()
+        val playlistMaps = playlists.associateWith {
+            it.postIds.contains(postId)
+        }
 
         initialSelectionStatuses = playlistMaps
         playlistSelectionStatuses.putAll(playlistMaps)
@@ -30,8 +30,8 @@ internal class PlaylistAddInteractor @Inject constructor(
     suspend fun submitData(postId: String) {
         val user = authInteractor.getPostiumUser() ?: return
         playlistSelectionStatuses.forEach {
-            val isAdded = it.value && !initialSelectionStatuses.getValue(it.key)
-            val isRemoved = !it.value && initialSelectionStatuses.getValue(it.key)
+            val isAdded = it.value && (initialSelectionStatuses[it.key]?.not() ?: false)
+            val isRemoved = !it.value && (initialSelectionStatuses[it.key] ?: false)
             when {
                 isAdded -> playlistRepository.addPostToPlaylist(user.getUid(), postId, it.key.id)
                 isRemoved -> playlistRepository.removePostFromPlaylist(

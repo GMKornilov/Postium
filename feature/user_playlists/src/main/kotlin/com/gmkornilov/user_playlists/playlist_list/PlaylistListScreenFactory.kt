@@ -10,6 +10,7 @@ import com.gmkornilov.brick_navigation.Dependency
 import com.gmkornilov.brick_navigation.DependencyProvider
 import com.gmkornilov.brick_navigation.ScreenFactory
 import com.gmkornilov.playlists.repository.PlaylistRepository
+import com.gmkornilov.source.FirebasePostSource
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistList
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListListener
 import com.gmkornilov.user_playlists.playlist_list.view.PlaylistListViewModel
@@ -55,6 +56,7 @@ class PlaylistListScreenFactory @Inject constructor(
     interface Deps: Dependency {
         val playlistRepository: PlaylistRepository
         val authInteractor: AuthInteractor
+        val firebasePostSource: FirebasePostSource
     }
 
     @dagger.Component(dependencies = [Deps::class])

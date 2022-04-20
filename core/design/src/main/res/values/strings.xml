@@ -4,6 +4,7 @@
         <item quantity="zero">%d публикаций</item>
         <item quantity="one">%d публикация</item>
         <item quantity="few">%d публикации</item>
-        <item quantity="many" formatted="true">%d публикаций</item>
+        <item quantity="many">%d публикаций</item>
+        <item quantity="other">%d публикаций</item>
     </plurals>
 </resources>

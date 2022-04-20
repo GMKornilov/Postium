@@ -112,7 +112,7 @@ private fun ErrorState(modifier: Modifier = Modifier) {
 private fun EmptyState(modifier: Modifier = Modifier) {
     EmptyStateContainer(
         emptyStateMessage = stringResource(R.string.playlists_empty),
-        modifier = modifier.fillMaxWidth().padding(bottom = 24.dp)
+        modifier = modifier.fillMaxWidth().padding(bottom = 42.dp)
     )
 }
 

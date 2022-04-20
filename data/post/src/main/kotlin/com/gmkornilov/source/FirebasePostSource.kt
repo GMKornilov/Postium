@@ -32,7 +32,8 @@ class FirebasePostSource @Inject constructor(
             DATE_FIELD to FieldValue.serverTimestamp(),
             USER_FIELD to userReference,
             TITLE_FIELD to title,
-            CATEGORIES_FIELD to categoryReferences
+            CATEGORIES_FIELD to categoryReferences,
+            IS_DELETED to false,
         )
 
         val reference = firestore

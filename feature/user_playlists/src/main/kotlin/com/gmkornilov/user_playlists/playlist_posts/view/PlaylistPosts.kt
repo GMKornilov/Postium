@@ -59,7 +59,7 @@ internal fun PlaylistPostsList(
                 )
             }
 
-            PostList(viewModel = listViewModel, modifier = Modifier.weight(1f))
+            PostList(viewModel = listViewModel, modifier = Modifier.weight(1f).fillMaxSize())
         }
     }
 }

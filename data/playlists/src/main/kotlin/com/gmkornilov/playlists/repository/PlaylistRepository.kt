@@ -51,6 +51,7 @@ class PlaylistRepository @Inject constructor(
             .collection(PLAYLISTS_SUBCOLLECTION)
             .document(playlistId)
             .update(addMap)
+            .await()
     }
 
     suspend fun removePostFromPlaylist(userId: String, postId: String, playlistId: String) {
@@ -64,6 +65,7 @@ class PlaylistRepository @Inject constructor(
             .collection(PLAYLISTS_SUBCOLLECTION)
             .document(playlistId)
             .update(removeMap)
+            .await()
     }
 
     private fun mapSnapshot(snapshot: QuerySnapshot): List<Playlist> {
